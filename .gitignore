@@ -147,3 +147,20 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# testing
+/coverage
+
+# production
+/build
+
+# IDEs and editors
+/.idea
+/.vscode
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
