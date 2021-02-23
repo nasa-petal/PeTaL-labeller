@@ -1,3 +1,6 @@
+.env
+.DS_Store
+
 #petal/__pycache__
 *.pyc*
 data
