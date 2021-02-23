@@ -1,5 +1,6 @@
 .env
 .DS_Store
+pytorch_model.bin
 
 #petal/__pycache__
 *.pyc*
