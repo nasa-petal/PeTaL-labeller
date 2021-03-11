@@ -245,7 +245,7 @@ print ("Number of training labels: {:}".format(len(labels)))
 print ("Number of training docs: {:}".format(len(docs)))
 print ("Number of test labels: {:}".format(len(labels_test)))
 print ("Number of test docs: {:}".format(len(docs_test)))
-# print(labels)
+print(labels)
 # print(docs)
 # print(labels_test)
 # print(docs_test)
@@ -357,13 +357,13 @@ attention_masks = []
 for d in docs:
 
     encoded_dict = tokenizer.encode_plus(
-                        d,                      # Docs to encode.
+                        d,                      
                         truncation=True,
-                        add_special_tokens = True, # Add '[CLS]' and '[SEP]'
-                        max_length = 256,           # Pad & truncate all docs
+                        add_special_tokens = True, 
+                        max_length = 256,           
                         pad_to_max_length = True,
-                        return_attention_mask = True,   # Attention masks
-                        return_tensors = 'pt',     # Return pytorch tensors.
+                        return_attention_mask = True,   
+                        return_tensors = 'pt',     
                    )
     
     input_ids.append(encoded_dict['input_ids'])
@@ -377,7 +377,6 @@ attention_masks = torch.cat(attention_masks, dim=0)
 
 labels = torch.tensor(labels)
 
-# Print sentence 0, now as a list of IDs.
 # print('Original: ', docs[0])
 # print('Token IDs:', input_ids[0])
 # print('Reverse:', tokenizer.convert_ids_to_tokens(input_ids[0]))
@@ -413,11 +412,10 @@ train_dataloader = DataLoader(
             batch_size = batch_size 
         )
 
-# Sample sequentially for validation
 validation_dataloader = DataLoader(
             val_dataset, 
             sampler = SequentialSampler(val_dataset), 
-            batch_size = batch_size # Evaluate with this batch size.
+            batch_size = batch_size 
         )
 
 """## Training the Classification Model w/ Sequence Classification
@@ -435,6 +433,7 @@ model = BertForSequenceClassification.from_pretrained(
     output_attentions = False, 
     output_hidden_states = False, 
 )
+model.save_pretrained('results/tokenizer/')
 
 # this needs to be run on GPU
 model.cuda()
@@ -451,7 +450,7 @@ Possible hyperparamters:
 # Exeprimenting w/ different parameters
 optimizer = AdamW(model.parameters(),
                   lr = 2e-5, 
-                  eps = 1e-8 # epsilon prevents division by 0??
+                  eps = 1e-8 
                 )
 
 from transformers import get_linear_schedule_with_warmup
@@ -481,25 +480,19 @@ loss_values = []
 for epoch_i in range(0, epochs):
 
     print("")
-    print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
+    print('Epoch {:} / {:} '.format(epoch_i + 1, epochs))
     print('Training...')
-    # Measure how long the training epoch takes.
     t0 = time.time()
-    # Reset the total loss for this epoch.
     total_loss = 0
 
     model.train()
-    # For each batch of training data...
     for step, batch in enumerate(train_dataloader):
-        # Progress update every 40 batches.
         if step % 40 == 0 and not step == 0:
-            # Calculate elapsed time in minutes.
             elapsed = format_time(time.time() - t0)
             
             print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader), elapsed))
-        # Unpack this training batch from our dataloader. 
 
-        # `batch` contains three pytorch tensors:
+        # `batch` pytorch tensors:
         #   [0]: input ids 
         #   [1]: attention masks
         #   [2]: labels 
@@ -530,11 +523,11 @@ for epoch_i in range(0, epochs):
     loss_values.append(avg_train_loss)
     print("")
     print("  Average training loss: {0:.2f}".format(avg_train_loss))
-    print("  Training epcoh took: {:}".format(format_time(time.time() - t0)))
+    print("  Training epoch time: {:}".format(format_time(time.time() - t0)))
         
 
     print("")
-    print("Running Validation...")
+    print(" Validation ->")
     t0 = time.time()
 
     model.eval()
@@ -560,13 +553,13 @@ for epoch_i in range(0, epochs):
         
         eval_accuracy += tmp_eval_accuracy
         nb_eval_steps += 1
-    # Report the final accuracy for this validation run.
     print("  Accuracy: {0:.2f}".format(eval_accuracy/nb_eval_steps))
-    print("  Validation took: {:}".format(format_time(time.time() - t0)))
+    print("  Validation time: {:}".format(format_time(time.time() - t0)))
 print("")
-print("Training complete!")
+print("training complete")
+print("")
 
-# Display metrics of training process in a dataframe
+# display training metrics in pd df
 
 import pandas as pd
 
@@ -576,6 +569,15 @@ df_vals = pd.DataFrame(data=training_vals)
 df_vals = df_vals.set_index('epoch')
 
 df_vals
+
+import plotly.express as px
+f = pd.DataFrame(loss_values)
+f.columns=['Loss']
+fig = px.line(f, x=f.index, y=f.Loss)
+fig.update_layout(title='Training loss of the Model',
+                   xaxis_title='Epoch',
+                   yaxis_title='Loss')
+fig.show()
 
 input_ids_test = []
 attention_masks_test = []
@@ -649,9 +651,137 @@ print ('Classification correctly: ',  classification_correct)
 
 print ('Model accuracy from testing: {0:.2f}'.format(classification_correct / len(input_ids_test)))
 
-#from sagemaker.pytorch import model.PyTorchModel
+import os
 
-#pytorch_mode = PyTorchModel ( model_data=model_data,
-    
-#)
+output_dir = './model_save/'
 
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+print("save to %s" % output_dir)
+
+model_to_save = model.module if hasattr(model, 'module') else model  
+model_to_save.save_pretrained(output_dir)
+
+tokenizer.save_pretrained(output_dir)
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+!ls -l --block-size=K ./model_save/
+
+!ls -l --block-size=M ./model_save/pytorch_model.bin
+
+!cp -r ./model_save/ "./drive/My Drive/Model"
+
+# load pretrained model
+model = model.from_pretrained(output_dir)
+tokenizer = tokenizer.from_pretrained(output_dir)
+
+# copy to gpu
+model.to(device)
+
+PATH = "state_dict_model.pt"
+
+# Save
+torch.save(model.state_dict(), PATH)
+
+#input_ids = []
+#for d in docs:
+#
+#    encoded_dict = tokenizer.encode_plus(
+#                        d,                      
+#                        truncation=True,
+#                        add_special_tokens = True, 
+#                        max_length = 256,           
+#                        pad_to_max_length = True,
+#                        return_attention_mask = True,   
+#                        return_tensors = 'pt',     
+#                   )
+#    
+#    input_ids.append(encoded_dict['input_ids'])
+#
+#input_ids = torch.cat(input_ids, dim=0)
+
+# Load
+model = model(b_input_ids, 
+                    token_type_ids=None, 
+                    attention_mask=b_input_mask, 
+                    labels=b_labels)
+#(input_ids, attention_masks)
+model.load_state_dict(torch.load(PATH))
+model.eval()
+
+PATH = "model.pt"
+
+# Save
+torch.save(model, PATH)
+
+# Load
+model = torch.load(PATH)
+model.eval()
+
+torch.save(model.state_dict(), 'model.pt')
+
+import sagemaker
+from sagemaker.pytorch import model.PyTorchModel
+
+pytorch_model = PyTorchModel ( model_data=model_data,
+                    role=role,
+                     framework_version='1.0.0',
+                     py_version="py3"
+)
+
+estimator = PyTorch(entry_point=' ',
+                     role=role,
+                     framework_version='1.4.0',
+                     train_instance_count=1,
+                     train_instance_type=' ',
+                     source_dir=' s',
+                     git_config=git_config,
+                     # available hyperparameters: emsize, nhid, nlayers, lr, clip, epochs, batch_size,
+                     #                            bptt, dropout, tied, seed, log_interval
+                     hyperparameters={
+                         'epochs': 1,
+                         'tied': True
+                     })
+
+import tarfile
+import os.path
+
+def make_tarfile(output_filename, source_dir):
+    with tarfile.open(output_filename, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
+
+## Ignore this cell for now
+# Trying out example BERT
+
+# Single training/test example for simple sequence classification
+# class InputExample(object):
+
+#    def __init__(self, guid, text_a, text_b=None, label=None):
+        """Constructs a InputExample.
+
+        Args:
+            guid: Unique id for the example.
+            text_a: string. The untokenized text of the first sequence. For single
+            sequence tasks, only this sequence must be specified.
+            text_b: (Optional) string. The untokenized text of the second sequence.
+            Only must be specified for sequence pair tasks.
+            label: (Optional) string. The label of the example. This should be
+            specified for train and dev examples, but not for test examples.
+        """
+#        self.guid = guid
+#        self.text_a = text_a
+#        self.text_b = text_b
+#        self.label = label
+
+
+#class InputFeatures(object):
+    """Single set of features of data."""
+
+#    def __init__(self, input_ids, input_mask, segment_ids, label_id):
+#        self.input_ids = input_ids
+#        self.input_mask = input_mask
+#        self.segment_ids = segment_ids
+#        self.label_id = label_id
