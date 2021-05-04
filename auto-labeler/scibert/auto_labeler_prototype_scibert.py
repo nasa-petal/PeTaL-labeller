@@ -11,7 +11,6 @@ from train import train
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
 def get_args_parser():
     def str2bool(v):
         if isinstance(v, bool):
@@ -26,8 +25,8 @@ def get_args_parser():
     parser.add_argument('--lr', default=1e-4, type=float)    
     parser.add_argument('--batch_size', default=32, type=int)
     parser.add_argument('--num_workers', default=4, type=int)
-    parser.add_argument('--epochs', default=100, type=int)
-    parser.add_argument('--validation_epoch', default=50, type=int, help='At what epoch do we run the validation')
+    parser.add_argument('--epochs', default=101, type=int)
+    parser.add_argument('--validation_epoch', default=1, type=int, help='At what epoch do we run the validation')
     parser.add_argument('--output_dir',default='epochs',type=str, help='folder where to save checkpoints')
     return parser
     
@@ -49,7 +48,7 @@ def setup_dataset():
 
     df = pd.read_csv(filename)
     df = df[['title', 'abstract', 'labels', 'doi', 'url', 'single_labels', 'labels_string']]
-    df = df[df['single_labels'].notnull( )]
+    df = df[df['single_labels'].notnull()]
 
     labels = []
     docs = []
@@ -60,7 +59,6 @@ def setup_dataset():
     single_labels = df["single_labels"].tolist()
     abstract = df["abstract"].tolist()
     title = df["title"].tolist()
-    # ! Paht: This is a bit strange code. She is searching through the dictionary to append why not just labels.append(single_labels[i])? 
     for i in range(len(title)):
         if i < len(title) - 40:
             docs.append(abstract[i])
@@ -69,10 +67,10 @@ def setup_dataset():
             docs_test.append(abstract[i])
             labels_test.append(labels_dict.index(single_labels[i]))
 
-    print ("Number of training labels: {:}".format(len(labels)))
-    print ("Number of training docs: {:}".format(len(docs)))
-    print ("Number of test labels: {:}".format(len(labels_test)))
-    print ("Number of test docs: {:}".format(len(docs_test)))
+    print("Number of training labels: {:}".format(len(labels)))
+    print("Number of training docs: {:}".format(len(docs)))
+    print("Number of test labels: {:}".format(len(labels_test)))
+    print("Number of test docs: {:}".format(len(docs_test)))
     
     tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
     print('SciBERT tokenizer loaded')
