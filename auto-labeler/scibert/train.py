@@ -46,7 +46,7 @@ def print_model(model):
     for p in params[-4:]:
         print("{:<55} {:>12}".format(p[0], str(tuple(p[1].size()))))
 
-def train_one_epoch(model,train_loader:DataLoader,optimizer:AdamW,scheduler:torch.optim.lr_scheduler.LambdaLR):
+def train_one_epoch(model,train_loader:DataLoader,optimizer:AdamW,scheduler:torch.optim.lr_scheduler.LambdaLR,epoch:int,max_epoch:int):
     """Loops through the dataloader and trains the model and optimizer
 
     Args:
@@ -62,7 +62,7 @@ def train_one_epoch(model,train_loader:DataLoader,optimizer:AdamW,scheduler:torc
     total_loss = 0
     model.train()
     train_bar = tqdm(train_loader)
-
+    train_bar.desc = f"Epoch {epoch}/{max_epoch}"
     for batch in train_bar:
         # `batch` pytorch tensors:
         #   [0]: input ids 
@@ -151,7 +151,6 @@ def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTo
     total_steps = len(train_dataloader) * epochs    
     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps = 0, num_training_steps = total_steps) # LR scheduler
 
-
     # Check to see if training has been performed, reload last if exists
     val_losses = 0
     training_stats = list()
@@ -160,9 +159,7 @@ def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTo
         data = torch.load(last_saved)
         model.load_state_dict(data['model'])
         optimizer.load_state_dict(data['optimizer'])
-        scheduler = data['scheduler']
         training_stats.extend(data['training_stats'])
-
 
     # based on the `run_glue.py` script here:
     # https://github.com/huggingface/transformers/blob/5bfcd0485ece086ebcbed2d008813037968a9e58/examples/run_glue.py#L128
@@ -171,7 +168,7 @@ def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTo
     
     
     for epoch in range(epochs):
-        model, optimizer, scheduler, avg_train_loss = train_one_epoch(model,train_dataloader,optimizer,scheduler)
+        model, optimizer, scheduler, avg_train_loss = train_one_epoch(model,train_dataloader,optimizer,scheduler,epoch,epochs)
 
         train_losses.append(avg_train_loss)
 
@@ -186,8 +183,7 @@ def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTo
             }
         )
         
-        torch.save({'model':model.state_dict(),'optimizer':optimizer.state_dict(), 'scheduler':scheduler,'training_stats':training_stats}, os.path.join(save_folder,f'epoch_{epoch}'))
-
-        torch.save({'model':model.state_dict(),'optimizer':optimizer.state_dict(), 'scheduler':scheduler,'training_stats':training_stats}, last_saved)
+        torch.save({'model':model.state_dict(),'optimizer':optimizer.state_dict(),'training_stats':training_stats}, os.path.join(save_folder,f'epoch_{epoch}.pt'))
+        torch.save({'model':model.state_dict(),'optimizer':optimizer.state_dict(),'training_stats':training_stats}, last_saved)
 
     return model, optimizer, scheduler, training_stats
