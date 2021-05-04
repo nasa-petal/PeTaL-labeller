@@ -168,3 +168,7 @@ cython_debug/
 .env.development.local
 .env.test.local
 .env.production.local
+
+
+# Torch saved files
+*.pt
