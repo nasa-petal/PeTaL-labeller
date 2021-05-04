@@ -1,3 +1,11 @@
+'''
+    Auto_labeler_scibert - this code trains the model on a single label csv data provided by Colleen and Alex
+        Procedure:
+            - Reads data and splits it into test train. Data is saved into dataset.pt
+            - dataset.pt is read and loaded into dataloaders where it is sent to the training code
+            - 
+    Authors: Paht Juangphanich (paht.juangphanich@nasa.gov)
+'''
 import os
 import argparse
 from pathlib import Path
@@ -25,7 +33,7 @@ def get_args_parser():
     parser.add_argument('--lr', default=1e-4, type=float)    
     parser.add_argument('--batch_size', default=32, type=int)
     parser.add_argument('--num_workers', default=4, type=int)
-    parser.add_argument('--epochs', default=101, type=int)
+    parser.add_argument('--epochs', default=500, type=int)
     parser.add_argument('--validation_epoch', default=1, type=int, help='At what epoch do we run the validation')
     parser.add_argument('--output_dir',default='epochs',type=str, help='folder where to save checkpoints')
     return parser
@@ -162,5 +170,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser('DETR training and evaluation script', parents=[get_args_parser()])
     args = parser.parse_args()
     if args.output_dir:
-            Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+        Path(args.output_dir).mkdir(parents=True, exist_ok=True)
     main(args)
