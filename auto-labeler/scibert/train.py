@@ -1,3 +1,8 @@
+'''
+    train.py - performs the training and saving of the model at each epoch. 
+
+    Authors: Paht Juangphanich (paht.juangphanich@nasa.gov)
+'''
 import os
 import torch
 from torch.nn import utils
@@ -62,7 +67,7 @@ def train_one_epoch(model,train_loader:DataLoader,optimizer:AdamW,scheduler:torc
     total_loss = 0
     model.train()
     train_bar = tqdm(train_loader)
-    train_bar.desc = f"Epoch {epoch}/{max_epoch}"
+    train_bar.desc = f"Epoch {epoch}/{max_epoch} Loss: 0"
     for batch in train_bar:
         # `batch` pytorch tensors:
         #   [0]: input ids 
@@ -79,13 +84,15 @@ def train_one_epoch(model,train_loader:DataLoader,optimizer:AdamW,scheduler:torc
                     attention_mask=b_input_mask, 
                     labels=b_labels)
         
-        loss = outputs[0]
+        tmp_eval_loss, logits = outputs[:2]
+        loss = torch.nn.functional.cross_entropy(logits,b_labels)
 
         total_loss += loss.item()
         loss.backward()
         utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
-        scheduler.step()
+        scheduler.step()    
+        train_bar.desc = f"Epoch {epoch}/{max_epoch} Batch Loss: {loss.item()}" # Note cross entropy loss does not increase with batch size
 
     avg_train_loss = total_loss / len(train_loader)            
     return model, optimizer, scheduler, avg_train_loss
@@ -160,14 +167,15 @@ def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTo
         model.load_state_dict(data['model'])
         optimizer.load_state_dict(data['optimizer'])
         training_stats.extend(data['training_stats'])
-
+    
+    start_epoch = training_stats[-1]['epoch']
     # based on the `run_glue.py` script here:
     # https://github.com/huggingface/transformers/blob/5bfcd0485ece086ebcbed2d008813037968a9e58/examples/run_glue.py#L128
     train_losses = list()
     val_losses = list()
     
     
-    for epoch in range(epochs):
+    for epoch in range(start_epoch+1,epochs):
         model, optimizer, scheduler, avg_train_loss = train_one_epoch(model,train_dataloader,optimizer,scheduler,epoch,epochs)
 
         train_losses.append(avg_train_loss)

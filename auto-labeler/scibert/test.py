@@ -1,3 +1,11 @@
+'''
+    test.py - complements train.py. Performs two functions,
+        Function 1: Picks a random abstract and compares it and plots all the errors.
+        Function 2: Plots the training loss
+
+   
+    Authors: Paht Juangphanich (paht.juangphanich@nasa.gov)
+'''
 import matplotlib.pyplot as plt
 import torch
 import pandas as pd 
