@@ -21,11 +21,10 @@ Run `tar -cvzf scibert-X.X-model.tar.gz code last_saved.pth` to generate a tarba
 Upload tarball to `s3://petal-bucket`
 
 For more information about the model format Sagemaker expects see:
-https://docs.aws.amazon.com/sagemaker/latest/dg/neo-deployment-hosting-services-prerequisites.html
-
-and
-
 https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#model-directory-structure
+
+For more information about deploying a model trained outside of Sagemaker to Sagemaker see:
+https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#bring-your-own-model
 
 ### Transformers
 
