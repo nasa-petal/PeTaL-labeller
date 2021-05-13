@@ -24,7 +24,7 @@ Rename `sagemaker` folder to `scibert-X.X-model`. Replace X.X with the next vers
 
 Run `tar -cvzf scibert-X.X-model.tar.gz scibert-X.X-model` to generate a tarball.
 
-Upload tarball to s3://petal-bucket
+Upload tarball to `s3://petal-bucket`
 
 For more information about the model format Sagemaker expects see:
 https://docs.aws.amazon.com/sagemaker/latest/dg/neo-deployment-hosting-services-prerequisites.html
