@@ -10,19 +10,12 @@ The labeler is currently in a prototype stage and we are experimenting with diff
 
 ## Deploying the SciBERT model to Sagemaker
 
-TODO: try this container image: `763104351884.dkr.ecr.us-east-2.amazonaws.com/pytorch-inference:1.8.1-cpu-py36-ubuntu18.04`
+Generate a model file `last_saved.pth` and store in `auto-labeler/scibert/sagemaker/`
 
-https://docs.aws.amazon.com/sagemaker/latest/dg/neo-deployment-hosting-services-cli.html
+Replace X.X with the next version numbers ex. 0.1 to 0.2.
 
-Generate a model file (.pt or .pth) and store in `auto-labeler/scibert/sagemaker/`
-
-Delete `auto-labeler/scibert/sagemaker/test.py` file. It's only used for locally generating inferences using the model and isn't needed by Sagemaker.
-
-Move `generate.py` and `requirements.txt` to a new folder `auto-labeler/scibert/sagemaker/code/`
-
-Rename `sagemaker` folder to `scibert-X.X-model`. Replace X.X with the next version numbers ex. 0.1 to 0.2.
-
-Run `tar -cvzf scibert-X.X-model.tar.gz scibert-X.X-model` to generate a tarball.
+`cd auto-labeler/scibert/sagemaker`
+Run `tar -cvzf scibert-X.X-model.tar.gz code last_saved.pth` to generate a tarball.
 
 Upload tarball to `s3://petal-bucket`
 
