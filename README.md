@@ -8,7 +8,7 @@ PeTaL is comprised of multiple interconnected services. This repository is for t
 
 The labeler is currently in a prototype stage and we are experimenting with different models, currently transformer-based models (BERT, XLNet, BioBERT) and support vector machines (SVMs).
 
-## Step 1: Package the machine learning model and upload to S3
+### Step 1: Package the machine learning model and upload to S3
 
 Generate a model file `last_saved.pth` and store in `auto-labeler/scibert/sagemaker/`
 
@@ -21,29 +21,26 @@ Run `tar -cvzf scibert-X.X-model.tar.gz code last_saved.pth` to generate a tarba
 Upload tarball to `s3://petal-bucket`
 
 
-## Step 2: Deploy and run the model in Sagemaker to generate and store labelled data.
+### Step 2: Deploy and run the model in Sagemaker to generate and store labelled data.
 
 1. In AWS console, go to Step Functions.
 1. Click the state machine
 1. Click the Start Execution button.
 
-## Step 3: If it fails to deploy or run and you want to try again or you want to update the labeller:
-1. Delete the model, endpoint configuration, and endpoint in Sagemaker. 
+### Step 3: If it fails to deploy or run and you want to try again or you want to update the labeller:
+1. Delete the model, endpoint configuration, and endpoint in Sagemaker.
 
-In AWS console, go to SageMaker.
+    >In AWS console, go to SageMaker.    
+    >In the sidebar, expand Inference, click Endpoints, select the endpoint, click Actions -> Delete.    
+    >In the sidebar, expand Inference, click Endpoint Configurations, select the endpoint configuration, click Actions -> Delete.    
+    >In the sidebar, expand Inference, click Models, select the model, click Actions -> Delete.    
+1. Repeat step 2.
 
-In the sidebar, expand Inference, click Endpoints, select the endpoint, click Actions -> Delete.
-
-In the sidebar, expand Inference, click Endpoint Configurations, select the endpoint configuration, click Actions -> Delete.
-
-In the sidebar, expand Inference, click Models, select the model, click Actions -> Delete.
-1. Repeat the steps to run the labeller.
-
-
-For more information about the model format Sagemaker expects see:
+### For more information
+Model format Sagemaker expects:
 https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#model-directory-structure
 
-For more information about deploying a model trained outside of Sagemaker to Sagemaker see:
+Deploying a model trained outside of Sagemaker to Sagemaker:
 https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#bring-your-own-model
 
 ### Transformers
