@@ -14,8 +14,8 @@ def model_fn(model_dir):
     logger.info('Loading the model.')
     model_info = dict()
     model = AutoModelForSequenceClassification.from_pretrained("allenai/scibert_scivocab_uncased", num_labels = 10, output_attentions = False, output_hidden_states = False)
-    if os.path.exists('last_saved.pt'):
-        state_dict = torch.load('last_saved.pt')
+    if os.path.exists(os.path.join(model_dir,'last_saved.pth')):
+        state_dict = torch.load(os.path.join(model_dir,'last_saved.pth'))
         model.load_state_dict(state_dict['model'])
 
     print('model_info: {}'.format(model_info))

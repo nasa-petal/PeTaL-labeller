@@ -172,6 +172,7 @@ cython_debug/
 
 # Torch saved files
 *.pt
+*.pth
 
 # Linux files
 nohup.out
