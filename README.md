@@ -10,7 +10,7 @@ The labeler is currently in a prototype stage and we are experimenting with diff
 
 ## Deploying the SciBERT model to Sagemaker
 
-TODO: try this container image: 763104351884.dkr.ecr.us-east-2.amazonaws.com/pytorch-inference:1.8.1-cpu-py36-ubuntu18.04
+TODO: try this container image: `763104351884.dkr.ecr.us-east-2.amazonaws.com/pytorch-inference:1.8.1-cpu-py36-ubuntu18.04`
 
 https://docs.aws.amazon.com/sagemaker/latest/dg/neo-deployment-hosting-services-cli.html
 
