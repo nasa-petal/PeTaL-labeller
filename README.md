@@ -8,6 +8,31 @@ PeTaL is comprised of multiple interconnected services. This repository is for t
 
 The labeler is currently in a prototype stage and we are experimenting with different models, currently transformer-based models (BERT, XLNet, BioBERT) and support vector machines (SVMs).
 
+## Deploying the SciBERT model to Sagemaker
+
+TODO: try this container image: 763104351884.dkr.ecr.us-east-2.amazonaws.com/pytorch-inference:1.8.1-cpu-py36-ubuntu18.04
+
+https://docs.aws.amazon.com/sagemaker/latest/dg/neo-deployment-hosting-services-cli.html
+
+Generate a model file (.pt or .pth) and store in `auto-labeler/scibert/sagemaker/`
+
+Delete `auto-labeler/scibert/sagemaker/test.py` file. It's only used for locally generating inferences using the model and isn't needed by Sagemaker.
+
+Move `generate.py` and `requirements.txt` to a new folder `auto-labeler/scibert/sagemaker/code/`
+
+Rename `sagemaker` folder to `scibert-X.X-model`. Replace X.X with the next version numbers ex. 0.1 to 0.2.
+
+Run `tar -cvzf scibert-X.X-model.tar.gz scibert-X.X-model` to generate a tarball.
+
+Upload tarball to s3://petal-bucket
+
+For more information about the model format Sagemaker expects see:
+https://docs.aws.amazon.com/sagemaker/latest/dg/neo-deployment-hosting-services-prerequisites.html
+
+and
+
+https://sagemaker.readthedocs.io/en/stable/frameworks/pytorch/using_pytorch.html#model-directory-structure
+
 ### Transformers
 
 Notable Papers:
