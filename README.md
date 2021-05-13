@@ -12,11 +12,9 @@ The labeler is currently in a prototype stage and we are experimenting with diff
 
 Generate a model file `last_saved.pth` and store in `auto-labeler/scibert/sagemaker/`
 
-Replace X.X with the next version numbers ex. 0.1 to 0.2.
-
 `cd auto-labeler/scibert/sagemaker`
 
-Run `tar -cvzf scibert-X.X-model.tar.gz code last_saved.pth` to generate a tarball.
+Run `tar -cvzf scibert-X.X-model.tar.gz code last_saved.pth` to generate a tarball. Replace X.X with the next version numbers ex. 0.1 to 0.2.
 
 Upload tarball to `s3://petal-bucket`
 
