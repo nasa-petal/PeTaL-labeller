@@ -174,5 +174,10 @@ cython_debug/
 *.pt
 *.pth
 
+# Model tarball
+*.tar.gz
+*.tgz
+*.tar
+
 # Linux files
 nohup.out
