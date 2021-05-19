@@ -168,3 +168,16 @@ cython_debug/
 .env.development.local
 .env.test.local
 .env.production.local
+
+
+# Torch saved files
+*.pt
+*.pth
+
+# Model tarball
+*.tar.gz
+*.tgz
+*.tar
+
+# Linux files
+nohup.out
