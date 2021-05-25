@@ -81,6 +81,7 @@ def setup_dataset():
     print("Number of test docs: {:}".format(len(docs_test)))
     
     tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
+
     print('SciBERT tokenizer loaded')
 
     # original abstract
