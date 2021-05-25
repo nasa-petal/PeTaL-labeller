@@ -175,3 +175,5 @@ cython_debug/
 
 # Linux files
 nohup.out
+*.tar.gz
+*.pth

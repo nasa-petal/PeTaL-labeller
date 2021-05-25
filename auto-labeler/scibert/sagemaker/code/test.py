@@ -7,6 +7,6 @@ input_data = {'abstract':abstract}
 input_json = json.dumps(input_data)
 
 input_fn_output = input_fn(input_json)
-model = model_fn(None)
+model = model_fn('../')
 results = predict_fn(input_fn_output,model)
 print(output_fn(results))
