@@ -40,8 +40,8 @@ def predict_random_sample():
 
     # Prediction
     model = AutoModelForSequenceClassification.from_pretrained("allenai/scibert_scivocab_uncased", num_labels = 10, output_attentions = False, output_hidden_states = False)
-    if osp.exists('epochs/epoch_99.pt'):
-        state_dict = torch.load('epochs/epoch_99.pt')
+    if osp.exists('epochs/last_saved.pt'):
+        state_dict = torch.load('epochs/last_saved.pt')
         model.load_state_dict(state_dict['model'])
 
     with torch.no_grad():
@@ -71,15 +71,21 @@ def predict_random_sample():
 def plot_training():
     last = torch.load('epochs/last_saved.pt')
     df = pd.DataFrame(last['training_stats'])
-    plt.figure(figsize=(8,6),dpi=150)
-    plt.plot(df['epoch'],df['Training Loss'])
-    plt.xlabel('Epoch')
-    plt.ylabel('Training Loss')
-    plt.yscale('log')
-    plt.title('Training Loss vs Epoch')
+    plt.figure(figsize=(16,15),dpi=150)
+    fig, ax = plt.subplots(2,1)
+    ax[0].plot(df['epoch'],df['Training Loss'])    
+    ax[0].set_xlabel('Epoch')
+    ax[0].set_ylabel('Avg Cross Entropy Loss')   
+    ax[0].set_yscale('log')
+    ax[0].set_title('Training Loss vs Epoch')
+    
+    ax[1].plot(df['epoch'][1:],df['Valid. Accur.'][1:])    
+    ax[1].set_xlabel('Epoch')
+    ax[1].set_ylabel('Avg Cross Entropy Loss')
+    ax[1].set_title('Validation Loss vs Epoch')
     plt.savefig('training_loss.png')
-    print("hello")
+    
 
 if __name__ == '__main__':
-    # plot_training()
-    predict_random_sample()
+    plot_training()
+    # predict_random_sample()

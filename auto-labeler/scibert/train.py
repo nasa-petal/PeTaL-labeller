@@ -85,7 +85,7 @@ def train_one_epoch(model,train_loader:DataLoader,optimizer:AdamW,scheduler:torc
                     labels=b_labels)
         
         tmp_eval_loss, logits = outputs[:2]
-        loss = torch.nn.functional.cross_entropy(logits,b_labels)
+        loss = tmp_eval_loss # torch.nn.functional.cross_entropy(logits,b_labels)
 
         total_loss += loss.item()
         loss.backward()
@@ -167,8 +167,9 @@ def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTo
         model.load_state_dict(data['model'])
         optimizer.load_state_dict(data['optimizer'])
         training_stats.extend(data['training_stats'])
-    
-    start_epoch = training_stats[-1]['epoch']
+        start_epoch = training_stats[-1]['epoch']
+    else:
+        start_epoch = 0
     # based on the `run_glue.py` script here:
     # https://github.com/huggingface/transformers/blob/5bfcd0485ece086ebcbed2d008813037968a9e58/examples/run_glue.py#L128
     train_losses = list()
@@ -179,9 +180,7 @@ def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTo
         model, optimizer, scheduler, avg_train_loss = train_one_epoch(model,train_dataloader,optimizer,scheduler,epoch,epochs)
 
         train_losses.append(avg_train_loss)
-
-        if epoch % val_epochs == 0 and epoch != 0:
-            val_losses = validation(val_dataloader, model)
+        val_losses = validation(val_dataloader, model)
         
         training_stats.append(
             {
