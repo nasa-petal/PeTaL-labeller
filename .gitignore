@@ -172,6 +172,12 @@ cython_debug/
 
 # Torch saved files
 *.pt
+*.pth
+
+# Model tarball
+*.tar.gz
+*.tgz
+*.tar
 
 # Linux files
 nohup.out
