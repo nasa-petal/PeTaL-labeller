@@ -138,8 +138,9 @@ def clean_lens_json(lens_output: dict, labeled_dataframe: pd.DataFrame):
 
         # Label - Biomimicry functions
         try:
-            paper_object["label"] = labeled_dataframe["label"].loc[labeled_dataframe["title"]
-                                                               == paper.get("title", "")].tolist()[0]
+            paper_object["label"] = [re.sub("\s", "_", label).lower(
+        ) for label in labeled_dataframe["label"].loc[labeled_dataframe["title"]
+                                                               == paper.get("title", "")].tolist()[0]]
         except:
             paper_object["label"] = []
 
@@ -162,6 +163,7 @@ if __name__ == "__main__":
         list_size = len(cleaned_json_list)
 
         for row in cleaned_json_list:
+            print("Progress of JSON Write Completed = {0:.0%}".format(count/list_size), end = '\r')
             cleaned_json.write(json.dumps(row))
             if(count < list_size):
                 cleaned_json.write("\n")
