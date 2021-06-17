@@ -4,7 +4,7 @@ pytorch_model.bin
 
 #petal/__pycache__
 *.pyc*
-data
+__pycache__/data
 .dependencies.json
 desktop.ini
 *scholar.log*
