@@ -183,3 +183,5 @@ cython_debug/
 nohup.out
 *.tar.gz
 *.pth
+scripts/lens-cleaner/lens_output.json
+scripts/lens-cleaner/labeled_data.csv
