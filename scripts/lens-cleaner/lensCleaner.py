@@ -53,6 +53,7 @@ def load_csv(csv_path: str):
 
     merged_dataframe = pd.DataFrame(data={"label": merged_data})
     merged_dataframe["title"] = labeled_data["title"]
+    merged_dataframe["doi"] = labeled_data["doi"]
     return merged_dataframe
 
 
@@ -91,6 +92,12 @@ def clean_lens_json(lens_output: dict, labeled_dataframe: pd.DataFrame):
     Returns:
         list: A list containing the reformated JSON data.
     """
+
+    def find_labels(column_name: str, comparison_tag: str):
+        label_list = [re.sub("\s", "_", label).lower(
+            ) for label in labeled_dataframe["label"].loc[labeled_dataframe[column_name]
+                                                                == comparison_tag].tolist()[0]]
+        return label_list
 
     cleaned_papers = []
     amount_of_rows = len(lens_output['data'])
@@ -136,11 +143,26 @@ def clean_lens_json(lens_output: dict, labeled_dataframe: pd.DataFrame):
             [paper.get("title", ""), paper.get("abstract", "")])
         paper_object["text"] = " ".join(clean_text(title_abstract_text))
 
+        # Extract DOI
+        paper_doi = False
+        for external_id in paper.get("external_ids", []):
+            if (external_id["type"] == "doi"):
+                paper_doi = external_id["value"]
+                break
+
         # Label - Biomimicry functions
+                
         try:
-            paper_object["label"] = [re.sub("\s", "_", label).lower(
-        ) for label in labeled_dataframe["label"].loc[labeled_dataframe["title"]
-                                                               == paper.get("title", "")].tolist()[0]]
+            if (paper_doi):
+                label_list = find_labels("doi", paper_doi)
+                if (len(label_list) == 0):
+                    label_list = find_labels("title", paper.get("title", ""))
+
+            else:
+                label_list = find_labels("title", paper.get("title", ""))
+            
+            paper_object["label"] = label_list
+
         except:
             paper_object["label"] = []
 
