@@ -53,6 +53,7 @@ def load_csv(csv_path: str):
 
     merged_dataframe = pd.DataFrame(data={"label": merged_data})
     merged_dataframe["title"] = labeled_data["title"]
+    merged_dataframe["doi"] = labeled_data["doi"].str.lower()
     return merged_dataframe
 
 
@@ -79,7 +80,8 @@ def clean_text(text: str):
     """
 
     tokenized_text = nltk.tokenize.word_tokenize(text)
-    cleaned_text = [text.lower() for text in tokenized_text if text not in special_characters and text not in stopwords]
+    cleaned_text = [text.lower(
+    ) for text in tokenized_text if text not in special_characters and text not in stopwords]
     return cleaned_text
 
 
@@ -91,6 +93,15 @@ def clean_lens_json(lens_output: dict, labeled_dataframe: pd.DataFrame):
     Returns:
         list: A list containing the reformated JSON data.
     """
+
+    def find_labels(column_name: str, comparison_tag: str):
+        temp_list = labeled_dataframe["label"].loc[labeled_dataframe[column_name]
+                                                   == comparison_tag].tolist()
+
+        label_list = [re.sub("\s", "_", label).lower()
+                      for label in temp_list[0]] if len(temp_list) else []
+
+        return label_list
 
     cleaned_papers = []
     amount_of_rows = len(lens_output['data'])
@@ -129,18 +140,37 @@ def clean_lens_json(lens_output: dict, labeled_dataframe: pd.DataFrame):
                 for reference_object in paper["references"]]
 
         # Scholarly Citations - Scholarly Citations
-        paper_object["scholarly_citations"] = paper.get("scholarly_citations", [])
+        paper_object["scholarly_citations"] = paper.get(
+            "scholarly_citations", [])
 
         # Text - title + abstract
         title_abstract_text = " ".join(
             [paper.get("title", ""), paper.get("abstract", "")])
         paper_object["text"] = " ".join(clean_text(title_abstract_text))
 
+        # Extract DOI
+        paper_dois = []
+        for external_id in paper.get("external_ids", []):
+            if (external_id["type"] == "doi"):
+                paper_dois.append(external_id["value"])
+
         # Label - Biomimicry functions
+
         try:
-            paper_object["label"] = [re.sub("\s", "_", label).lower(
-        ) for label in labeled_dataframe["label"].loc[labeled_dataframe["title"]
-                                                               == paper.get("title", "")].tolist()[0]]
+            if (len(paper_dois)):
+                for paper_doi in paper_dois:
+                    label_list = find_labels("doi", paper_doi)
+
+                    if (len(label_list) == 0):
+                        label_list = find_labels("title", paper.get("title", ""))
+                    else:
+                        break
+
+            else:
+                label_list = find_labels("title", paper.get("title", ""))
+
+            paper_object["label"] = label_list
+
         except:
             paper_object["label"] = []
 
@@ -157,7 +187,7 @@ if __name__ == "__main__":
     labeled_dataframe = load_csv(args.csv_path)
     json_dict = load_lens_json(args.json_path)
     cleaned_json_list = clean_lens_json(json_dict, labeled_dataframe)
-    
+
     with open("cleaned_lens_output.json", "w") as cleaned_json:
         count = 1
         list_size = len(cleaned_json_list)
