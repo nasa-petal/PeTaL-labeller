@@ -1,0 +1,24 @@
+name: MATCH
+
+model:
+  hidden_size: 100
+  n_layers: 3
+  n_probes: 8
+  n_aheads: 2
+  intermediate_size: 400
+  dropout: 0.1
+  src_max_len: 500
+
+train:
+  batch_size: 256
+  step: 100
+  nb_epoch: 1000
+  swa_warmup: 4
+
+valid:
+  batch_size: 256
+
+predict:
+  batch_size: 256
+
+path: PeTaL/models

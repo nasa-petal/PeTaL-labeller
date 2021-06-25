@@ -1,0 +1,24 @@
+name: PeTaL
+
+train:
+  texts: PeTaL/train_texts.npy
+  labels: PeTaL/train_labels.npy
+
+valid:
+  size: 100
+
+test:
+  texts: PeTaL/test_texts.npy
+
+embedding:
+  emb_init: PeTaL/emb_init.npy
+
+hierarchy: PeTaL/taxonomy.txt
+
+output:
+  res: PeTaL/results
+
+labels_binarizer: PeTaL/labels_binarizer
+
+model:
+  emb_size: 100
