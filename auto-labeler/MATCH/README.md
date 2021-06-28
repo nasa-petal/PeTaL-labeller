@@ -58,7 +58,7 @@ This is encouraging for our project, at least because it indicates that we can k
 
 ### Effect of adding MAG fields of study and MeSH terms to text
 
-Here are the results from my trials:
+I performed ablation studies to determine the effect of appending Microsoft Academic Graph (MAG) fields of study or Medical Subject Headings (MeSH) terms to the text. Here are the results from my trials:
 
 | Test set P@1 | without MeSH | with MeSH |
 | --- | --- | --- |
