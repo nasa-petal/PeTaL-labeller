@@ -1,0 +1,97 @@
+# PeTaL Labeller Issue #53 Data
+
+---
+
+NB_EPOCH 1000, STEP 10
+
+### WITH MAG LABELS, WITH MESH LABELS
+
+```
+[I 210623 22:45:20 main:68] Training
+...
+[I 210623 22:58:32 models:110] 9r67 512 train loss: 0.0000006 valid loss: 0.3614617 P@1: 0.69000 P@3: 0.54667 P@5: 0.41400 N@3: 0.58642 N@5: 0.58019 early stop: 100
+[I 210623 22:58:34 main:76] Finish Training
+
+Precision@1,3,5: 0.61 0.49666666666666665 0.382
+nDCG@1,3,5: 0.61 0.5242603369757589 0.5284999798212123
+```
+
+---
+
+NB_EPOCH 1000, STEP 100
+
+### WITH MAG LABELS, WITH MESH LABELS
+
+```
+[I 210623 23:14:10 main:68] Training
+...
+[I 210623 23:26:08 models:110] 999 1024 train loss: 0.0000449 valid loss: 0.2336695 P@1: 0.61000 P@3: 0.44667 P@5: 0.34200 N@3: 0.48767 N@5: 0.47849 early stop: 24
+[I 210623 23:26:08 main:76] Finish Training
+
+Precision@1,3,5: 0.67 0.49333333333333335 0.392
+nDCG@1,3,5: 0.67 0.5408242591878821 0.5537992919593395
+```
+
+
+
+Ablation study: Turn off Hypernymy Regularization
+
+```
+[I 210624 15:27:01 models:110] 999 1024 train loss: 0.0000006 valid loss: 0.3382077 P@1: 0.67000 P@3: 0.55333 P@5: 0.42400 N@3: 0.58602 N@5: 0.57995 early stop: 1
+[I 210624 15:27:01 main:76] Finish Training
+Precision@1,3,5: 0.66 0.53 0.42
+nDCG@1,3,5: 0.66 0.5620467187130749 0.5699775424270964
+```
+
+...
+
+### WITH MAG LABELS, WITHOUT MESH LABELS
+
+```
+[I 210623 23:53:26 main:68] Training
+...
+[I 210624 00:05:23 models:110] 999 1024 train loss: 0.0000008 valid loss: 0.3501080 P@1: 0.61000 P@3: 0.50000 P@5: 0.38400 N@3: 0.53295 N@5: 0.52845 early stop: 21
+[I 210624 00:05:23 main:76] Finish Training
+
+Precision@1,3,5: 0.61 0.47 0.36
+nDCG@1,3,5: 0.61 0.5058103299312516 0.5092618406049622
+```
+
+...
+
+###WITHOUT MAG LABELS, WITH MESH LABELS
+
+```
+[I 210624 00:25:22 main:68] Training
+...
+[I 210624 00:37:21 models:110] 999 1024 train loss: 0.0000005 valid loss: 0.3799064 P@1: 0.57000 P@3: 0.48000 P@5: 0.37800 N@3: 0.50490 N@5: 0.50889 early stop: 29
+[I 210624 00:37:21 main:76] Finish Training
+
+Precision@1,3,5: 0.63 0.5133333333333333 0.394
+nDCG@1,3,5: 0.63 0.5428495108215929 0.5469096994042273
+```
+
+// IGNORE THIS RUN
+
+```
+// [I 210624 00:09:12 main:68] Training
+// ...
+// [I 210624 00:21:02 models:110] 999 1024 train loss: 0.0000495 valid loss: 0.2390965 P@1: 0.56000 P@3: 0.45667 P@5: 0.36600 N@3: 0.49144 N@5: 0.50292 early stop: 6
+// [I 210624 00:21:02 main:76] Finish Training
+// Precision@1,3,5: 0.57 0.49333333333333335 0.396
+// nDCG@1,3,5: 0.57 0.5199229416590925 0.5379514078369942
+```
+
+...
+
+### WITHOUT MAG LABELS, WITHOUT MESH LABELS
+
+```
+[I 210624 00:45:45 main:68] Training
+[I 210624 00:57:49 models:110] 999 1024 train loss: 0.0000006 valid loss: 0.3676617 P@1: 0.63000 P@3: 0.50333 P@5: 0.39600 N@3: 0.54296 N@5: 0.54319 early stop: 12
+[I 210624 00:57:49 main:76] Finish Training
+
+Precision@1,3,5: 0.64 0.5033333333333333 0.386
+nDCG@1,3,5: 0.64 0.5401049168541686 0.5459427175903998
+```
+
