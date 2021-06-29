@@ -20,15 +20,7 @@ This README was last updated on 28 June 2021.
 
 ## How do I reproduce your results?
 
-In the future I may write a Makefile to automate the following setup, but until then:
-
-- Step through `run_MATCH_with_PeTaL_data.ipynb`. This will involve cloning the MATCH repository (https://github.com/yuzhimanhua/MATCH) into your workspace.
-- When the MATCH repository is cloned:
-  - move `PeTaL/` into `MATCH/`
-  - move `transform_data_PeTaL.py` into `MATCH/`
-  - move `MATCH-PeTaL.yaml` into `MATCH/configure/datasets/`
-  - move `PeTaL.yaml` into `MATCH/configure/models/`
-- Continue stepping through `run_MATCH_with_PeTaL_data.ipynb`.
+- Step through `run_MATCH_with_PeTaL_data.ipynb`.
 
 ## Summary of results
 
