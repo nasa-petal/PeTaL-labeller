@@ -183,4 +183,8 @@ cython_debug/
 nohup.out
 *.tar.gz
 *.pth
+
 auto-labeler/MATCH/experiment_data/analyse_size_testing.py
+
+scripts/data-analyzer/taxonomy.csv
+scripts/data-analyzer/labeled_data.csv
