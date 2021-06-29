@@ -403,3 +403,307 @@ Precision@1,3,5: 0.65 0.5066666666666667 0.398
 nDCG@1,3,5: 0.65 0.5462085302685622 0.5464655115226336
 ```
 
+```
+wrong_mag_and_mesh skip0
+[I 210629 17:28:35 models:110] 469 1024 train loss: 0.0337351 valid loss: 0.2756027 P@1: 0.58000 P@3: 0.51667 P@5: 0.40000 N@3: 0.54013 N@5: 0.53737 early stop: 50
+[I 210629 17:28:38 main:76] Finish Training
+...
+[I 210629 17:28:44 main:91] Finish Predicting
+Precision@1,3,5: 0.58 0.4866666666666667 0.38
+nDCG@1,3,5: 0.58 0.5111175426710239 0.5221123093271918
+```
+
+```
+wrong_mag_and_mesh skip100
+[I 210629 17:37:28 models:110] 444 1024 train loss: 0.0000047 valid loss: 0.3359202 P@1: 0.66000 P@3: 0.51667 P@5: 0.40000 N@3: 0.55704 N@5: 0.54402 early stop: 50
+[I 210629 17:37:31 main:76] Finish Training
+...
+[I 210629 17:37:36 main:91] Finish Predicting
+Precision@1,3,5: 0.59 0.47 0.384
+nDCG@1,3,5: 0.59 0.5038899951517094 0.5131574375359996
+```
+
+```
+wrong_mag_and_mesh skip200
+[I 210629 17:53:02 models:110] 789 1024 train loss: 0.0002430 valid loss: 0.2952935 P@1: 0.56000 P@3: 0.43333 P@5: 0.34000 N@3: 0.46949 N@5: 0.46065 early stop: 50
+[I 210629 17:53:05 main:76] Finish Training
+...
+[I 210629 17:53:11 main:91] Finish Predicting
+Precision@1,3,5: 0.54 0.44 0.332
+nDCG@1,3,5: 0.54 0.4698052419371296 0.4621473255773203
+```
+
+```
+wrong_mag_and_mesh skip300
+[I 210629 18:02:49 models:110] 492 512 train loss: 0.0000027 valid loss: 0.3267366 P@1: 0.63000 P@3: 0.53333 P@5: 0.42800 N@3: 0.56173 N@5: 0.54516 early stop: 50
+[W 210629 18:02:51 models:137] Clipping gradients with total norm 0.00754 and max norm 0.001
+[I 210629 18:02:52 main:76] Finish Training
+...
+[I 210629 18:02:57 main:91] Finish Predicting
+Precision@1,3,5: 0.64 0.52 0.398
+nDCG@1,3,5: 0.64 0.5591972078914819 0.532127221184923
+```
+
+```
+wrong_mag_and_mesh skip400
+[I 210629 18:07:19 models:110] 219 1024 train loss: 0.0000209 valid loss: 0.2907422 P@1: 0.50000 P@3: 0.38333 P@5: 0.28400 N@3: 0.41868 N@5: 0.39755 early stop: 50
+[I 210629 18:07:22 main:76] Finish Training
+...
+[I 210629 18:07:27 main:91] Finish Predicting
+Precision@1,3,5: 0.62 0.41333333333333333 0.33
+nDCG@1,3,5: 0.62 0.4603918089034134 0.45797198888951823
+```
+
+```
+wrong_mag_and_mesh skip500
+[I 210629 18:21:18 models:110] 709 1024 train loss: 0.0000604 valid loss: 0.2490768 P@1: 0.54000 P@3: 0.42667 P@5: 0.34400 N@3: 0.45552 N@5: 0.45503 early stop: 50
+[I 210629 18:21:21 main:76] Finish Training
+...
+[I 210629 18:21:26 main:91] Finish Predicting
+Precision@1,3,5: 0.64 0.4866666666666667 0.384
+nDCG@1,3,5: 0.64 0.5275422980818205 0.5122532818830564
+```
+
+```
+wrong_mag_and_mesh skip600
+[I 210629 18:28:31 models:110] 357 512 train loss: 0.0022147 valid loss: 0.2685510 P@1: 0.55000 P@3: 0.45333 P@5: 0.36000 N@3: 0.48338 N@5: 0.48840 early stop: 50
+[I 210629 18:28:34 main:76] Finish Training
+...
+[I 210629 18:28:39 main:91] Finish Predicting
+Precision@1,3,5: 0.6 0.43 0.346
+nDCG@1,3,5: 0.6 0.4720124687659167 0.46801912014528957
+```
+
+```
+wrong_mag_and_mesh skip700
+[I 210629 18:38:40 models:110] 502 512 train loss: 0.0000027 valid loss: 0.2916571 P@1: 0.64000 P@3: 0.52333 P@5: 0.41000 N@3: 0.55349 N@5: 0.53210 early stop: 50
+[W 210629 18:38:42 models:137] Clipping gradients with total norm 0.00358 and max norm 0.00063
+[I 210629 18:38:43 main:76] Finish Training
+...
+[I 210629 18:38:48 main:91] Finish Predicting
+Precision@1,3,5: 0.58 0.4533333333333333 0.366
+nDCG@1,3,5: 0.58 0.4934019536056973 0.48621020579303
+```
+
+```
+wrong_mag_and_mesh skip800
+[I 210629 18:47:46 models:110] 444 1024 train loss: 0.0000101 valid loss: 0.2472440 P@1: 0.59000 P@3: 0.48333 P@5: 0.39600 N@3: 0.51133 N@5: 0.52299 early stop: 50
+[W 210629 18:47:47 models:137] Clipping gradients with total norm 0.01827 and max norm 0.00109
+[I 210629 18:47:50 main:76] Finish Training
+...
+[I 210629 18:47:55 main:91] Finish Predicting
+Precision@1,3,5: 0.54 0.4766666666666667 0.378
+nDCG@1,3,5: 0.54 0.5074930982541741 0.49534840980159556
+```
+
+```
+wrong_mag_and_mesh skip900
+[I 210629 19:01:59 models:110] 714 1024 train loss: 0.0009299 valid loss: 0.2399114 P@1: 0.53000 P@3: 0.44000 P@5: 0.34600 N@3: 0.45805 N@5: 0.45470 early stop: 50
+[I 210629 19:02:02 main:76] Finish Training
+...
+[I 210629 19:02:07 main:91] Finish Predicting
+Precision@1,3,5: 0.58 0.48333333333333334 0.362
+nDCG@1,3,5: 0.58 0.5137850782975408 0.5006275375985259
+```
+
+```
+only_mag_and_mesh skip0
+[I 210629 19:13:43 models:110] 577 512 train loss: 0.1263775 valid loss: 0.1435963 P@1: 0.29000 P@3: 0.22667 P@5: 0.20000 N@3: 0.24101 N@5: 0.26225 early stop: 50
+[I 210629 19:13:46 main:76] Finish Training
+...
+[I 210629 19:13:51 main:91] Finish Predicting
+Precision@1,3,5: 0.41 0.25333333333333335 0.208
+nDCG@1,3,5: 0.41 0.2843588623960305 0.2930164796297494
+```
+
+```
+only_mag_and_mesh skip100
+[I 210629 19:16:51 models:110] 144 1024 train loss: 0.1342389 valid loss: 0.1445978 P@1: 0.26000 P@3: 0.22000 P@5: 0.18400 N@3: 0.22816 N@5: 0.23442 early stop: 50
+[I 210629 19:16:54 main:76] Finish Training
+...
+[I 210629 19:16:59 main:91] Finish Predicting
+Precision@1,3,5: 0.3 0.23 0.216
+nDCG@1,3,5: 0.3 0.24581032993125163 0.26764748170727454
+```
+
+```
+only_mag_and_mesh skip200
+[I 210629 19:24:26 models:110] 369 1024 train loss: 0.1282068 valid loss: 0.1437697 P@1: 0.32000 P@3: 0.23667 P@5: 0.21000 N@3: 0.25520 N@5: 0.27047 early stop: 50
+[I 210629 19:24:29 main:76] Finish Training
+...
+[I 210629 19:24:34 main:91] Finish Predicting
+Precision@1,3,5: 0.29 0.2 0.184
+nDCG@1,3,5: 0.29 0.22108968415776295 0.2420145791901519
+```
+
+```
+only_mag_and_mesh skip300
+[I 210629 19:28:01 models:110] 167 512 train loss: 0.1313191 valid loss: 0.1459799 P@1: 0.35000 P@3: 0.25000 P@5: 0.22800 N@3: 0.27173 N@5: 0.28254 early stop: 50
+[I 210629 19:28:04 main:76] Finish Training
+...
+[I 210629 19:28:09 main:91] Finish Predicting
+Precision@1,3,5: 0.3 0.25666666666666665 0.24
+nDCG@1,3,5: 0.3 0.2621237770539824 0.2789240417170009
+```
+
+```
+only_mag_and_mesh skip400
+[I 210629 19:31:11 models:110] 147 512 train loss: 0.1324192 valid loss: 0.1483450 P@1: 0.26000 P@3: 0.18333 P@5: 0.19200 N@3: 0.20131 N@5: 0.22737 early stop: 50
+[I 210629 19:31:14 main:76] Finish Training
+...
+[I 210629 19:31:19 main:91] Finish Predicting
+Precision@1,3,5: 0.3 0.20666666666666667 0.188
+nDCG@1,3,5: 0.3 0.22324131972500644 0.24080693909786322
+```
+
+```
+only_mag_and_mesh skip500
+[I 210629 19:41:53 models:110] 537 512 train loss: 0.1287062 valid loss: 0.1417217 P@1: 0.35000 P@3: 0.23333 P@5: 0.20200 N@3: 0.25805 N@5: 0.26380 early stop: 50
+[I 210629 19:41:56 main:76] Finish Training
+...
+[I 210629 19:42:01 main:91] Finish Predicting
+Precision@1,3,5: 0.19 0.16333333333333333 0.16
+nDCG@1,3,5: 0.19 0.16877114904091023 0.18577785022153037
+```
+
+```
+only_mag_and_mesh skip600
+[I 210629 19:45:41 models:110] 182 512 train loss: 0.1345706 valid loss: 0.1410361 P@1: 0.35000 P@3: 0.23667 P@5: 0.20600 N@3: 0.26224 N@5: 0.26627 early stop: 50
+[I 210629 19:45:44 main:76] Finish Training
+...
+[I 210629 19:45:49 main:91] Finish Predicting
+Precision@1,3,5: 0.31 0.21 0.204
+nDCG@1,3,5: 0.31 0.22854853246477883 0.25329919503944587
+```
+
+```
+only_mag_and_mesh skip700
+[I 210629 19:52:20 models:110] 329 1024 train loss: 0.1284429 valid loss: 0.1462586 P@1: 0.27000 P@3: 0.22000 P@5: 0.19600 N@3: 0.23112 N@5: 0.24408 early stop: 50
+[I 210629 19:52:23 main:76] Finish Training
+...
+[I 210629 19:52:28 main:91] Finish Predicting
+Precision@1,3,5: 0.35 0.25 0.196
+nDCG@1,3,5: 0.35 0.27039180890341347 0.256605479494552
+```
+
+```
+only_mag_and_mesh skip800
+[I 210629 20:02:32 models:110] 507 512 train loss: 0.1252063 valid loss: 0.1404018 P@1: 0.31000 P@3: 0.24667 P@5: 0.22000 N@3: 0.25866 N@5: 0.27530 early stop: 50
+[I 210629 20:02:34 main:76] Finish Training
+...
+[I 210629 20:02:39 main:91] Finish Predicting
+Precision@1,3,5: 0.27 0.22 0.198
+nDCG@1,3,5: 0.27 0.23050311719147915 0.2448808675023952
+```
+
+```
+only_mag_and_mesh skip900
+[I 210629 20:07:56 models:110] 262 512 train loss: 0.1291728 valid loss: 0.1442561 P@1: 0.25000 P@3: 0.24667 P@5: 0.19600 N@3: 0.24827 N@5: 0.25030 early stop: 50
+
+[I 210629 20:07:59 main:76] Finish Training
+...
+[I 210629 20:08:04 main:91] Finish Predicting
+Precision@1,3,5: 0.31 0.24 0.214
+nDCG@1,3,5: 0.31 0.2533526280130721 0.280816834621133
+```
+
+```
+nothing skip0
+[I 210629 20:19:20 models:110] 129 1024 train loss: 0.1424850 valid loss: 0.1404955 P@1: 0.29000 P@3: 0.22000 P@5: 0.19400 N@3: 0.23613 N@5: 0.25812 early stop: 50
+[I 210629 20:19:23 main:76] Finish Training
+...
+[I 210629 20:19:28 main:91] Finish Predicting
+Precision@1,3,5: 0.39 0.28 0.226
+nDCG@1,3,5: 0.39 0.299051649656258 0.30641591066017626
+```
+
+```
+nothing skip100
+[I 210629 20:22:15 models:110] 132 512 train loss: 0.1394004 valid loss: 0.1447483 P@1: 0.28000 P@3: 0.21667 P@5: 0.20000 N@3: 0.22805 N@5: 0.24578 early stop: 50
+[I 210629 20:22:18 main:76] Finish Training
+...
+[I 210629 20:22:23 main:91] Finish Predicting
+Precision@1,3,5: 0.32 0.22 0.19
+nDCG@1,3,5: 0.32 0.2403918089034135 0.2472971808740672
+```
+
+```
+nothing skip200
+[I 210629 20:25:09 models:110] 132 512 train loss: 0.1416580 valid loss: 0.1423907 P@1: 0.33000 P@3: 0.25333 P@5: 0.19200 N@3: 0.26989 N@5: 0.25917 early stop: 50
+[I 210629 20:25:12 main:76] Finish Training
+...
+[I 210629 20:25:17 main:91] Finish Predicting
+Precision@1,3,5: 0.31 0.23333333333333334 0.182
+nDCG@1,3,5: 0.31 0.2516206598625032 0.2546628706341298
+```
+
+```
+nothing skip300
+[I 210629 20:28:43 models:110] 164 1024 train loss: 0.1401133 valid loss: 0.1460576 P@1: 0.37000 P@3: 0.26000 P@5: 0.22800 N@3: 0.28363 N@5: 0.28890 early stop: 50
+[I 210629 20:28:46 main:76] Finish Training
+...
+[I 210629 20:28:51 main:91] Finish Predicting
+Precision@1,3,5: 0.3 0.2633333333333333 0.212
+nDCG@1,3,5: 0.3 0.2668165643142099 0.25955940301063135
+```
+
+```
+nothing skip400
+[I 210629 20:31:40 models:110] 134 1024 train loss: 0.1402221 valid loss: 0.1483494 P@1: 0.26000 P@3: 0.20333 P@5: 0.18800 N@3: 0.21916 N@5: 0.23212 early stop: 50
+[I 210629 20:31:43 main:76] Finish Training
+...
+[I 210629 20:31:49 main:91] Finish Predicting
+Precision@1,3,5: 0.3 0.2 0.192
+nDCG@1,3,5: 0.3 0.22039180890341348 0.2430343171438473
+```
+
+```
+nothing skip500
+[I 210629 20:34:30 models:110] 129 1024 train loss: 0.1414297 valid loss: 0.1369625 P@1: 0.33000 P@3: 0.22000 P@5: 0.18400 N@3: 0.24212 N@5: 0.24161 early stop: 50
+[I 210629 20:34:33 main:76] Finish Training
+...
+[I 210629 20:34:39 main:91] Finish Predicting
+Precision@1,3,5: 0.19 0.19333333333333333 0.18
+nDCG@1,3,5: 0.19 0.1892742662323894 0.20553790875032343
+```
+
+```
+nothing skip600
+[I 210629 20:37:28 models:110] 134 1024 train loss: 0.1406198 valid loss: 0.1400108 P@1: 0.35000 P@3: 0.26000 P@5: 0.20600 N@3: 0.27805 N@5: 0.27028 early stop: 50
+[I 210629 20:37:31 main:76] Finish Training
+...
+[I 210629 20:37:36 main:91] Finish Predicting
+Precision@1,3,5: 0.31 0.22333333333333333 0.206
+nDCG@1,3,5: 0.31 0.2416206598625032 0.26048249524993256
+```
+
+```
+nothing skip700
+[I 210629 20:40:23 models:110] 134 1024 train loss: 0.1415591 valid loss: 0.1430922 P@1: 0.28000 P@3: 0.22000 P@5: 0.19000 N@3: 0.23469 N@5: 0.24138 early stop: 50
+[I 210629 20:40:26 main:76] Finish Training
+...
+[I 210629 20:40:32 main:91] Finish Predicting
+Precision@1,3,5: 0.34 0.22 0.186
+nDCG@1,3,5: 0.34 0.245084596163641 0.24472481998619305
+```
+
+```
+nothing skip800
+[I 210629 20:43:14 models:110] 129 1024 train loss: 0.1424465 valid loss: 0.1387460 P@1: 0.30000 P@3: 0.22667 P@5: 0.17800 N@3: 0.24224 N@5: 0.23964 early stop: 50
+[I 210629 20:43:17 main:76] Finish Training
+...
+[I 210629 20:43:23 main:91] Finish Predicting
+Precision@1,3,5: 0.29 0.21333333333333335 0.192
+nDCG@1,3,5: 0.29 0.22865984075284454 0.23846230804256696
+```
+
+```
+nothing skip900
+[I 210629 20:46:11 models:110] 132 512 train loss: 0.1399098 valid loss: 0.1436310 P@1: 0.29000 P@3: 0.22333 P@5: 0.19600 N@3: 0.23754 N@5: 0.25484 early stop: 50
+[I 210629 20:46:14 main:76] Finish Training
+...
+[I 210629 20:46:19 main:91] Finish Predicting
+Precision@1,3,5: 0.32 0.22666666666666666 0.204
+nDCG@1,3,5: 0.32 0.24508459616364103 0.2686014358449626
+```
+

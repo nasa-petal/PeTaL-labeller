@@ -4,7 +4,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify Lens output data according to the PeTaL taxonomy.
 
-This README was last updated on 28 June 2021.
+This README was last updated on 29 June 2021.
 
 ## What are all these files?
 
@@ -68,11 +68,34 @@ Repeated with 10-fold cross-validation on June 28:
 
 Results are **inconclusive**, and I suspect the differences between these trials may not be statistically significant, but adding MeSH terms and MAG fields does not hurt accuracy, nor does it hurt performance (i.e., speed). All trials took roughly 12 minutes to run 1000 epochs on the dataset of 1000 papers (800 training, 100 validation, 100 test).
 
+### Effect of using *wrong* MAG and MeSH labels, &c.
+
+Adding *wrong* MAG and MeSH labels does not seem to have affected the precision of the model in the slightest.
+
+Using *only* MAG and MeSH labels (and no other information, not even text) does not seem to have helped MATCH predict labels any better than chance.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| with_mag, with_mesh | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| wrong_mag_and_mesh | 0.591 ± 0.034 | 0.466 ± 0.030 | 0.366 ± 0.022 | 0.502 ± 0.028 | 0.495 ± 0.025 |
+| only_mag_and_mesh | 0.303 ± 0.053 | 0.223 ± 0.028 | 0.201 ± 0.020 | 0.239 ± 0.031 | 0.254 ± 0.028 |
+| nothing at all | 0.307 ± 0.047 | 0.227 ± 0.025 | 0.197 ± 0.014 | 0.243 ± 0.027 | 0.253 ± 0.024 |
+
+If you train MATCH on *nothing at all*, it predicts the following top-5 labels:
+
+```
+protect_from_harm
+process_resources
+protect_from_non-living_threats sense_send_or_process_information
+move
+```
+
+All of which are level-1 labels (except for `protect_from_non-living_threats`). Presumably these are the top 5 most common labels in the dataset.
+
 ## Future work
 
-- Write Makefile to streamline instructions for reproducing this work.
-  - Add CLI options for `PeTaL/Split.py`, `transform_data_PeTaL.py`
 - Migrate code from Jupyter notebooks to python source files.
 - Integrate this work with the rest of the PeTaL pipeline.
 - Look into relevancy threshold vs. top k for labelling (https://github.com/nasa-petal/PeTaL-labeller/issues/55)
 - Compare to auto-sklearn (https://github.com/nasa-petal/PeTaL-labeller/issues/56)
+- Use flat taxonomy and/or taxonomy with labels with less than 10 instances removed
