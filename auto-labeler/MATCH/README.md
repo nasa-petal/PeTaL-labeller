@@ -4,7 +4,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify Lens output data according to the PeTaL taxonomy.
 
-This README was last updated on 25 June 2021.
+This README was last updated on 28 June 2021.
 
 ## What are all these files?
 
@@ -58,14 +58,23 @@ This is encouraging for our project, at least because it indicates that we can k
 
 ### Effect of adding MAG fields of study and MeSH terms to text
 
-I performed ablation studies to determine the effect of appending Microsoft Academic Graph (MAG) fields of study or Medical Subject Headings (MeSH) terms to the text. Here are the results from my trials:
+I performed ablation studies to determine the effect of appending Microsoft Academic Graph (MAG) fields of study or Medical Subject Headings (MeSH) terms to the text. Here are the results from my first trials on June 23:
 
 | Test set P@1 | without MeSH | with MeSH |
 | --- | --- | --- |
 | without MAG | 0.64 | 0.63 |
 | with MAG | 0.61 | 0.67 |
 
-Results are **a bit inconclusive**, and I suspect the differences between these trials may not be statistically significant, but adding MeSH terms and MAG fields does not hurt accuracy, nor does it hurt performance (i.e., speed). All trials took roughly 12 minutes to run 1000 epochs on the dataset of 1000 papers (800 training, 100 validation, 100 test).
+Repeated with 10-fold cross-validation on June 28:
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| with_mag, with_mesh | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| with_mag, no_mesh | 0.583 ± 0.032 | 0.477 ± 0.035 | 0.378 ± 0.029 | 0.508 ± 0.033 | 0.506 ± 0.036 |
+| no_mag, with_mesh | 0.573 ± 0.056 | 0.455 ± 0.029 | 0.362 ± 0.034 | 0.488 ± 0.034 | 0.485 ± 0.040 |
+| no_mag, no_mesh | 0.569 ± 0.036 | 0.475 ± 0.028 | 0.373 ± 0.026 | 0.504 ± 0.029 | 0.498 ± 0.030 |
+
+Results are **inconclusive**, and I suspect the differences between these trials may not be statistically significant, but adding MeSH terms and MAG fields does not hurt accuracy, nor does it hurt performance (i.e., speed). All trials took roughly 12 minutes to run 1000 epochs on the dataset of 1000 papers (800 training, 100 validation, 100 test).
 
 ## Future work
 
