@@ -24,7 +24,16 @@ def get_arg_parser():
         else:
             raise NotADirectoryError(string)
 
-    parser = argparse.ArgumentParser(description="Input document file paths")
+    def formatting_type(string):
+        if string.lower() in ["leaf", "all"]:
+            return string.lower()
+        else:
+            raise parser.error("Bad Argument: {}\nAcceptable options: leaf, all".format(string))
+
+    parser = argparse.ArgumentParser(
+        description="This script will take our labeled_data and a lens_output file and create a MATCH friendly paper output file.")
+    parser.add_argument("type", help="Argument indicating what kind of labels should be included in the final output.\nAccepts: leaf, all",
+                        type=formatting_type)
     parser.add_argument("--json_path", "-jp", help="Full path to Lens JSON output file: C:\..\..\lens_output.json",
                         default="./lens_output.json", type=dir_path)
     parser.add_argument("--csv_path", "-cp", help="Full path to CSV labeled file: C:\..\..\labeled_data.csv",
@@ -32,15 +41,14 @@ def get_arg_parser():
     return parser
 
 
-def load_csv(csv_path: str):
-    """Loads in labeled csv data, pulls the title and labels out and creates a dataframe.
+def get_all_labels(labeled_data: pd.DataFrame, merged_data: list):
+    """Merges all of the levels of labels from our labeled data into a single list and appends it to the reference of a list.
     Args:
-        args (csv_path): Path of the csv file.
+        args (labeled_data): Dataframe of our labeled data read from a csv.
+        args (merged_data): A list which will have a single list per paper appended to it.
     Returns:
-        pandas.Dataframe: A dataframe consisting of only titles and labels.
+        None
     """
-    labeled_data = pd.read_csv(csv_path)
-    merged_data = []
 
     for index, row in labeled_data.iterrows():
 
@@ -50,6 +58,42 @@ def load_csv(csv_path: str):
                          *ast.literal_eval(row["label_level_3"] if type(row["label_level_3"]) == str else '[]')
                          ]
         merged_data.append(merged_labels)
+    return
+
+
+def get_leaf_labels(labeled_data: pd.DataFrame, merged_data: list):
+    """Takes only the leaf list of labels from our labeled data and appends it to the reference of a list.
+    Args:
+        args (labeled_data): Dataframe of our labeled data read from a csv.
+        args (merged_data): A list which will have a single list per paper appended to it.
+    Returns:
+        None
+    """
+
+    for index, row in labeled_data.iterrows():
+        if (not pd.isna(row["label_level_3"])):
+            merged_data.append(ast.literal_eval(row["label_level_3"]))
+        else:
+            merged_data.append(ast.literal_eval(row["label_level_2"]))
+    return
+
+
+def load_csv(csv_path: str, format_type: str):
+    """Loads in labeled csv data, pulls the title and labels out and creates a dataframe.
+    Args:
+        args (csv_path): Path of the csv file.
+        args (format_type): A string dictating what kind of labels should the parser include in its output.
+    Returns:
+        pandas.Dataframe: A dataframe consisting of only titles and labels.
+    """
+    labeled_data = pd.read_csv(csv_path)
+    merged_data = []
+
+    if (format_type == "all"):
+        get_all_labels(labeled_data, merged_data)
+
+    elif (format_type == "leaf"):
+        get_leaf_labels(labeled_data, merged_data)
 
     merged_dataframe = pd.DataFrame(data={"label": merged_data})
     merged_dataframe["title"] = labeled_data["title"]
@@ -162,7 +206,8 @@ def clean_lens_json(lens_output: dict, labeled_dataframe: pd.DataFrame):
                     label_list = find_labels("doi", paper_doi)
 
                     if (len(label_list) == 0):
-                        label_list = find_labels("title", paper.get("title", ""))
+                        label_list = find_labels(
+                            "title", paper.get("title", ""))
                     else:
                         break
 
@@ -176,7 +221,8 @@ def clean_lens_json(lens_output: dict, labeled_dataframe: pd.DataFrame):
 
         cleaned_papers.append(paper_object)
         amount_done += 1
-        print("Progress Completed = {0:.0%}".format(amount_done/amount_of_rows), end = '\r')
+        print("Progress Completed = {0:.0%}".format(
+            amount_done/amount_of_rows), end='\r')
 
     return cleaned_papers
 
@@ -184,7 +230,7 @@ def clean_lens_json(lens_output: dict, labeled_dataframe: pd.DataFrame):
 if __name__ == "__main__":
     parser = get_arg_parser()
     args = parser.parse_args()
-    labeled_dataframe = load_csv(args.csv_path)
+    labeled_dataframe = load_csv(args.csv_path, args.type)
     json_dict = load_lens_json(args.json_path)
     cleaned_json_list = clean_lens_json(json_dict, labeled_dataframe)
 
@@ -193,7 +239,8 @@ if __name__ == "__main__":
         list_size = len(cleaned_json_list)
 
         for row in cleaned_json_list:
-            print("Progress of JSON Write Completed = {0:.0%}".format(count/list_size), end = '\r')
+            print("Progress of JSON Write Completed = {0:.0%}".format(
+                count/list_size), end='\r')
             cleaned_json.write(json.dumps(row))
             if(count < list_size):
                 cleaned_json.write("\n")

@@ -6,7 +6,14 @@
 
 ## How do I run it?
 <p>The script is run by starting it with the "python" command (ex. python example_script.py). The script will by default, look for a "labeled_data.csv" and a "lens_output.json" file within the same directory.</p>
-<p>The script accepts two arguments (-jp, --json_path, -cp, --csv_path) which is the path + file_name and extension of the respective files. The help parameter can also be passed to the script to get these commands and examples (-h, --help).</p>
+<p>The script requires one argument and accepts two optional arguments. The required argument is the type of labels to include in the output. The current options are: 
+
+- "all"
+    - The output will contain all labels attached to a paper.
+- "leaf"
+    - The output will only contain the labels represented by the leaf nodes of our taxonomy.
+    
+The optional arguments are, -jp, --json_path and -cp, --csv_path, which are the path + file_name and extension of the respective files. The help parameter can also be passed to the script to get these commands and examples (-h, --help).</p>
 
 ## Downloading data from lens.org API to generate lens_output.json
 
