@@ -96,6 +96,5 @@ All of which are level-1 labels (except for `protect_from_non-living_threats`). 
 
 - Migrate code from Jupyter notebooks to python source files.
 - Integrate this work with the rest of the PeTaL pipeline.
-- Look into relevancy threshold vs. top k for labelling (https://github.com/nasa-petal/PeTaL-labeller/issues/55)
 - Compare to auto-sklearn (https://github.com/nasa-petal/PeTaL-labeller/issues/56)
-- Use flat taxonomy and/or taxonomy with labels with less than 10 instances removed
+- Use flat taxonomy and/or taxonomy with labels with less than 10 instances removed (https://github.com/nasa-petal/PeTaL-labeller/issues/60)
