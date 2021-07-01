@@ -17,6 +17,8 @@ This README was last updated on 1 July 2021.
 - `run_MATCH_with_PeTaL_data.ipynb` is a Jupyter notebook evaluating the performance of MATCH on PeTaL data.
 - `run_MATCH.ipynb` is an earlier attempt to reproduce the MATCH algorithm's results in its Quick Start section.
 - `transform_data_PeTaL.py` is a version of MATCH's `transform_data.py`, modified to use the PeTaL dataset instead.
+- `transform_data_PeTaL_only_mags_and_meshes.py` is the same, but only the MAG and MeSH fields are used (no title, journal, author, references, or text). Used for an ablation study.
+- `transform_data_PeTaL_random_mags_and_meshes.py` is the same, but the MAG and MeSH fields are chosen randomly. Used for an ablation study.
 
 ## How do I reproduce your results?
 
@@ -103,7 +105,15 @@ This could in part show that using hierarchy information is helpful, but I doubt
 | with_mag, with_mesh | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
 | leaf_labels | 0.299 ± 0.043 | 0.187 ± 0.024 | 0.142 ± 0.017 | 0.323 ± 0.037 | 0.357 ± 0.036 |
 
-### Effect of additional pretraining for the embeddings
+#### Is MATCH playing it safe by only predicting level-1 labels?
+
+We conduct a preliminary analysis on this question.
+
+![Are Parent Labels Overrepresented? plot](are_parent_labels_overrepresented.png)
+
+It appears that yes, the top k predicted labels are more likely to be parent (non-leaf) labels (the red line is the proportion of target labels which are parent labels), but only up to k = 5. After that, leaf labels are more represnted.
+
+### Effect of additional pretrainings for the embeddings
 
 Modifying the embedding pretraining script to take into account MAG and MeSH terms does not seem to have helped.
 
