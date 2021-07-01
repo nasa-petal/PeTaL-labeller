@@ -4,7 +4,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify Lens output data according to the PeTaL taxonomy.
 
-This README was last updated on 29 June 2021.
+This README was last updated on 1 July 2021.
 
 ## What are all these files?
 
@@ -91,6 +91,26 @@ move
 ```
 
 All of which are level-1 labels (except for `protect_from_non-living_threats`). Presumably these are the top 5 most common labels in the dataset.
+
+### Effect of using leaf labels only
+
+These results are sobering, to say the least. Removing non-leaf labels (e.g., `move`, `protect_from_harm`, &c.) brings our metrics down dramatically.
+
+This could in part show that using hierarchy information is helpful, but I doubt that would explain the stark difference. The explanation which I most endorse is that MATCH was previously "playing it safe" by predicting level-1 labels (which, by virtue of being the most general labels, appeared most frequently in our dataset).
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| with_mag, with_mesh | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| leaf_labels | 0.299 ± 0.043 | 0.187 ± 0.024 | 0.142 ± 0.017 | 0.323 ± 0.037 | 0.357 ± 0.036 |
+
+### Effect of additional pretraining for the embeddings
+
+Modifying the embedding pretraining script to take into account MAG and MeSH terms does not seem to have helped.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| with embedding pretraining | 0.299 ± 0.043 | 0.187 ± 0.024 | 0.142 ± 0.017 | 0.323 ± 0.037 | 0.357 ± 0.036 |
+| no embedding pretraining | 0.288 ± 0.038 | 0.171 ± 0.012 | 0.126 ± 0.008 | 0.325 ± 0.027 | 0.356 ± 0.025 |
 
 ## Future work
 

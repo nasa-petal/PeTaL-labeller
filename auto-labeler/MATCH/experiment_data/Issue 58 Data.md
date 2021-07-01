@@ -707,3 +707,204 @@ Precision@1,3,5: 0.32 0.22666666666666666 0.204
 nDCG@1,3,5: 0.32 0.24508459616364103 0.2686014358449626
 ```
 
+```
+leaf_labels skip0
+[I 210630 22:36:28 models:110] 609 1024 train loss: 0.0000042 valid loss: 0.1434948 P@1: 0.35000 P@3: 0.23000 P@5: 0.17600 N@3: 0.39455 N@5: 0.44095 early stop: 50
+[I 210630 22:36:31 main:76] Finish Training
+...
+[I 210630 22:36:36 main:91] Finish Predicting
+Precision@1,3,5: 0.22 0.17333333333333334 0.128
+nDCG@1,3,5: 0.22 0.30457721234394314 0.3360800079517747
+```
+
+```
+leaf_labels skip100
+[I 210630 22:44:11 models:110] 414 1024 train loss: 0.0000424 valid loss: 0.1272322 P@1: 0.28000 P@3: 0.19000 P@5: 0.14400 N@3: 0.31814 N@5: 0.35339 early stop: 50
+[I 210630 22:44:14 main:76] Finish Training
+...
+[I 210630 22:44:19 main:91] Finish Predicting
+Precision@1,3,5: 0.31 0.19333333333333333 0.15
+nDCG@1,3,5: 0.31 0.3409433732950163 0.37416619329743506
+```
+
+```
+leaf_labels skip200
+[I 210630 22:56:40 models:110] 682 512 train loss: 0.0000039 valid loss: 0.1757972 P@1: 0.31000 P@3: 0.17667 P@5: 0.12600 N@3: 0.32781 N@5: 0.35669 early stop: 50
+[I 210630 22:56:42 main:76] Finish Training
+...
+[I 210630 22:56:47 main:91] Finish Predicting
+Precision@1,3,5: 0.2857142857142857 0.19047619047619047 0.14489795918367346
+nDCG@1,3,5: 0.2857142857142857 0.32235519795941253 0.3621482312005172
+```
+
+```
+leaf_labels skip300
+[I 210630 23:09:15 models:110] 692 512 train loss: 0.0000639 valid loss: 0.1358802 P@1: 0.31000 P@3: 0.20333 P@5: 0.14400 N@3: 0.33527 N@5: 0.35744 early stop: 50
+[I 210630 23:09:17 main:76] Finish Training
+...
+[I 210630 23:09:22 main:91] Finish Predicting
+Precision@1,3,5: 0.37 0.23 0.158
+nDCG@1,3,5: 0.37 0.3922358554171231 0.40712212331611225
+```
+
+```
+leaf_labels skip400
+[I 210630 23:17:45 models:110] 459 1024 train loss: 0.0001201 valid loss: 0.1327952 P@1: 0.24000 P@3: 0.18333 P@5: 0.13200 N@3: 0.29120 N@5: 0.30953 early stop: 50
+[I 210630 23:17:48 main:76] Finish Training
+...
+[I 210630 23:17:52 main:91] Finish Predicting
+Precision@1,3,5: 0.3333333333333333 0.1919191919191919 0.15555555555555556
+nDCG@1,3,5: 0.3333333333333333 0.3292187453347561 0.37938073923226995
+```
+
+```
+leaf_labels skip500
+[I 210630 23:27:56 models:110] 552 512 train loss: 0.0011348 valid loss: 0.1171184 P@1: 0.24000 P@3: 0.15333 P@5: 0.12600 N@3: 0.25088 N@5: 0.28935 early stop: 50
+[I 210630 23:27:59 main:76] Finish Training
+...
+[I 210630 23:28:03 main:91] Finish Predicting
+Precision@1,3,5: 0.32 0.17333333333333334 0.128
+nDCG@1,3,5: 0.32 0.3055742949010058 0.33215746563416304
+```
+
+```
+leaf_labels skip600
+[I 210630 23:46:11 models:110] 999 1024 train loss: 0.0000893 valid loss: 0.1923326 P@1: 0.29000 P@3: 0.18667 P@5: 0.13400 N@3: 0.31806 N@5: 0.33995 early stop: 4
+[I 210630 23:46:11 main:76] Finish Training
+...
+[I 210630 23:46:15 main:91] Finish Predicting
+Precision@1,3,5: 0.25 0.14 0.11
+nDCG@1,3,5: 0.25 0.25093748393985926 0.28681568339600044
+```
+
+```
+leaf_labels skip700
+[I 210630 23:58:02 models:110] 637 512 train loss: 0.0000041 valid loss: 0.1625699 P@1: 0.30000 P@3: 0.18667 P@5: 0.14200 N@3: 0.33099 N@5: 0.36755 early stop: 50
+[W 210630 23:58:03 models:137] Clipping gradients with total norm 0.0015 and max norm 0.00021
+[I 210630 23:58:04 main:76] Finish Training
+...
+[I 210630 23:58:09 main:91] Finish Predicting
+Precision@1,3,5: 0.27 0.17666666666666667 0.14
+nDCG@1,3,5: 0.27 0.28600246983347966 0.31867402176030535
+```
+
+```
+leaf_labels skip800
+[I 210701 00:13:28 models:110] 839 1024 train loss: 0.0000329 valid loss: 0.1334490 P@1: 0.32000 P@3: 0.20667 P@5: 0.14800 N@3: 0.37239 N@5: 0.39497 early stop: 50
+[I 210701 00:13:31 main:76] Finish Training
+...
+[I 210701 00:13:36 main:91] Finish Predicting
+Precision@1,3,5: 0.34 0.22333333333333333 0.17
+nDCG@1,3,5: 0.34 0.35814056118163007 0.39403364739797025
+```
+
+```
+leaf_labels skip900
+[I 210701 00:21:37 models:110] 432 512 train loss: 0.0000969 valid loss: 0.1189979 P@1: 0.34000 P@3: 0.21667 P@5: 0.15600 N@3: 0.36531 N@5: 0.39473 early stop: 50
+[I 210701 00:21:39 main:76] Finish Training
+...
+[I 210701 00:21:44 main:91] Finish Predicting
+Precision@1,3,5: 0.29 0.18 0.136
+nDCG@1,3,5: 0.29 0.3440226534779366 0.3792350879246611
+```
+
+```
+leaf_labels_and_pretraining_embedding skip0
+[I 210701 05:50:49 models:110] 489 1024 train loss: 0.0000041 valid loss: 0.1499073 P@1: 0.36000 P@3: 0.23667 P@5: 0.15800 N@3: 0.40540 N@5: 0.41968 early stop: 50
+[I 210701 05:50:52 main:76] Finish Training
+...
+[I 210701 05:50:57 main:91] Finish Predicting
+Precision@1,3,5: 0.34 0.19333333333333333 0.14
+nDCG@1,3,5: 0.34 0.36667287161210554 0.39518445228985855
+```
+
+```
+leaf_labels_and_pretraining_embedding skip100
+[I 210701 06:01:33 models:110] 584 1024 train loss: 0.0000036 valid loss: 0.1506335 P@1: 0.41000 P@3: 0.25333 P@5: 0.17800 N@3: 0.44419 N@5: 0.46962 early stop: 50
+[I 210701 06:01:36 main:76] Finish Training
+...
+[I 210701 06:01:40 main:91] Finish Predicting
+Precision@1,3,5: 0.26 0.17666666666666667 0.13
+nDCG@1,3,5: 0.26 0.32376349417697425 0.35098581705634446
+```
+
+```
+leaf_labels_and_pretraining_embedding skip200
+[I 210701 06:13:26 models:110] 644 1024 train loss: 0.0000039 valid loss: 0.1574478 P@1: 0.39000 P@3: 0.21667 P@5: 0.15800 N@3: 0.38836 N@5: 0.41941 early stop: 50
+[I 210701 06:13:29 main:76] Finish Training
+...
+[I 210701 06:13:33 main:91] Finish Predicting
+Precision@1,3,5: 0.31 0.18 0.136
+nDCG@1,3,5: 0.31 0.3450947608707928 0.38893243335538796
+```
+
+```
+leaf_labels_and_pretraining_embedding skip300
+[I 210701 06:31:29 models:110] 989 1024 train loss: 0.0000033 valid loss: 0.1827621 P@1: 0.36000 P@3: 0.21667 P@5: 0.15800 N@3: 0.37662 N@5: 0.40285 early stop: 50
+[I 210701 06:31:32 main:76] Finish Training
+...
+[I 210701 06:31:36 main:91] Finish Predicting
+Precision@1,3,5: 0.3 0.17333333333333334 0.13
+nDCG@1,3,5: 0.3 0.3219425719339812 0.3567138387276948
+```
+
+```
+leaf_labels_and_pretraining_embedding skip400
+[I 210701 06:38:17 models:110] 364 1024 train loss: 0.0000062 valid loss: 0.1206563 P@1: 0.35000 P@3: 0.21000 P@5: 0.15800 N@3: 0.38703 N@5: 0.42267 early stop: 50
+[I 210701 06:38:20 main:76] Finish Training
+...
+[I 210701 06:38:25 main:91] Finish Predicting
+Precision@1,3,5: 0.29 0.16333333333333333 0.132
+nDCG@1,3,5: 0.29 0.3153181387982232 0.36411629934532075
+```
+
+```
+leaf_labels_and_pretraining_embedding skip500
+[I 210701 06:46:15 models:110] 429 1024 train loss: 0.0000048 valid loss: 0.1325373 P@1: 0.37000 P@3: 0.23333 P@5: 0.16600 N@3: 0.41740 N@5: 0.45452 early stop: 50
+[I 210701 06:46:19 main:76] Finish Training
+...
+[I 210701 06:46:23 main:91] Finish Predicting
+Precision@1,3,5: 0.35 0.18 0.124
+nDCG@1,3,5: 0.35 0.3644528619155245 0.38155878769825946
+```
+
+```
+leaf_labels_and_pretraining_embedding skip600
+[I 210701 06:54:24 models:110] 437 512 train loss: 0.0000047 valid loss: 0.1561050 P@1: 0.32000 P@3: 0.23333 P@5: 0.16000 N@3: 0.40275 N@5: 0.42238 early stop: 50
+[I 210701 06:54:27 main:76] Finish Training
+...
+[I 210701 06:54:32 main:91] Finish Predicting
+Precision@1,3,5: 0.22 0.14666666666666667 0.118
+nDCG@1,3,5: 0.22 0.2740091092588436 0.3135088908021499
+```
+
+```
+leaf_labels_and_pretraining_embedding skip700
+[I 210701 07:12:35 models:110] 994 1024 train loss: 0.0000034 valid loss: 0.1814691 P@1: 0.31000 P@3: 0.20000 P@5: 0.15000 N@3: 0.35981 N@5: 0.38982 early stop: 50
+[W 210701 07:12:36 models:137] Clipping gradients with total norm 0.00019 and max norm 3e-05
+[I 210701 07:12:38 main:76] Finish Training
+...
+[I 210701 07:12:43 main:91] Finish Predicting
+Precision@1,3,5: 0.27 0.16666666666666666 0.114
+nDCG@1,3,5: 0.27 0.3209539143159295 0.33363475076023247
+```
+
+```
+leaf_labels_and_pretraining_embedding skip800
+[I 210701 07:22:59 models:110] 557 512 train loss: 0.0000043 valid loss: 0.1452004 P@1: 0.38000 P@3: 0.23000 P@5: 0.17000 N@3: 0.39669 N@5: 0.43380 early stop: 50
+[I 210701 07:23:02 main:76] Finish Training
+...
+[I 210701 07:23:07 main:91] Finish Predicting
+Precision@1,3,5: 0.25 0.16666666666666666 0.118
+nDCG@1,3,5: 0.25 0.3013117986551543 0.33081696247086695
+```
+
+```
+leaf_labels_and_pretraining_embedding skip900
+[I 210701 07:30:33 models:110] 402 512 train loss: 0.0000338 valid loss: 0.1165039 P@1: 0.32000 P@3: 0.19000 P@5: 0.15400 N@3: 0.34814 N@5: 0.39234 early stop: 50
+[I 210701 07:30:35 main:76] Finish Training
+...
+[I 210701 07:30:40 main:91] Finish Predicting
+Precision@1,3,5: 0.29 0.16666666666666666 0.12
+nDCG@1,3,5: 0.29 0.31577570367033203 0.34728349940948616
+```
