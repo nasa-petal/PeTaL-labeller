@@ -11,9 +11,10 @@ model:
 
 train:
   batch_size: 256
-  step: 100
+  step: 10
   nb_epoch: 1000
   swa_warmup: 4
+  early: 50
 
 valid:
   batch_size: 256
