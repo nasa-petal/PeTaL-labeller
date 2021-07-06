@@ -4,7 +4,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify Lens output data according to the PeTaL taxonomy.
 
-This README was last updated on 25 June 2021.
+This README was last updated on 1 July 2021.
 
 ## What are all these files?
 
@@ -17,18 +17,12 @@ This README was last updated on 25 June 2021.
 - `run_MATCH_with_PeTaL_data.ipynb` is a Jupyter notebook evaluating the performance of MATCH on PeTaL data.
 - `run_MATCH.ipynb` is an earlier attempt to reproduce the MATCH algorithm's results in its Quick Start section.
 - `transform_data_PeTaL.py` is a version of MATCH's `transform_data.py`, modified to use the PeTaL dataset instead.
+- `transform_data_PeTaL_only_mags_and_meshes.py` is the same, but only the MAG and MeSH fields are used (no title, journal, author, references, or text). Used for an ablation study.
+- `transform_data_PeTaL_random_mags_and_meshes.py` is the same, but the MAG and MeSH fields are chosen randomly. Used for an ablation study.
 
 ## How do I reproduce your results?
 
-In the future I may write a Makefile to automate the following setup, but until then:
-
-- Step through `run_MATCH_with_PeTaL_data.ipynb`. This will involve cloning the MATCH repository (https://github.com/yuzhimanhua/MATCH) into your workspace.
-- When the MATCH repository is cloned:
-  - move `PeTaL/` into `MATCH/`
-  - move `transform_data_PeTaL.py` into `MATCH/`
-  - move `MATCH-PeTaL.yaml` into `MATCH/configure/datasets/`
-  - move `PeTaL.yaml` into `MATCH/configure/models/`
-- Continue stepping through `run_MATCH_with_PeTaL_data.ipynb`.
+- Step through `run_MATCH_with_PeTaL_data.ipynb`.
 
 ## Summary of results
 
@@ -58,20 +52,79 @@ This is encouraging for our project, at least because it indicates that we can k
 
 ### Effect of adding MAG fields of study and MeSH terms to text
 
-Here are the results from my trials:
+I performed ablation studies to determine the effect of appending Microsoft Academic Graph (MAG) fields of study or Medical Subject Headings (MeSH) terms to the text. Here are the results from my first trials on June 23:
 
 | Test set P@1 | without MeSH | with MeSH |
 | --- | --- | --- |
 | without MAG | 0.64 | 0.63 |
 | with MAG | 0.61 | 0.67 |
 
-Results are **a bit inconclusive**, and I suspect the differences between these trials may not be statistically significant, but adding MeSH terms and MAG fields does not hurt accuracy, nor does it hurt performance (i.e., speed). All trials took roughly 12 minutes to run 1000 epochs on the dataset of 1000 papers (800 training, 100 validation, 100 test).
+Repeated with 10-fold cross-validation on June 28:
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| with_mag, with_mesh | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| with_mag, no_mesh | 0.583 ± 0.032 | 0.477 ± 0.035 | 0.378 ± 0.029 | 0.508 ± 0.033 | 0.506 ± 0.036 |
+| no_mag, with_mesh | 0.573 ± 0.056 | 0.455 ± 0.029 | 0.362 ± 0.034 | 0.488 ± 0.034 | 0.485 ± 0.040 |
+| no_mag, no_mesh | 0.569 ± 0.036 | 0.475 ± 0.028 | 0.373 ± 0.026 | 0.504 ± 0.029 | 0.498 ± 0.030 |
+
+Results are **inconclusive**, and I suspect the differences between these trials may not be statistically significant, but adding MeSH terms and MAG fields does not hurt accuracy, nor does it hurt performance (i.e., speed). All trials took roughly 12 minutes to run 1000 epochs on the dataset of 1000 papers (800 training, 100 validation, 100 test).
+
+### Effect of using *wrong* MAG and MeSH labels, &c.
+
+Adding *wrong* MAG and MeSH labels does not seem to have affected the precision of the model in the slightest.
+
+Using *only* MAG and MeSH labels (and no other information, not even text) does not seem to have helped MATCH predict labels any better than chance.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| with_mag, with_mesh | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| wrong_mag_and_mesh | 0.591 ± 0.034 | 0.466 ± 0.030 | 0.366 ± 0.022 | 0.502 ± 0.028 | 0.495 ± 0.025 |
+| only_mag_and_mesh | 0.303 ± 0.053 | 0.223 ± 0.028 | 0.201 ± 0.020 | 0.239 ± 0.031 | 0.254 ± 0.028 |
+| nothing at all | 0.307 ± 0.047 | 0.227 ± 0.025 | 0.197 ± 0.014 | 0.243 ± 0.027 | 0.253 ± 0.024 |
+
+If you train MATCH on *nothing at all*, it predicts the following top-5 labels:
+
+```
+protect_from_harm
+process_resources
+protect_from_non-living_threats sense_send_or_process_information
+move
+```
+
+All of which are level-1 labels (except for `protect_from_non-living_threats`). Presumably these are the top 5 most common labels in the dataset.
+
+### Effect of using leaf labels only
+
+These results are sobering, to say the least. Removing non-leaf labels (e.g., `move`, `protect_from_harm`, &c.) brings our metrics down dramatically.
+
+This could in part show that using hierarchy information is helpful, but I doubt that would explain the stark difference. The explanation which I most endorse is that MATCH was previously "playing it safe" by predicting level-1 labels (which, by virtue of being the most general labels, appeared most frequently in our dataset).
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| with_mag, with_mesh | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| leaf_labels | 0.299 ± 0.043 | 0.187 ± 0.024 | 0.142 ± 0.017 | 0.323 ± 0.037 | 0.357 ± 0.036 |
+
+#### Is MATCH playing it safe by only predicting level-1 labels?
+
+We conduct a preliminary analysis on this question.
+
+![Are Parent Labels Overrepresented? plot](are_parent_labels_overrepresented.png)
+
+It appears that yes, the top k predicted labels are more likely to be parent (non-leaf) labels (the red line is the proportion of target labels which are parent labels), but only up to k = 5. After that, leaf labels are more represnted.
+
+### Effect of additional pretrainings for the embeddings
+
+Modifying the embedding pretraining script to take into account MAG and MeSH terms does not seem to have helped.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| with embedding pretraining | 0.299 ± 0.043 | 0.187 ± 0.024 | 0.142 ± 0.017 | 0.323 ± 0.037 | 0.357 ± 0.036 |
+| no embedding pretraining | 0.288 ± 0.038 | 0.171 ± 0.012 | 0.126 ± 0.008 | 0.325 ± 0.027 | 0.356 ± 0.025 |
 
 ## Future work
 
-- Write Makefile to streamline instructions for reproducing this work.
-  - Add CLI options for `PeTaL/Split.py`, `transform_data_PeTaL.py`
 - Migrate code from Jupyter notebooks to python source files.
 - Integrate this work with the rest of the PeTaL pipeline.
-- Look into relevancy threshold vs. top k for labelling (https://github.com/nasa-petal/PeTaL-labeller/issues/55)
 - Compare to auto-sklearn (https://github.com/nasa-petal/PeTaL-labeller/issues/56)
+- Use flat taxonomy and/or taxonomy with labels with less than 10 instances removed (https://github.com/nasa-petal/PeTaL-labeller/issues/60)
