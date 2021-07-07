@@ -94,6 +94,18 @@ move
 
 All of which are level-1 labels (except for `protect_from_non-living_threats`). Presumably these are the top 5 most common labels in the dataset.
 
+### Additional ablation studies
+
+We investigate the effect of removing venue, author, references, and text features (separately).
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| nothing removed | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| NO_VENUE | 0.584 ± 0.045 | 0.454 ± 0.019 | 0.365 ± 0.017 | 0.490 ± 0.023 | 0.489 ± 0.024 |
+| NO_AUTHOR | 0.572 ± 0.053 | 0.466 ± 0.042 | 0.367 ± 0.035 | 0.496 ± 0.046 | 0.489 ± 0.046 |
+| NO_REFERENCE | 0.556 ± 0.034 | 0.440 ± 0.037 | 0.345 ± 0.030 | 0.472 ± 0.035 | 0.465 ± 0.033 |
+| NO_TEXT | 0.490 ± 0.050 | 0.401 ± 0.045 | 0.323 ± 0.032 | 0.427 ± 0.047 | 0.428 ± 0.043 |
+
 ### Effect of using leaf labels only
 
 These results are sobering, to say the least. Removing non-leaf labels (e.g., `move`, `protect_from_harm`, &c.) brings our metrics down dramatically.
