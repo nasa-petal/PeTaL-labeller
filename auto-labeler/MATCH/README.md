@@ -4,7 +4,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify Lens output data according to the PeTaL taxonomy.
 
-This README was last updated on 1 July 2021.
+This README was last updated on 8 July 2021.
 
 ## What are all these files?
 
@@ -117,6 +117,8 @@ We also investigate the effect of including each metadatum by itself, as the onl
 | ONLY_MESH | 0.307 ± 0.047 | 0.227 ± 0.021 | 0.207 ± 0.020 | 0.243 ± 0.023 | 0.260 ± 0.027 |
 | ONLY_MAG | 0.307 ± 0.047 | 0.225 ± 0.027 | 0.195 ± 0.018 | 0.241 ± 0.029 | 0.251 ± 0.030 |
 | nothing at all | 0.307 ± 0.047 | 0.229 ± 0.025 | 0.198 ± 0.013 | 0.244 ± 0.027 | 0.253 ± 0.025 |
+
+Conclusion from these ablation experiments: something is *definitely* fishy with MATCH's inability to include MAG and MeSH terms (as opposed to other metadata from the paper).
 
 ### Effect of using leaf labels only
 
