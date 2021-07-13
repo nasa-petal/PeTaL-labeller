@@ -8,9 +8,10 @@ import os
 import gdown
 
 @click.command()
+@click.option('--dataset', type=click.Choice(['PeTaL']), default='PeTaL')
 @click.option('-v', '--verbose', type=click.BOOL, is_flag=True, default=False)
 
-def main(verbose):
+def main(DATASET, verbose):
     '''
         Download our modified MATCH repository using gdown.
     '''
@@ -22,6 +23,9 @@ def main(verbose):
     else:
         if verbose:
             print("You have already downloaded our modified MATCH repository.")
+
+    MODEL = "MATCH"
+
     
 
 if __name__ == '__main__':
