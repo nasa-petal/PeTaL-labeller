@@ -106,6 +106,20 @@ We investigate the effect of removing venue, author, references, and text featur
 | NO_REFERENCE | 0.556 ± 0.034 | 0.440 ± 0.037 | 0.345 ± 0.030 | 0.472 ± 0.035 | 0.465 ± 0.033 |
 | NO_TEXT | 0.490 ± 0.050 | 0.401 ± 0.045 | 0.323 ± 0.032 | 0.427 ± 0.047 | 0.428 ± 0.043 |
 
+We also investigate the effect of including each metadatum by itself, as the only thing MATCH has to go on.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| ONLY_TEXT | 0.568 ± 0.058 | 0.449 ± 0.049 | 0.357 ± 0.028 | 0.483 ± 0.049 | 0.481 ± 0.044 |
+| ONLY_REFERENCE | 0.502 ± 0.079 | 0.410 ± 0.053 | 0.333 ± 0.038 | 0.436 ± 0.059 | 0.438 ± 0.056 |
+| ONLY_VENUE | 0.302 ± 0.049 | 0.232 ± 0.026 | 0.205 ± 0.020 | 0.247 ± 0.028 | 0.261 ± 0.030 |
+| ONLY_AUTHOR | 0.395 ± 0.046 | 0.314 ± 0.032 | 0.260 ± 0.025 | 0.335 ± 0.034 | 0.340 ± 0.031 |
+| ONLY_MESH | 0.307 ± 0.047 | 0.227 ± 0.021 | 0.207 ± 0.020 | 0.243 ± 0.023 | 0.260 ± 0.027 |
+| ONLY_MAG | 0.307 ± 0.047 | 0.225 ± 0.027 | 0.195 ± 0.018 | 0.241 ± 0.029 | 0.251 ± 0.030 |
+| nothing at all | 0.307 ± 0.047 | 0.229 ± 0.025 | 0.198 ± 0.013 | 0.244 ± 0.027 | 0.253 ± 0.025 |
+
+Conclusion from these ablation experiments: something is *definitely* fishy with MATCH's inability to include MAG and MeSH terms (as opposed to other metadata from the paper).
+
 ### Effect of using leaf labels only
 
 These results are sobering, to say the least. Removing non-leaf labels (e.g., `move`, `protect_from_harm`, &c.) brings our metrics down dramatically.
