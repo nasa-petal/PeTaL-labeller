@@ -14,6 +14,11 @@ Install requirements:
 pip install -r requirements.txt.
 ```
 
+Run MATCH on PeTAL data with configuration options in `config.yaml`:
+
+```
+python run_MATCH_with_PeTaL_data.py --cnf config.yaml
+```
 
 
 
