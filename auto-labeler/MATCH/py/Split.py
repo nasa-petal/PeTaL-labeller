@@ -1,5 +1,10 @@
 '''
 	split.py
+
+    Run MATCH with PeTaL data.
+    Last modified on 14 July 2021.
+
+	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
 
 import json
@@ -36,8 +41,26 @@ import logging
 @click.option('--skip', default=0, type=click.INT, help='Number of training examples by which to rotate the dataset (e.g., for cross-validation).')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
-def main(prefix,
-		dataset,
+def main(prefix='MATCH/PeTaL',
+		dataset='cleaned_lens_output.json',
+		train=0.8,
+		dev=0.1,
+		skip=0,
+		verbose=False):
+	"""Performs train-test split on newline-delimited json file.	
+
+	Args:
+		prefix (string): Path from current working directory to directory containing dataset.
+		dataset (string): Filename of newline-delimited json dataset.
+		train (float): Proportion, from 0.0 to 1.0, of dataset used for training.
+		dev (float): Proportion, from 0.0 to 1.0, of dataset used for validation.
+		skip (int): Number of training examples by which to rotate the dataset (e.g., for cross-validation).
+		verbose (bool): Verbose output.
+	"""	
+	split(prefix, dataset, train, dev, skip, verbose)
+
+def split(prefix='MATCH/PeTaL',
+		dataset='cleaned_lens_output.json',
 		train=0.8,
 		dev=0.1,
 		skip=0,
@@ -67,7 +90,8 @@ def main(prefix,
 	dev_path = os.path.join(prefix, 'dev.json')
 	test_path = os.path.join(prefix, 'test.json')
 
-	logger.info(f"Transforming from {dataset_path} to {train_path}, {dev_path}, and {test_path}.")
+	if verbose:
+		logger.info(f"Transforming from {dataset_path} to {train_path}, {dev_path}, and {test_path}.")
 
 	train_proportion, dev_proportion = train, dev
 	train_labels = set()

@@ -3,6 +3,8 @@
 
     Run MATCH with PeTaL data.
     Last modified on 14 July 2021.
+
+    Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
 
 import click
@@ -14,8 +16,20 @@ import logging
 @click.option('--cnf', type=click.Path(exists=True), help='Path of configure yaml.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
+def main(cnf, verbose):
+    """
+        Download our modified MATCH repository using gdown.
+
+    Args:
+        cnf (str): Path to configure yaml file.
+        verbose (bool): Verbose output.
+    """
+    setup(cnf, verbose)
+
+
 def setup(cnf, verbose):
-    """Download our modified MATCH repository using gdown.
+    """
+        Download our modified MATCH repository using gdown.
 
     Args:
         cnf (str): Path to configure yaml file.
@@ -40,4 +54,4 @@ def setup(cnf, verbose):
     
 
 if __name__ == "__main__":
-    setup()
+    main()

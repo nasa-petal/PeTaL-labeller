@@ -186,6 +186,7 @@ nohup.out
 
 auto-labeler/MATCH/experiment_data/analyse_size_testing.py
 auto-labeler/MATCH/py/MATCH/
+auto-labeler/MATCH/py/wandb/
 
 scripts/data-analyzer/taxonomy.csv
 scripts/data-analyzer/labeled_data.csv
