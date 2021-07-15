@@ -4,7 +4,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify Lens output data according to the PeTaL taxonomy.
 
-This README was last updated on 13 July 2021.
+This README was last updated on 15 July 2021.
 
 ## What are all these files?
 
@@ -48,7 +48,9 @@ Here are the results from my trials:
 
 Each training set size was run for 3 trials, whose statistics are averaged in the table above. All trials used 100 papers for validation and the rest of the papers for testing.
 
-This is encouraging for our project, at least because it indicates that we can keep improving precision for roughly linear increase in training dataset size, and that we have not hit a plateau yet. 
+This is encouraging for our project, at least because it indicates that we can keep improving precision for roughly linear increase in training dataset size, and that we have not hit a plateau yet.
+
+![Size testing plot](plots/size_testing.png)
 
 ### Effect of adding MAG fields of study and MeSH terms to text
 
@@ -118,6 +120,8 @@ We also investigate the effect of including each metadatum by itself, as the onl
 | ONLY_MAG | 0.307 ± 0.047 | 0.225 ± 0.027 | 0.195 ± 0.018 | 0.241 ± 0.029 | 0.251 ± 0.030 |
 | nothing at all | 0.307 ± 0.047 | 0.229 ± 0.025 | 0.198 ± 0.013 | 0.244 ± 0.027 | 0.253 ± 0.025 |
 
+![Ablation testing plot](plots/ablation_testing.png)
+
 Conclusion from these ablation experiments: something is *definitely* fishy with MATCH's inability to include MAG and MeSH terms (as opposed to other metadata from the paper).
 
 ### Effect of using leaf labels only
@@ -135,7 +139,7 @@ This could in part show that using hierarchy information is helpful, but I doubt
 
 We conduct a preliminary analysis on this question.
 
-![Are Parent Labels Overrepresented? plot](are_parent_labels_overrepresented.png)
+![Are Parent Labels Overrepresented? plot](plots/are_parent_labels_overrepresented.png)
 
 It appears that yes, the top k predicted labels are more likely to be parent (non-leaf) labels (the red line is the proportion of target labels which are parent labels), but only up to k = 5. After that, leaf labels are more represnted.
 
