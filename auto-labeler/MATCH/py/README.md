@@ -18,6 +18,7 @@ In `auto-labeler/MATCH/py` you will find:
 - `train.py`, for training MATCH on the PeTaL training set (uses `MATCH/main.py`).
 - `eval.py`, for evaluating MATCH's performance on the PeTaL testing set (uses `MATCH/main.py` and `MATCH/eval.py`).
 - `run_MATCH_with_PeTaL_data`, for running the whole pipeline (or portions of it): `setup.py`, `preprocess.py`, `train.py`, `eval.py`.
+- `match-env.yml`, please ignore (we switched from conda to pip and this is a remnant of the old approach).
 
 ## How do I reproduce your results?
 
