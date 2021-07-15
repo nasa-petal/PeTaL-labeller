@@ -17,7 +17,6 @@ This README was last updated on 15 July 2021.
 - `prediction_metrics.ipynb`, in progress, is an attempt to compute various classification metrics (precision, recall, F1 score, confusion matrix) for MATCH run on the MAG-CS dataset.
 - `README.md` is this (self-referential) document.
 - `run_MATCH_with_PeTaL_data.ipynb` is a Jupyter notebook evaluating the performance of MATCH on PeTaL data.
-- `run_MATCH.ipynb` is an earlier attempt to reproduce the MATCH algorithm's results in its Quick Start section.
 - `transform_data_PeTaL.py` is a version of MATCH's `transform_data.py`, modified to use the PeTaL dataset instead.
 
 ## How do I reproduce your results?
