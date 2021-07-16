@@ -13,6 +13,8 @@ This README was last updated on 16 July 2021.
 - `analyse_MATCH_output.py` takes an experiment output (raw or abbreviated) and returns a markdown table of statistics.
 - `README.md` is this (self-referential) document.
 
+A few other files in nonstandard formats from previous logging (by hand) are also here.
+
 ## How do I summarise a log?
 
 Suppose you have a log, `ablations_20210716.md`. Then you may run

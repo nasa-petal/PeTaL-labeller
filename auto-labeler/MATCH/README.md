@@ -159,9 +159,17 @@ Modifying the embedding pretraining script to take into account MAG and MeSH ter
 | after modifying PeTaL.joint.emb | 0.614 ± 0.051 | 0.474 ± 0.041 | 0.370 ± 0.027 | 0.510 ± 0.041 | 0.519 ± 0.038 |
 | after modifying emb_init.npy, vocab.npy | 0.577 ± 0.041 | 0.433 ± 0.034 | 0.339 ± 0.026 | 0.470 ± 0.034 | 0.476 ± 0.034 |
 
+### UPDATE 2021-07-16: Tests now that MATCH doesn't ignore MAG and MeSH terms anymore!
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| new-pretraining-2021-07-15d | 0.307 ± 0.047 | 0.221 ± 0.036 | 0.193 ± 0.012 | 0.239 ± 0.038 | 0.250 ± 0.026 |
+| new_pretraining_only_mag_and_mesh | 0.533 ± 0.065 | 0.432 ± 0.045 | 0.345 ± 0.040 | 0.461 ± 0.044 | 0.455 ± 0.046 |
+| new_pretraining_all_but_mag_and_mesh | 0.582 ± 0.064 | 0.450 ± 0.047 | 0.343 ± 0.042 | 0.486 ± 0.048 | 0.471 ± 0.055 |
+| new_pretraining_all | 0.591 ± 0.043 | 0.452 ± 0.036 | 0.359 ± 0.027 | 0.492 ± 0.036 | 0.487 ± 0.033 |
+
 ## Future work
 
-- Figure out what is wrong with MATCH ignoring MAG and MeSH metadata.
 - Integrate this work with the rest of the PeTaL pipeline.
 - Compare to auto-sklearn (https://github.com/nasa-petal/PeTaL-labeller/issues/56)
 - Use flat taxonomy and/or taxonomy with labels with less than 10 instances removed (https://github.com/nasa-petal/PeTaL-labeller/issues/60)
