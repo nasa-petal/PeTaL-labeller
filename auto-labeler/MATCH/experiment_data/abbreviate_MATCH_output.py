@@ -1,5 +1,19 @@
 '''
-    analyse_MATCH_output.py
+    abbreviate_MATCH_output.py
+
+    Run MATCH with PeTaL data.
+    Last modified on 16 July 2021.
+
+    USAGE
+
+        python3 abbreviate_MATCH_output.py -i LOG_FILE_NAME -o ABBR_LOG_FILE_NAME
+
+    or in context:
+
+        python3 abbreviate_MATCH_output.py -i LOG_FILE_NAME -o ABBR_LOG_FILE_NAME
+        python3 analyse_MATCH_output.py -f ABBR_LOG_FILE_NAME
+
+    Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
 
 from collections import namedtuple
