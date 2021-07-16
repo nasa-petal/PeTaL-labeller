@@ -151,6 +151,14 @@ Modifying the embedding pretraining script to take into account MAG and MeSH ter
 | with embedding pretraining | 0.299 ± 0.043 | 0.187 ± 0.024 | 0.142 ± 0.017 | 0.323 ± 0.037 | 0.357 ± 0.036 |
 | no embedding pretraining | 0.288 ± 0.038 | 0.171 ± 0.012 | 0.126 ± 0.008 | 0.325 ± 0.027 | 0.356 ± 0.025 |
 
+### UPDATE 2021-07-15: Preliminary tests after getting MATCH to stop ignoring MAG and MeSH terms:
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| before modfying PeTaL.joint.emb | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| after modifying PeTaL.joint.emb | 0.614 ± 0.051 | 0.474 ± 0.041 | 0.370 ± 0.027 | 0.510 ± 0.041 | 0.519 ± 0.038 |
+| after modifying emb_init.npy, vocab.npy | 0.577 ± 0.041 | 0.433 ± 0.034 | 0.339 ± 0.026 | 0.470 ± 0.034 | 0.476 ± 0.034 |
+
 ## Future work
 
 - Figure out what is wrong with MATCH ignoring MAG and MeSH metadata.
