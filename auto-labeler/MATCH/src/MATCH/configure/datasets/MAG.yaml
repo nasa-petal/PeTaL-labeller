@@ -1,0 +1,24 @@
+name: MAG
+
+train:
+  texts: MAG/train_texts.npy
+  labels: MAG/train_labels.npy
+
+valid:
+  size: 70534
+
+test:
+  texts: MAG/test_texts.npy
+
+embedding:
+  emb_init: MAG/emb_init.npy
+
+hierarchy: MAG/taxonomy.txt
+
+output:
+  res: MAG/results
+
+labels_binarizer: MAG/labels_binarizer
+
+model:
+  emb_size: 100
