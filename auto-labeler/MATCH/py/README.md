@@ -39,7 +39,7 @@ with optional arguments for toggling on/off different phases:
 - `--setup` or `-b` vs. `--no-setup` or `-B` for whether to do `setup.py` (i.e., download our version of MATCH using `gdown`). Defaults to true.
 - `--split` or `-s` vs. `--no-split` or `-S` for whether to do `Split.py` (i.e., perform train-development-test split). Defaults to true.
 - `--transform` or `-t` vs. `--no-transform` or `-T` for whether to do `transform_data_PeTaL.py` (i.e., transform `json` datasets into text (sequences of tokens) and label `txt` files). Defaults to true.
-- `--preprocess` or `-p'` vs. `--no-preprocess` or `-P` for whether to do `MATCH/preprocess.py` (i.e., tokenize and otherwise process the `txt` files into `npy` data). Defaults to true.
+- `--preprocess` or `-p` vs. `--no-preprocess` or `-P` for whether to do `MATCH/preprocess.py` (i.e., tokenize and otherwise process the `txt` files into `npy` data). Defaults to true.
 - `--train` or `-r` vs. `--no-train` or `-R` for whether to do `train.py` (i.e., run MATCH training on the PeTaL training set. Generally the longest-running task). Defaults to true.
 - `--eval` or `-e` vs. `--no-eval` or `-E` for whether to do `eval.py` (i.e., run MATCH inference on the PeTaL testing set, and generate precision and nDCG scores on that test set). Defaults to true.
 - `--verbose` or `-v` on whether to see logging output. Defaults to false.
@@ -74,7 +74,7 @@ python preprocess.py --cnf config.yaml [--verbose]
 with optional arguments for toggling on/off different phases:
 - `--split` or `-s` vs. `--no-split` or `-S`- for doing `Split.py`
 - `--transform` or `-t` vs. `--no-transform` or `-T` for doing `transform_data_PeTaL.py`.
-- `--preprocess` or `-p'` vs. `--no-preprocess` or `-P` for doing `MATCH/preprocess.py`.
+- `--preprocess` or `-p` vs. `--no-preprocess` or `-P` for doing `MATCH/preprocess.py`.
 
 Run training:
 

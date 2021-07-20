@@ -44,7 +44,8 @@ def setup(cnf, verbose):
     if not os.path.exists('MATCH/'):
         if verbose:
             logger.info("Downloading our modified MATCH repository.")  
-        url = "https://drive.google.com/uc?id=1iUwxS7HsP-T9kBkPR3ZMn_bGnn80ydTv"
+        url = "https://drive.google.com/uc?id=1Ly--Y2w9ZQWZ_v9Kb6o742DTWokR7Rbi" # MATCH_20210716
+        # url = "https://drive.google.com/uc?id=1iUwxS7HsP-T9kBkPR3ZMn_bGnn80ydTv" # MATCH_20210714
         output = "MATCH.tar.gz"
         gdown.download(url, output, quiet=not verbose)
         os.system("tar -xvf MATCH.tar.gz")

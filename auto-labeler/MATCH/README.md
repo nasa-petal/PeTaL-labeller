@@ -4,7 +4,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify Lens output data according to the PeTaL taxonomy.
 
-This README was last updated on 15 July 2021.
+This README was last updated on 16 July 2021.
 
 ## What are all these files?
 
@@ -17,7 +17,6 @@ This README was last updated on 15 July 2021.
 - `prediction_metrics.ipynb`, in progress, is an attempt to compute various classification metrics (precision, recall, F1 score, confusion matrix) for MATCH run on the MAG-CS dataset.
 - `README.md` is this (self-referential) document.
 - `run_MATCH_with_PeTaL_data.ipynb` is a Jupyter notebook evaluating the performance of MATCH on PeTaL data.
-- `run_MATCH.ipynb` is an earlier attempt to reproduce the MATCH algorithm's results in its Quick Start section.
 - `transform_data_PeTaL.py` is a version of MATCH's `transform_data.py`, modified to use the PeTaL dataset instead.
 
 ## How do I reproduce your results?
@@ -31,6 +30,31 @@ In short, what I've found so far seems to indicate that:
 - appending MAG fields of study and MeSH terms to text may help (at least does not hurt) accuracy.
 
 Raw experiment logs for various sets of trials are found in `experiment_data`.
+
+### 2021-07-19 Ablation Studies: MAG vs. MeSH vs. Everything Else
+
+*"Everything Else" includes references, author, venue, and text*.
+
+| MAG | MeSH | Everything Else | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| no | no | no | 0.307 ± 0.047 | 0.221 ± 0.036 | 0.193 ± 0.012 | 0.239 ± 0.038 | 0.250 ± 0.026 |
+| yes | no | no | 0.498 ± 0.034 | 0.393 ± 0.024 | 0.312 ± 0.029 | 0.420 ± 0.026 | 0.415 ± 0.028 |
+| no | yes | no | 0.409 ± 0.067 | 0.313 ± 0.046 | 0.264 ± 0.029 | 0.338 ± 0.050 | 0.348 ± 0.043 |
+| yes | yes | no | 0.533 ± 0.065 | 0.432 ± 0.045 | 0.345 ± 0.040 | 0.461 ± 0.044 | 0.455 ± 0.046 |
+| no | no | yes | 0.582 ± 0.064 | 0.450 ± 0.047 | 0.343 ± 0.042 | 0.486 ± 0.048 | 0.471 ± 0.055 |
+| yes | no | yes | 0.586 ± 0.104 | 0.443 ± 0.059 | 0.350 ± 0.045 | 0.482 ± 0.069 | 0.475 ± 0.063 |
+| no | yes | yes | 0.571 ± 0.087 | 0.439 ± 0.064 | 0.344 ± 0.043 | 0.477 ± 0.069 | 0.468 ± 0.063 |
+| yes | yes | yes | 0.591 ± 0.043 | 0.452 ± 0.036 | 0.359 ± 0.027 | 0.492 ± 0.036 | 0.487 ± 0.033 |
+
+In a nutshell, this suggests that MAG fields of study give more information than MeSH terms.
+
+### 2021-07-15: Preliminary tests after getting MATCH to stop ignoring MAG and MeSH terms:
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| before modfying PeTaL.joint.emb | 0.590 ± 0.040 | 0.457 ± 0.030 | 0.369 ± 0.025 | 0.495 ± 0.032 | 0.493 ± 0.035 |
+| after modifying PeTaL.joint.emb | 0.614 ± 0.051 | 0.474 ± 0.041 | 0.370 ± 0.027 | 0.510 ± 0.041 | 0.519 ± 0.038 |
+| after modifying emb_init.npy, vocab.npy | 0.577 ± 0.041 | 0.433 ± 0.034 | 0.339 ± 0.026 | 0.470 ± 0.034 | 0.476 ± 0.034 |
 
 ### Effect of training dataset size on MATCH precision.
 
@@ -154,7 +178,6 @@ Modifying the embedding pretraining script to take into account MAG and MeSH ter
 
 ## Future work
 
-- Figure out what is wrong with MATCH ignoring MAG and MeSH metadata.
 - Integrate this work with the rest of the PeTaL pipeline.
 - Compare to auto-sklearn (https://github.com/nasa-petal/PeTaL-labeller/issues/56)
 - Use flat taxonomy and/or taxonomy with labels with less than 10 instances removed (https://github.com/nasa-petal/PeTaL-labeller/issues/60)
