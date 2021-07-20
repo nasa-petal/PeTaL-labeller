@@ -1,5 +1,7 @@
 # MATCH: Metadata-Aware Text Classification in A Large Hierarchy
 
+*Note*: This is the MATCH repository (https://github.com/yuzhimanhua/MATCH), slightly modified for use with PeTaL.
+
 This project focuses on metadata/hierarchy-aware extreme multi-label text classification.
 
 ## Links

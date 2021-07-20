@@ -1,14 +1,13 @@
-# MATCH/py
+# MATCH/src
 
 This directory contains the source files for running MATCH on PeTaL data.
 
-This README was last updated on 14 July 2021.
+This README was last updated on 20 July 2021.
 
 ## What are all these files?
 
-In `auto-labeler/MATCH/py` you will find:
-- `match-env/`, a python `venv` containing all of the requirements.
-- `requirements.txt`, a txt file containing all of the requirements.
+In `auto-labeler/MATCH/src` you will find:
+- `MATCH/`, our slightly modified version of the MATCH repository (https://github.com/yuzhimanhua/MATCH).
 - `config.yaml`, a one-stop shop for all configuration variables in running MATCH with PeTaL.
 - `README.md`, this self-referential document.
 - `setup.py`, for setting up the rest of the preliminaries (i.e., downloading our version of MATCH).
@@ -18,7 +17,6 @@ In `auto-labeler/MATCH/py` you will find:
 - `train.py`, for training MATCH on the PeTaL training set (uses `MATCH/main.py`).
 - `eval.py`, for evaluating MATCH's performance on the PeTaL testing set (uses `MATCH/main.py` and `MATCH/eval.py`).
 - `run_MATCH_with_PeTaL_data`, for running the whole pipeline (or portions of it): `setup.py`, `preprocess.py`, `train.py`, `eval.py`.
-- `match-env.yml`, please ignore (we switched from conda to pip and this is a remnant of the old approach).
 
 ## How do I reproduce your results?
 
