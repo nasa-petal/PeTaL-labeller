@@ -29,6 +29,7 @@ This project is run in Python 3.6. In order to faithfully reproduce our environm
 
 ```
 conda create --name match-env python=3.6.8
+conda activate match-env
 ```
 
 installing dependencies through pip,
