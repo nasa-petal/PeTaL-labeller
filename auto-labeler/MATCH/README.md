@@ -20,6 +20,8 @@ This README was last updated on 21 July 2021.
 
 ## How do I reproduce your results?
 
+### Environment and setup
+
 This project is run in Python 3.6. In order to faithfully reproduce our environment, we recommend using a conda environment,
 
 ```
@@ -37,6 +39,15 @@ and downloading the PeTaL dataset using
 ```
 python setup.py [--verbose]
 ```
+
+or, alternatively,
+
+```
+make
+```
+(which currently just calls `python setup.py --verbose`).
+
+### Running the main MATCH pipeline - preprocessing, training, evaluation
 
 To run the main pipeline, navigate to `src/` and follow its README. In short, this will be
 
@@ -56,11 +67,21 @@ python eval.py --cnf config.yaml [--verbose]
 
 where `[--verbose]` is an optional parameter.
 
+### Everybody clean up!
+
+There is also the command
+
+```
+make clean
+```
+
+should you want to remove the dataset that `setup.py` downloaded. This is necessary if you want to download an updated version of the dataset.
+
 ## Summary of results
 
 In short, what I've found so far seems to indicate that:
 - for the scale of our data in `PeTaL/cleaned_lens_output.json` (up to 1000 papers), dataset size matters a lot. This is encouraging.
-- appending MAG fields of study and MeSH terms to text does help accuracy. MAG fields of study alone give somewhat more information than MeSH terms alone.
+- among other metadata, appending MAG fields of study and MeSH terms to text does help accuracy. MAG fields of study alone give somewhat more information than MeSH terms alone.
 
 Cleaned experiment logs for various sets of trials are found in `experiment_data/`.
 
