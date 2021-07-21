@@ -1,37 +1,16 @@
 '''
-	split.py
+	Split.py
 
     Run MATCH with PeTaL data.
-    Last modified on 14 July 2021.
+    Last modified on 21 July 2021.
 
 	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
 
 import json
-# import argparse
-# import sys
 import click
 import os
 import logging
-
-# parser = argparse.ArgumentParser(description='main', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-# parser.add_argument('--prefix', default='MATCH/PeTaL', help='Path from current working directory to directory containing dataset.')
-# parser.add_argument('--dataset', default='cleaned_lens_output.json', help='Filename of newline-delimited json dataset.')
-# parser.add_argument('--train', default=0.8, type=float, help='Proportion, from 0.0 to 1.0, of dataset used for training.')
-# parser.add_argument('--dev', default=0.1, type=float, help='Proportion, from 0.0 to 1.0, of dataset used for validation.')
-# parser.add_argument('--skip', default=0, type=int, help='Number of training examples by which to rotate the dataset (e.g., for cross-validation).')
-# parser.add_argument()
-
-# args = parser.parse_args()
-# prefix = args.prefix
-# dataset = args.dataset
-# train_proportion = args.train
-# dev_proportion = args.dev
-# skip = args.skip
-
-# labelled = 1000 # 409
-
-
 
 @click.command()
 @click.option('--prefix', default='MATCH/PeTaL', help='Path from current working directory to directory containing dataset.')
@@ -154,34 +133,65 @@ def split(prefix='MATCH/PeTaL',
 	if verbose:			
 		logger.info(f"Number of train labels: {len(train_labels)}")
 
-	# with open('cleaned_lens_output.json') as fin, open('train.json', 'w') as fou1, open('dev.json', 'w') as fou2, open('test.json', 'w') as fou3:
-	# 	labelled_so_far = 0
-	# 	for idx, line in enumerate(fin):
-	# 		js = json.loads(line)
+	'''
+		Original non-rotated version (for reference purposes):
+
+	with open('cleaned_lens_output.json') as fin, open('train.json', 'w') as fou1, open('dev.json', 'w') as fou2, open('test.json', 'w') as fou3:
+		labelled_so_far = 0
+		for idx, line in enumerate(fin):
+			js = json.loads(line)
 			
-	# 		if js['label']:
-	# 			if labelled_so_far < labelled * 0.8:
-	# 				for l in js['label']:
-	# 					train_labels.add(l)
-	# 				fou1.write(json.dumps(js) + '\n')
-	# 			else:
-	# 				label_new = []
-	# 				for l in js['label']:
-	# 					if l in train_labels:
-	# 						label_new.append(l)
-	# 				if len(label_new) == 0:
-	# 					continue
+			if js['label']:
+				if labelled_so_far < labelled * 0.8:
+					for l in js['label']:
+						train_labels.add(l)
+					fou1.write(json.dumps(js) + '\n')
+				else:
+					label_new = []
+					for l in js['label']:
+						if l in train_labels:
+							label_new.append(l)
+					if len(label_new) == 0:
+						continue
 
-	# 				js['label'] = label_new
-	# 				fou2.write(json.dumps(js)+'\n')
-	# 			labelled_so_far += 1
-	# 	fin.seek(0)
-	# 	for idx, line in enumerate(fin):
-	# 		js = json.loads(line)
-	# 		if not js['label']:
-	# 			fou3.write(json.dumps(js)+'\n')
+					js['label'] = label_new
+					fou2.write(json.dumps(js)+'\n')
+				labelled_so_far += 1
+		fin.seek(0)
+		for idx, line in enumerate(fin):
+			js = json.loads(line)
+			if not js['label']:
+				fou3.write(json.dumps(js)+'\n')
 
-	# print(len(train_labels))
+	print(len(train_labels))
+	'''
 
 if __name__ == "__main__":
 	main()
+
+########################################
+#
+#   FOR HISTORICAL REFERENCE
+#
+########################################
+
+'''
+	Original argparse version of getting CLI arguments (for reference purposes):
+
+	parser = argparse.ArgumentParser(description='main', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+	parser.add_argument('--prefix', default='MATCH/PeTaL', help='Path from current working directory to directory containing dataset.')
+	parser.add_argument('--dataset', default='cleaned_lens_output.json', help='Filename of newline-delimited json dataset.')
+	parser.add_argument('--train', default=0.8, type=float, help='Proportion, from 0.0 to 1.0, of dataset used for training.')
+	parser.add_argument('--dev', default=0.1, type=float, help='Proportion, from 0.0 to 1.0, of dataset used for validation.')
+	parser.add_argument('--skip', default=0, type=int, help='Number of training examples by which to rotate the dataset (e.g., for cross-validation).')
+	parser.add_argument()
+
+	args = parser.parse_args()
+	prefix = args.prefix
+	dataset = args.dataset
+	train_proportion = args.train
+	dev_proportion = args.dev
+	skip = args.skip
+
+	labelled = 1000 # 409
+'''

@@ -2,7 +2,7 @@
     preprocess.py
 
     Run MATCH with PeTaL data.
-    Last modified on 14 July 2021.
+    Last modified on 21 July 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -18,19 +18,20 @@ from Split import split
 from transform_data_PeTaL import transform_data
 
 @click.command()
-@click.option('--cnf', type=click.Path(exists=True), help='Path of configure yaml.')
+@click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 @click.option('--split/--no-split', '-s/-S', 'do_split', default=True, help='Perform train-dev-test split.')
 @click.option('--transform/--no-transform', '-t/-T', 'do_transform', default=True, help='Perform transformation from json to text.')
 @click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
 
-def main(cnf,
+def main(cnf_path,
         verbose=False,
         do_split=True,
         do_transform=True,
         do_preprocess=True):
     """
-        Perform train-dev-test split, transform json to txt, and preprocess txt into npy.
+        Command-line entry function -- perform train-dev-test split,
+        transform json to txt, and preprocess txt into npy.
 
     Args:
         cnf (str): Path to configure yaml file.
@@ -39,6 +40,10 @@ def main(cnf,
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
     """
+
+    yaml = YAML(typ='safe')
+    cnf = yaml.load(Path(cnf_path))
+
     preprocess(cnf, verbose, do_split, do_transform, do_preprocess)
 
 def preprocess(cnf,
@@ -50,7 +55,7 @@ def preprocess(cnf,
         Perform train-dev-test split, transform json to txt, and preprocess txt into npy.
 
     Args:
-        cnf (str): Path to configure yaml file.
+        cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
         verbose (bool): Verbose output.
         do_split (bool): Whether to perform train-dev-test split.
         do_transform (bool): Whether to transform json to txt.
@@ -64,12 +69,8 @@ def preprocess(cnf,
 
     if verbose:
         logger.info("Begin preprocessing.")
-
-    yaml = YAML(typ='safe')
-    cnf = yaml.load(Path(cnf))
-
+    
     sys.path.insert(1, os.path.join(os.getcwd(), 'MATCH'))
-    # logger.info(sys.path)
 
     DATASET = cnf['dataset']
 
@@ -198,33 +199,44 @@ def get_transform_arg_string(config, verbose=False):
 if __name__ == '__main__':
     main()
 
-# def run_preprocessing(config, verbose=False):
-#     """Runs train-test split and preprocessing scripts
+########################################
+#
+#   FOR HISTORICAL REFERENCE
+#
+########################################
 
-#     Args:
-#         config (dict[str]): JSON dictionary of config arguments.
-#     """
-#     # Train-test split
-#     %cd PeTaL/
-#     !python3 Split.py \
-#         --train {config['train_proportion']} \
-#         --dev {config['dev_proportion']} \
-#         --skip {config['skip']}
-#     %cd ..
-#     !wc PeTaL/train.json
+'''
+    For historical purposes.
+    The original Google Colab notebook function that this somewhat replaces:
 
-#     # Slightly modified preprocess.sh
-#     !python3 transform_data_PeTaL.py --dataset {DATASET} \
-#     {get_transform_arg_string(config)}
+def run_preprocessing(config, verbose=False):
+    """Runs train-test split and preprocessing scripts
 
-#     !python preprocess.py \
-#     --text-path {DATASET}/train_texts.txt \
-#     --label-path {DATASET}/train_labels.txt \
-#     --vocab-path {DATASET}/vocab.npy \
-#     --emb-path {DATASET}/emb_init.npy \
-#     --w2v-model {DATASET}/{DATASET}.joint.emb \
+    Args:
+        config (dict[str]): JSON dictionary of config arguments.
+    """
+    # Train-test split
+    %cd PeTaL/
+    !python3 Split.py \
+        --train {config['train_proportion']} \
+        --dev {config['dev_proportion']} \
+        --skip {config['skip']}
+    %cd ..
+    !wc PeTaL/train.json
 
-#     !python preprocess.py \
-#     --text-path {DATASET}/test_texts.txt \
-#     --label-path {DATASET}/test_labels.txt \
-#     --vocab-path {DATASET}/vocab.npy \
+    # Slightly modified preprocess.sh
+    !python3 transform_data_PeTaL.py --dataset {DATASET} \
+    {get_transform_arg_string(config)}
+
+    !python preprocess.py \
+    --text-path {DATASET}/train_texts.txt \
+    --label-path {DATASET}/train_labels.txt \
+    --vocab-path {DATASET}/vocab.npy \
+    --emb-path {DATASET}/emb_init.npy \
+    --w2v-model {DATASET}/{DATASET}.joint.emb \
+
+    !python preprocess.py \
+    --text-path {DATASET}/test_texts.txt \
+    --label-path {DATASET}/test_labels.txt \
+    --vocab-path {DATASET}/vocab.npy \
+'''

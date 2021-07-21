@@ -2,7 +2,7 @@
 
 This directory contains the source files for running MATCH on PeTaL data.
 
-This README was last updated on 20 July 2021.
+This README was last updated on 21 July 2021.
 
 ## What are all these files?
 
@@ -35,7 +35,7 @@ with optional arguments for toggling on/off different phases:
 - `--eval` or `-e` vs. `--no-eval` or `-E` for whether to do `eval.py` (i.e., run MATCH inference on the PeTaL testing set, and generate precision and nDCG scores on that test set). Defaults to true.
 - `--verbose` or `-v` on whether to see logging output. Defaults to false.
 
-If you want to tweak a config variable (e.g., train-dev-test split, or whether to use MAG/MeSH terms or not), you can find all of those options in `config.yaml`.
+If you want to tweak a config variable (e.g., train-dev-test split, or whether to use MAG/MeSH terms or not), you can find all of those options in `config.yaml`. Note that you can also use `-c` in place of `--cnf`.
 
 ### If you want to run certain steps individually.
 
@@ -60,18 +60,21 @@ with optional arguments for toggling on/off different phases:
 - `--split` or `-s` vs. `--no-split` or `-S`- for doing `Split.py`
 - `--transform` or `-t` vs. `--no-transform` or `-T` for doing `transform_data_PeTaL.py`.
 - `--preprocess` or `-p` vs. `--no-preprocess` or `-P` for doing `MATCH/preprocess.py`.
+Note that you can also use `-c` in place of `--cnf`.
 
 Run training:
 
 ```
 python train.py --cnf config.yaml [--verbose]
 ```
+Note that you can also use `-c` in place of `--cnf`.
 
 Run testing:
 
 ```
 python eval.py --cnf config.yaml [--verbose]
 ```
+Note that you can also use `-c` in place of `--cnf`.
 
 ## Current issues
 

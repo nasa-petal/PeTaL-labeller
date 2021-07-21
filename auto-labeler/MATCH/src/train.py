@@ -17,17 +17,20 @@ from pathlib import Path
 import wandb
 
 @click.command()
-@click.option('--cnf', type=click.Path(exists=True), help='Path of configure yaml.')
+@click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
-def main(cnf, verbose):
+def main(cnf_path, verbose):
     """
         Run training.
 
     Args:
-        cnf (str): Path to configure yaml file.
+        cnf_path (str): Path to configure yaml file.
         verbose (bool): Verbose output.
     """
+
+    yaml = YAML(typ='safe')
+    cnf = yaml.load(Path(cnf_path))
     
     run_train(cnf, verbose)
 
@@ -36,7 +39,7 @@ def run_train(cnf, verbose):
         Run training.
 
     Args:
-        cnf (str): Path to configure yaml file.
+        cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
         verbose (bool): Verbose output.
     """
     logging.basicConfig(
@@ -47,9 +50,6 @@ def run_train(cnf, verbose):
 
     if verbose:
         logger.info("Begin training.")
-
-    yaml = YAML(typ='safe')
-    cnf = yaml.load(Path(cnf))
 
     wandb.login()
 
@@ -94,11 +94,16 @@ def run_train(cnf, verbose):
         reg=1 if train_cnf['hypernymy_regularization'] else 0
     )
 
-#     train_args = ["--data-cnf", f"configure/datasets/{DATASET}.yaml",
-#         "--model-cnf", f"configure/models/{MODEL}-{DATASET}.yaml",
-#         "--mode", "train",
-#         "--reg", "1" if config['hypernymy_regularization'] else "0"]
-#     match_main(args=train_args, standalone_mode=False)
+    '''
+        The Google Colab version of this (where I had to construct
+        a CLI argument string, blecch) is as follows:
+
+        train_args = ["--data-cnf", f"configure/datasets/{DATASET}.yaml",
+            "--model-cnf", f"configure/models/{MODEL}-{DATASET}.yaml",
+            "--mode", "train",
+            "--reg", "1" if config['hypernymy_regularization'] else "0"]
+        match_main(args=train_args, standalone_mode=False)
+    '''
 
     os.chdir("..")
 
@@ -110,50 +115,60 @@ def run_train(cnf, verbose):
 if __name__ == '__main__':
     main()
 
-# def run_train_test(config, group):
-#     """Runs training, testing, and evaluation.
+########################################
+#
+#   FOR HISTORICAL REFERENCE
+#
+########################################
 
-#     Args:
-#         config (dict[str]): JSON dictionary of config arguments.
-#         group (str): experiment group name for wandb logging.
-#     """
-#     # Slightly modified run_models.sh
+'''
+    The original Google Colab code, from which I adopted the above, for reference.
 
-#     wandb.init(
-#         project="MATCH",
-#         group=group,
-#         config=config
-#     )
+    def run_train_test(config, group):
+        """Runs training, testing, and evaluation.
 
-#     # wandb.save(f"configure/datasets/{DATASET}.yaml")
-#     # wandb.save(f"configure/models/{MODEL}-{DATASET}.yaml")
-#     %cp configure/datasets/{DATASET}.yaml {wandb.run.dir}
-#     %cp configure/models/{MODEL}-{DATASET}.yaml {wandb.run.dir}
+        Args:
+            config (dict[str]): JSON dictionary of config arguments.
+            group (str): experiment group name for wandb logging.
+        """
+        # Slightly modified run_models.sh
 
-#     train_args = ["--data-cnf", f"configure/datasets/{DATASET}.yaml",
-#         "--model-cnf", f"configure/models/{MODEL}-{DATASET}.yaml",
-#         "--mode", "train",
-#         "--reg", "1" if config['hypernymy_regularization'] else "0"]
-#     match_main(args=train_args, standalone_mode=False)
+        wandb.init(
+            project="MATCH",
+            group=group,
+            config=config
+        )
 
-#     test_args = ["--data-cnf", f"configure/datasets/{DATASET}.yaml",
-#         "--model-cnf", f"configure/models/{MODEL}-{DATASET}.yaml",
-#         "--mode", "eval"]
-#     match_main(args=test_args, standalone_mode=False)
-    
-#     wandb.finish()
+        # wandb.save(f"configure/datasets/{DATASET}.yaml")
+        # wandb.save(f"configure/models/{MODEL}-{DATASET}.yaml")
+        %cp configure/datasets/{DATASET}.yaml {wandb.run.dir}
+        %cp configure/models/{MODEL}-{DATASET}.yaml {wandb.run.dir}
 
-#     !python evaluation.py \
-#     --results {DATASET}/results/{MODEL}-{DATASET}-labels.npy \
-#     --targets {DATASET}/test_labels.npy \
-#     --train-labels {DATASET}/train_labels.npy
+        train_args = ["--data-cnf", f"configure/datasets/{DATASET}.yaml",
+            "--model-cnf", f"configure/models/{MODEL}-{DATASET}.yaml",
+            "--mode", "train",
+            "--reg", "1" if config['hypernymy_regularization'] else "0"]
+        match_main(args=train_args, standalone_mode=False)
 
-# def run_trial(config, group):
-#     """Runs both preprocessing and training-testing. The whole enchilada.
+        test_args = ["--data-cnf", f"configure/datasets/{DATASET}.yaml",
+            "--model-cnf", f"configure/models/{MODEL}-{DATASET}.yaml",
+            "--mode", "eval"]
+        match_main(args=test_args, standalone_mode=False)
 
-#     Args:
-#         config (dict[str]): JSON dictionary of config arguments.
-#         group (str): experiment group name for wandb logging.
-#     """
-#     run_preprocessing(config)
-#     run_train_test(config, group)  
+        wandb.finish()
+
+        !python evaluation.py \
+        --results {DATASET}/results/{MODEL}-{DATASET}-labels.npy \
+        --targets {DATASET}/test_labels.npy \
+        --train-labels {DATASET}/train_labels.npy
+
+    def run_trial(config, group):
+        """Runs both preprocessing and training-testing. The whole enchilada.
+
+        Args:
+            config (dict[str]): JSON dictionary of config arguments.
+            group (str): experiment group name for wandb logging.
+        """
+        run_preprocessing(config)
+        run_train_test(config, group)  
+'''

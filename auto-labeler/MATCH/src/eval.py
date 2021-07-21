@@ -14,20 +14,23 @@ import logging
 
 from ruamel.yaml import YAML
 from pathlib import Path
-import wandb
 
 @click.command()
-@click.option('--cnf', type=click.Path(exists=True), help='Path of configure yaml.')
+@click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
-def main(cnf, verbose):
+def main(cnf_path, verbose):
     """
-        Run testing.
+        Command-line entry function - runs testing.
 
     Args:
         cnf (str): Path to configure yaml file.
         verbose (bool): Verbose output.
     """
+
+    yaml = YAML(typ='safe')
+    cnf = yaml.load(Path(cnf_path))
+
     run_eval(cnf, verbose)
 
 def run_eval(cnf, verbose):
@@ -35,7 +38,7 @@ def run_eval(cnf, verbose):
         Run testing.
 
     Args:
-        cnf (str): Path to configure yaml file.
+        cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
         verbose (bool): Verbose output.
     """
     logging.basicConfig(
@@ -46,9 +49,6 @@ def run_eval(cnf, verbose):
 
     if verbose:
         logger.info("Begin evaluation.")
-
-    yaml = YAML(typ='safe')
-    cnf = yaml.load(Path(cnf))
 
     MODEL = cnf['model']
     DATASET = cnf['dataset']
@@ -81,3 +81,11 @@ def run_eval(cnf, verbose):
 
 if __name__ == '__main__':
     main()
+
+########################################
+#
+#   FOR HISTORICAL REFERENCE
+#
+#   (nothing yet for eval.py)
+#
+########################################
