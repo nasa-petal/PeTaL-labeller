@@ -92,7 +92,7 @@ Cleaned experiment logs for various sets of trials are found in `experiment_data
 
 Historical analyses of results are available in `reports/results_up_to_20210714.md`.
 
-### 2021-07-21 The Effect of Each Metadatum on MATCH Performance
+### 2021-07-21 Multilabel Confusion Matrix - How Each Label is Classified
 
 In this confusion matrix we plot the average probability of predicting a *predicted label* based on what *ground truth label* is present in the test set. Bright spots indicate probabilities closer to 1, and darker spots indicate probabilities closer to 0. 
 
@@ -100,7 +100,7 @@ In this confusion matrix we plot the average probability of predicting a *predic
 
 The (slight) diagonal bright streak indicates the probability of assigning a predicted label to the a paper with that same ground truth label. Observe that some parent-label ("Level I") columns (e.g., `move` and `sense_send_or_process_information`) have lots of bright spots down the column. This is expected, as all of their leaf labels should correctly have their parent labels also predicted in their papers.
 
-Because there are 131 labels in this matrix, it is a very big diagram. Future plots may filter out the number of labels.
+Because there are 131 labels in this matrix, it is a very big diagram, and it's also very unwieldy. Future work in confusion matrix visualization may focus on a subset of such labels (perhaps the most common ones).
 
 ### 2021-07-20 The Effect of Each Metadatum on MATCH Performance
 
