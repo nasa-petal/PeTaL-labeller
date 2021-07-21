@@ -10,7 +10,6 @@ In `auto-labeler/MATCH/src` you will find:
 - `MATCH/`, our slightly modified version of the MATCH repository (https://github.com/yuzhimanhua/MATCH).
 - `config.yaml`, a one-stop shop for all configuration variables in running MATCH with PeTaL.
 - `README.md`, this self-referential document.
-- `setup.py`, for setting up the rest of the preliminaries (i.e., downloading our version of MATCH).
 - `preprocess.py`, for running splitting (`Split.py`), transforming (`transform_data_PeTaL.py`), and MATCH preprocessing (`MATCH/preprocess.py.`).
 - `Split.py`, for performing the train-dev-test split on the original dataset (e.g., `cleaned_lens_output.json`).
 - `transform_data_PeTaL.py`, for transforming the training and testing `json` files into `txt` files of sequences of tokens.
@@ -20,13 +19,7 @@ In `auto-labeler/MATCH/src` you will find:
 
 ## How do I reproduce your results?
 
-It is recommended that you run this project in a python virtual environment (`venv`). We have provided one in `match-env/`.
-
-Install requirements:
-
-```
-pip install -r requirements.txt.
-```
+It is recommended that you run this project in a conda environment (`venv`), set up as described in `../README.md`.
 
 Run MATCH on PeTAL data with configuration options in `config.yaml`:
 
@@ -45,12 +38,6 @@ with optional arguments for toggling on/off different phases:
 If you want to tweak a config variable (e.g., train-dev-test split, or whether to use MAG/MeSH terms or not), you can find all of those options in `config.yaml`.
 
 ### If you want to run certain steps individually.
-
-Run setup:
-
-```
-python setup.py --cnf config.yaml [--verbose]
-```
 
 Run train-dev-test split by itself:
 
@@ -86,11 +73,9 @@ Run testing:
 python eval.py --cnf config.yaml [--verbose]
 ```
 
-
 ## Current issues
 
-- `train.py` and `eval.py` and files which use them will throw a runtime exception on hpc.grc.nasa.gov cluster because I don't have access to GPUs or CUDA acceleration.
-- `wandb` usage is always on. Every training, it will ask you if you want to log into your wandb account. Still trying to find a way around this.
+- `wandb` usage is always on. I may turn this off sometime.
 
 ## Dependencies
 

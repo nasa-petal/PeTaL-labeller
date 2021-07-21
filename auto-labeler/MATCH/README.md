@@ -16,6 +16,7 @@ This README was last updated on 20 July 2021.
 - `src/` contains python source files and other source files needed for reproducing this work in a non-notebook environment. Probably the source of primary development from 2021-07-14 onward.
 - `README.md` is this (self-referential) document.
 - `requirements.txt` contains a list of required packages.
+- `setup.py`, for setting up preliminaries (i.e., downloading PeTaL).
 
 ## How do I reproduce your results?
 
@@ -25,12 +26,16 @@ This project is run in Python 3.6. In order to faithfully reproduce our environm
 conda create --name match-env python=3.6.8
 ```
 
-and installing dependencies through pip:
+installing dependencies through pip,
 
 ```
-conda install pip
-pip install --upgrade pip
 pip install -r requirements.txt
+```
+
+and downloading the PeTaL dataset using
+
+```
+python setup.py [--verbose]
 ```
 
 To run the main pipeline, navigate to `src/` and follow its README. In short, this will be
@@ -44,7 +49,6 @@ or, step by step,
 
 ```
 cd src
-python setup.py --cnf config.yaml [--verbose]
 python preprocess.py --cnf config.yaml [--verbose]
 python train.py --cnf config.yaml [--verbose]
 python eval.py --cnf config.yaml [--verbose]

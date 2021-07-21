@@ -10,7 +10,6 @@
 import click
 import logging
 
-from setup import setup
 from preprocess import preprocess
 from train import run_train
 from eval import run_eval
@@ -18,7 +17,6 @@ from eval import run_eval
 @click.command()
 @click.option('--cnf', type=click.Path(exists=True), help='Path of configure yaml.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
-@click.option('--setup/--no-setup', '-b/-B', 'do_setup', default=True, help='Do preliminary setup (e.g., downloading MATCH).')
 @click.option('--split/--no-split', '-s/-S', 'do_split', default=True, help='Perform train-dev-test split.')
 @click.option('--transform/--no-transform', '-t/-T', 'do_transform', default=True, help='Perform transformation from json to text.')
 @click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
@@ -27,7 +25,6 @@ from eval import run_eval
 
 def main(cnf,
         verbose=False,
-        do_setup=True,
         do_split=True,
         do_transform=True,
         do_preprocess=True,
@@ -53,13 +50,6 @@ def main(cnf,
 
     if verbose:
         logger.info("Begin run_MATCH_with_PeTaL_data pipeline.")
-
-    '''
-        Setup: download our modified MATCH repository using gdown
-        in setup.py.
-    '''
-    if do_setup:
-        setup(cnf, verbose)
 
     '''
         Preprocessing: Perform train-dev-test split,

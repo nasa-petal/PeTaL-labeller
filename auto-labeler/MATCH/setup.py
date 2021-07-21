@@ -13,10 +13,9 @@ import gdown
 import logging
 
 @click.command()
-@click.option('--cnf', type=click.Path(exists=True), help='Path of configure yaml.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
-def main(cnf, verbose):
+def main(verbose):
     """
         Download our modified MATCH repository using gdown.
 
@@ -24,10 +23,10 @@ def main(cnf, verbose):
         cnf (str): Path to configure yaml file.
         verbose (bool): Verbose output.
     """
-    setup(cnf, verbose)
+    setup(verbose)
 
 
-def setup(cnf, verbose):
+def setup(verbose):
     """
         Download our modified MATCH repository using gdown.
 
@@ -41,17 +40,17 @@ def setup(cnf, verbose):
     )
     logger = logging.getLogger("setup") 
 
-    if not os.path.exists('MATCH/'):
+    if not os.path.exists('src/MATCH/PeTaL'):
         if verbose:
-            logger.info("Downloading our modified MATCH repository.")  
-        url = "https://drive.google.com/uc?id=1Ly--Y2w9ZQWZ_v9Kb6o742DTWokR7Rbi" # MATCH_20210716
-        # url = "https://drive.google.com/uc?id=1iUwxS7HsP-T9kBkPR3ZMn_bGnn80ydTv" # MATCH_20210714
-        output = "MATCH.tar.gz"
+            logger.info("Downloading the PeTaL dataset with pretrained embeddings.") 
+        url = "https://drive.google.com/uc?id=1yYHYpmwsgQMI1-5HfY-QVOxRi8JQQ4v4" # PeTaL_20210720
+        # url = "https://drive.google.com/uc?id=1Ly--Y2w9ZQWZ_v9Kb6o742DTWokR7Rbi" # MATCH_20210716
+        output = "PeTaL.tar.gz"
         gdown.download(url, output, quiet=not verbose)
-        os.system("tar -xvf MATCH.tar.gz")
+        os.system("tar -xvf PeTaL.tar.gz -C src/MATCH")
     else:
         if verbose:
-            logger.info("You have already downloaded our modified MATCH repository.")
+            logger.info("You have already downloaded the PeTaL dataset.")
     
 
 if __name__ == "__main__":
