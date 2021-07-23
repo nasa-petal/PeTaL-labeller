@@ -68,7 +68,7 @@ with open(folder+'train.json') as fin, open('network.dat', 'w') as fout:
 		# P-Mesh
 		for Mesh0 in js['mesh']:
 			Mesh = 'MESH_'+Mesh0
-			fout.write(P+' '+Mesh+' 6 1 \n')
+			fout.write(P+' '+Mesh+' 7 1 \n')
 			right.add(Mesh)
 
 		# P-W

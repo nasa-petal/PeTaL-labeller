@@ -186,6 +186,7 @@ nohup.out
 
 auto-labeler/MATCH/experiment_data/analyse_size_testing.py
 auto-labeler/MATCH/src/MATCH/PeTaL
+auto-labeler/MATCH/src/MATCH/joint/eigen-3.3.3
 auto-labeler/MATCH/src/wandb/
 auto-labeler/MATCH/PeTaL/
 
