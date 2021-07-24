@@ -2,7 +2,8 @@
 
 dataset=PeTaL
 
-python Preprocess_PeTaL.py --dataset $dataset
+python Preprocess_golden.py --dataset $dataset
+# python Preprocess_PeTaL.py --dataset $dataset
 
 # unzip eigen-3.3.3.zip
 # make
@@ -10,7 +11,7 @@ threads=5 # number of threads for training
 negative=5 # number of negative samples
 alpha=0.04 # initial learning rate
 sample=5000 # number of training samples (Million)
-type=8 # number of edge types
+type=7 # number of edge types
 dim=100
 
 word_file="left.dat"

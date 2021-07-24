@@ -2,7 +2,7 @@
 	Split.py
 
     Run MATCH with PeTaL data.
-    Last modified on 21 July 2021.
+    Last modified on 23 July 2021.
 
 	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -14,14 +14,14 @@ import logging
 
 @click.command()
 @click.option('--prefix', default='MATCH/PeTaL', help='Path from current working directory to directory containing dataset.')
-@click.option('--dataset', default='cleaned_lens_output.json', help='Filename of newline-delimited json dataset.')
+@click.option('--dataset', default='golden.json', help='Filename of newline-delimited json dataset.')
 @click.option('--train', default=0.8, type=click.FLOAT, help='Proportion, from 0.0 to 1.0, of dataset used for training.')
 @click.option('--dev', default=0.1, type=click.FLOAT, help='Proportion, from 0.0 to 1.0, of dataset used for validation.')
 @click.option('--skip', default=0, type=click.INT, help='Number of training examples by which to rotate the dataset (e.g., for cross-validation).')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
 def main(prefix='MATCH/PeTaL',
-		dataset='cleaned_lens_output.json',
+		dataset='golden.json',
 		train=0.8,
 		dev=0.1,
 		skip=0,

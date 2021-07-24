@@ -3,7 +3,7 @@ dataset: PeTaL
 
 split:
   prefix: MATCH/PeTaL
-  dataset: cleaned_lens_output.json
+  dataset: golden.json
   train: 0.8
   dev: 0.1
   skip: 0
