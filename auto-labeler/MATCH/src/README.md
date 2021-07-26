@@ -2,7 +2,7 @@
 
 This directory contains the source files for running MATCH on PeTaL data.
 
-This README was last updated on 21 July 2021.
+This README was last updated on 26 July 2021.
 
 ## What are all these files?
 
@@ -16,6 +16,7 @@ In `auto-labeler/MATCH/src` you will find:
 - `train.py`, for training MATCH on the PeTaL training set (uses `MATCH/main.py`).
 - `eval.py`, for evaluating MATCH's performance on the PeTaL testing set (uses `MATCH/main.py` and `MATCH/eval.py`).
 - `run_MATCH_with_PeTaL_data`, for running the whole pipeline (or portions of it): `setup.py`, `preprocess.py`, `train.py`, `eval.py`.
+- `xval_test.py` for running the whole pipeline multiple times with different folds for cross-validation
 
 ## How do I reproduce your results?
 
@@ -75,6 +76,14 @@ Run testing:
 python eval.py --cnf config.yaml [--verbose]
 ```
 Note that you can also use `-c` in place of `--cnf`.
+
+Run multiple trials for cross-validation:
+
+```
+python xval_test.py --cnf config.yaml [--verbose]
+```
+Note that you can also use `-c` in place of `--cnf`.
+You can redirect output to a file that `../analysis/analyse_MATCH_output.py` can read by appending `| tee experiment_data/xval_test/[FILENAME.py]` to your command.
 
 ## Current issues
 

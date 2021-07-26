@@ -2,7 +2,7 @@
     transform_data_golden.py
 
     Run MATCH with PeTaL data.
-    Last modified on 23 July 2021.
+    Last modified on 26 July 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -76,7 +76,7 @@ def transform_data(prefix,
         level=logging.DEBUG,
         format="[%(asctime)s:%(name)s] %(message)s"
     )
-    logger = logging.getLogger("transform_data_PeTaL")    
+    logger = logging.getLogger("transform_data_golden")    
 
     for src_json, dst_txt, file_mode in zip(
             ['train', 'dev', 'test'],
@@ -93,23 +93,23 @@ def transform_data(prefix,
                 data = json.loads(line)
                 
                 text = ''
-                if not no_mag:
+                if 'mag' in data and not no_mag:
                     mag = ' '.join(['MAG_'+x for x in data['mag']])
                     text += mag + ' '
-                if not no_mesh:
+                if 'mesh' in data and not no_mesh:
                     mesh = ' '.join(['MESH_'+x for x in data['mesh']])
                     text += mesh + ' '
                 # text = venue + ' ' + author + ' ' + reference + ' ' + data['text']
-                if not no_venue:
-                    venue = 'VENUE_'+data['venue'].replace(' ', '_')
+                if 'venue' in data and not no_venue:
+                    venue = ' '.join('VENUE_'+x.replace(' ', '_') for x in data['venue'])
                     text += venue + ' '
-                if not no_author:
-                    author = ' '.join(['AUTHOR_'+x for x in data['author']])
+                if 'author' in data and not no_author:
+                    author = ' '.join(['AUTHOR_'+str(x) for x in data['author']])
                     text += author + ' '
-                if not no_reference:
-                    reference = ' '.join(['REFP_'+x for x in data['reference']])
+                if 'reference' in data and not no_reference:
+                    reference = ' '.join(['REFP_'+str(x) for x in data['reference']])
                     text += reference + ' '
-                if not no_text:
+                if 'text' in data and not no_text:
                     text += data['text']
                 label = ' '.join(data['label'])
 

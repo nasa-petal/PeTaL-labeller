@@ -7,6 +7,7 @@ split:
   train: 0.8
   dev: 0.1
   skip: 0
+  tot: 1161
 
 transform:
   prefix: MATCH
@@ -31,4 +32,4 @@ train:
 
 wandb:
   project: MATCH
-  group: integration_20210714a
+  group: golden_20210726a

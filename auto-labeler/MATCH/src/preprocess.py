@@ -2,7 +2,7 @@
     preprocess.py
 
     Run MATCH with PeTaL data.
-    Last modified on 21 July 2021.
+    Last modified on 26 July 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -15,7 +15,7 @@ from ruamel.yaml import YAML
 from pathlib import Path
 
 from Split import split
-from transform_data_PeTaL import transform_data
+from transform_data_golden import transform_data
 
 @click.command()
 @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
@@ -94,6 +94,7 @@ def preprocess(cnf,
             train=float(split_cnf['train']),
             dev=float(split_cnf['dev']),
             skip=int(split_cnf['skip']),
+            tot=int(split_cnf['tot']),
             verbose=verbose
         )
     
@@ -101,7 +102,7 @@ def preprocess(cnf,
         Transform data from json objects into txt sequences of tokens.
 
         Notebook code that this accounts for:
-        !python3 transform_data_PeTaL.py --dataset {DATASET} \
+        !python3 transform_data_golden.py --dataset {DATASET} \
         {get_transform_arg_string(config)}
     '''
     if do_transform:

@@ -2,7 +2,7 @@
     run_MATCH_with_PeTaL_data.py
 
     Run MATCH with PeTaL data.
-    Last modified on 21 July 2021.
+    Last modified on 26 July 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''

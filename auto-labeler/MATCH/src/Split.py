@@ -2,7 +2,7 @@
 	Split.py
 
     Run MATCH with PeTaL data.
-    Last modified on 23 July 2021.
+    Last modified on 26 July 2021.
 
 	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -18,6 +18,7 @@ import logging
 @click.option('--train', default=0.8, type=click.FLOAT, help='Proportion, from 0.0 to 1.0, of dataset used for training.')
 @click.option('--dev', default=0.1, type=click.FLOAT, help='Proportion, from 0.0 to 1.0, of dataset used for validation.')
 @click.option('--skip', default=0, type=click.INT, help='Number of training examples by which to rotate the dataset (e.g., for cross-validation).')
+@click.option('--tot', default=0, type=click.INT, help='Total number of examples to use (defaults to whole dataset).')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
 def main(prefix='MATCH/PeTaL',
@@ -25,6 +26,7 @@ def main(prefix='MATCH/PeTaL',
 		train=0.8,
 		dev=0.1,
 		skip=0,
+		tot=0,
 		verbose=False):
 	"""Performs train-test split on newline-delimited json file.	
 
@@ -36,13 +38,14 @@ def main(prefix='MATCH/PeTaL',
 		skip (int): Number of training examples by which to rotate the dataset (e.g., for cross-validation).
 		verbose (bool): Verbose output.
 	"""	
-	split(prefix, dataset, train, dev, skip, verbose)
+	split(prefix, dataset, train, dev, skip, tot, verbose)
 
 def split(prefix='MATCH/PeTaL',
 		dataset='cleaned_lens_output.json',
 		train=0.8,
 		dev=0.1,
 		skip=0,
+		tot=0,
 		verbose=False):
 	"""Performs train-test split on newline-delimited json file.	
 
@@ -74,51 +77,76 @@ def split(prefix='MATCH/PeTaL',
 
 	train_proportion, dev_proportion = train, dev
 	train_labels = set()
-	with open(dataset_path) as fin:
-		tot = sum(1 for _ in fin)
+
+	# If the default value 0 was passed in as tot,
+	# count the number of examples in the dataset
+	# and use that as the total number of examples.
+	# Otherwise stick with the passed-in total argument.
+	if tot == 0:
+		with open(dataset_path) as fin:
+			tot = sum(1 for _ in json.loads(fin.read()))
 	if verbose:
 		logger.info(f"{tot} total examples in dataset.")
 
 	with open(dataset_path) as fin, open(train_path, 'w') as fou1, open(dev_path, 'w') as fou2, open(test_path, 'w') as fou3:
-		for idx, line in enumerate(fin):
-			if idx < skip:
+		golden = json.loads(fin.read())
+		# for idx, line in enumerate(fin):
+		for idx, js in enumerate(golden):
+			if idx < skip or idx >= tot:
 				continue
-			js = json.loads(line)
+			# js = json.loads(line)
+		
+			level1Labels = js['level1'] if js['level1'] else []
+			level2Labels = js['level2'] if js['level2'] else []
+			level3Labels = js['level3'] if js['level3'] else []
+			all_labels = level1Labels + level2Labels + level3Labels
 
 			if (idx - skip) % tot < tot * train_proportion:
-				for l in js['label']:
+				for l in all_labels:
 					train_labels.add(l)
+
+				js['label'] = all_labels
 				fou1.write(json.dumps(js)+'\n')
 			
 			else:
 				label_new = []
-				for l in js['label']:
+				for l in all_labels:
 					if l in train_labels:
 						label_new.append(l)
 				if len(label_new) == 0:
 					continue
 
 				js['label'] = label_new
+				# print(js['label'])
+				# print([x for x in js.keys()])
 				if (idx - skip) % tot < tot * (train_proportion + dev_proportion):
 					fou2.write(json.dumps(js)+'\n')
 				else:
 					fou3.write(json.dumps(js)+'\n')
 		
-		fin.seek(0)
+		# fin.seek(0)
 
-		for idx, line in enumerate(fin):
+		# for idx, line in enumerate(fin):
+		for idx, js in enumerate(golden):
 			if idx >= skip:
 				break
-			js = json.loads(line)
+			# js = json.loads(line)
+
+			level1Labels = js['level1'] if js['level1'] else []
+			level2Labels = js['level2'] if js['level2'] else []
+			level3Labels = js['level3'] if js['level3'] else []
+			all_labels = level1Labels + level2Labels + level3Labels
 
 			if (idx - skip) % tot < tot * train_proportion:
-				for l in js['label']:
+				for l in all_labels:
 					train_labels.add(l)
+
+				js['label'] = all_labels
 				fou1.write(json.dumps(js)+'\n')
 			
 			else:
 				label_new = []
-				for l in js['label']:
+				for l in all_labels:
 					if l in train_labels:
 						label_new.append(l)
 				if len(label_new) == 0:
