@@ -84,8 +84,9 @@ should you want to remove the dataset that `setup.py` downloaded. This is necess
 ## Summary of results
 
 In short, what I've found so far seems to indicate that:
-- for the scale of our data in `PeTaL/cleaned_lens_output.json` (up to 1000 papers), dataset size matters a lot. This is encouraging.
+- for the scale of our data in `PeTaL/golden.json` (roughly 1200 papers), dataset size matters a lot. This is encouraging.
 - among other metadata, appending MAG fields of study and MeSH terms to text does help accuracy. MAG fields of study alone give somewhat more information than MeSH terms alone.
+- for now, MATCH is quite definitely overfitting on `PeTaL/golden.json`.
 
 Cleaned experiment logs for various sets of trials are found in `experiment_data/`.
 
@@ -101,10 +102,13 @@ We plot multilabel confusion matrices for the top 25% of leaf labels for MATCH o
 
 ### 2021-07-27 Increasing the number of transformer layers on `golden.json`
 
+We increase the number of transformer layers for MATCH on `golden.json` to see if that makes a difference. Our preliminary investigations seem to indicate that increasing number of layers beyond 4 is not fruitful. In fact, with any more than 6 transformer layers, it is impossible for the GPU on `triglav.grc.nasa.gov` to fit the entire model.
+
 | Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
 | --- | --- | --- | --- | --- | --- |
 | golden_3_layer | 0.552 ± 0.108 | 0.471 ± 0.056 | 0.365 ± 0.045 | 0.495 ± 0.068 | 0.487 ± 0.064 |
 | golden_4_layer | 0.597 ± 0.059 | 0.489 ± 0.041 | 0.392 ± 0.031 | 0.521 ± 0.045 | 0.523 ± 0.040 |
+| golden_6_layer | 0.597 ± 0.044 | 0.496 ± 0.045 | 0.392 ± 0.037 | 0.525 ± 0.044 | 0.521 ± 0.042 |
 
 ### 2021-07-27 Dataset size testing on `golden.json`
 
@@ -212,7 +216,7 @@ In a nutshell, this suggests that MAG fields of study give more information than
 - Integrate this work with the rest of the PeTaL pipeline.
 - Compare to auto-sklearn (https://github.com/nasa-petal/PeTaL-labeller/issues/56)
 - Investigate using just the most common subset of labels (https://github.com/nasa-petal/PeTaL-labeller/issues/69, https://github.com/nasa-petal/PeTaL-labeller/issues/70) to see if MATCH does better on that.
-- Look into data augmentation techniques.
+- Look into data augmentation techniques (https://github.com/nasa-petal/PeTaL-labeller/issues/65).
 - conda throws a non-fatal error at the beginning of training? Not sure why, but it still trains well.
 
 ## Contact

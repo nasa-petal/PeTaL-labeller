@@ -24,14 +24,16 @@ from tqdm import tqdm
 @click.command()
 @click.option('--match', '-m', 'match_path', type=click.Path(exists=True), help='Path of MATCH folder.')
 @click.option('--plots', '-p', 'plots_path', type=click.Path(exists=True), help='Path of plots folder.')
+@click.option('--leaf-only', type=click.BOOL, is_flag=True, default=False, required=False, help='Leaf labels only.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
-def main(match_path, plots_path, verbose):
+def main(match_path, plots_path, leaf_only, verbose):
     """Plots multilabel confusion matrix.
 
     Args:
         match_path (str): Path of MATCH folder.
         plots_path (str): Path of plots folder.
+        leaf_only (bool): Leaf labels only.
         verbose (bool): Verbose output.
     """
 
@@ -71,18 +73,24 @@ def main(match_path, plots_path, verbose):
     # print(label_count)
     # print(len(label_count))
 
-    ONLY_LEAF_LABELS = True
-    labels = None
+    ONLY_LEAF_LABELS = leaf_only
+    # labels = None
+    # if ONLY_LEAF_LABELS:
+    #     labels = np.array(sorted(filter(lambda lbl: not lbl in parent_labels,
+    #                             list(set(label for label_list in all_labels for label in label_list))
+    #                         ), 
+    #                         key=lambda lbl: label_count[lbl],
+    #                         reverse=True))
+    # else:
+    #     labels = np.array(sorted(list(set(label for label_list in all_labels for label in label_list)), 
+    #                         key=lambda lbl: label_count[lbl],
+    #                         reverse=True))
     if ONLY_LEAF_LABELS:
-        labels = np.array(sorted(filter(lambda lbl: not lbl in parent_labels,
-                                list(set(label for label_list in all_labels for label in label_list))
-                            ), 
-                            key=lambda lbl: label_count[lbl],
-                            reverse=True))
-    else:
-        labels = np.array(sorted(list(set(label for label_list in all_labels for label in label_list)), 
-                            key=lambda lbl: label_count[lbl],
-                            reverse=True))
+        label_list = filter(lambda lbl: not lbl in parent_labels, label_list)
+        
+    labels = np.array(sorted(label_list,
+                        key=lambda lbl: label_count[lbl],
+                        reverse=True))
 
     label2idx = {label: idx for idx, label in enumerate(labels)}
     idx2label = {idx: label for idx, label in enumerate(labels)}
@@ -105,9 +113,6 @@ def main(match_path, plots_path, verbose):
                 for res_label, res_score in zip(res_label_list, res_score_list):
                     if res_label in label2idx:
                         preds_for_test_label[test_label][res_label] += res_score
-
-        # print("test_label_list", test_label_list)
-        # print("top_res_label_list", top_res_label_list)
 
     num_labels = len(label2idx)
     conf_matrix = np.array(
