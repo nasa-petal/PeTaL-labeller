@@ -4,7 +4,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify PeTaL data according to the PeTaL taxonomy.
 
-This README was last updated on 26 July 2021.
+This README was last updated on 27 July 2021.
 
 ## What are all these files?
 
@@ -91,7 +91,21 @@ Cleaned experiment logs for various sets of trials are found in `experiment_data
 
 Historical analyses of results are available in `reports/results_up_to_20210714.md`.
 
-### 2021-07-26 First Tests on `golden.json`
+### 2021-07-27 Dataset size testing on `golden.json`
+
+Although we report no improvement over the equivalent tests on `cleaned_lens_output.json`, we confirm that MATCH performance increases roughly linearly with respect to dataset size on `golden.json`.
+
+| Train set size | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| 232 | 0.315 ± 0.020 | 0.242 ± 0.022 | 0.208 ± 0.012 | 0.262 ± 0.022 | 0.273 ± 0.016 |
+| 348 | 0.394 ± 0.062 | 0.303 ± 0.048 | 0.248 ± 0.037 | 0.326 ± 0.053 | 0.331 ± 0.052 |
+| 464 | 0.437 ± 0.076 | 0.360 ± 0.064 | 0.286 ± 0.046 | 0.381 ± 0.069 | 0.380 ± 0.065 |
+| 581 | 0.510 ± 0.031 | 0.405 ± 0.027 | 0.321 ± 0.019 | 0.434 ± 0.028 | 0.431 ± 0.027 |
+| 697 | 0.515 ± 0.046 | 0.415 ± 0.036 | 0.332 ± 0.029 | 0.443 ± 0.039 | 0.444 ± 0.039 |
+| 813 | 0.568 ± 0.044 | 0.468 ± 0.039 | 0.366 ± 0.027 | 0.496 ± 0.039 | 0.492 ± 0.036 |
+| 929 | 0.580 ± 0.050 | 0.478 ± 0.043 | 0.373 ± 0.030 | 0.508 ± 0.045 | 0.501 ± 0.043 |
+
+### 2021-07-26 First Tests on `golden.json` - Issue #70
 
 We conducted three sets of ten trials. The first involved the whole `golden.json` dataset. The second and third involved only the papers labelled with one of the top 25% and top 10% leaf labels, respectively, for PeTaL Labeller Issue #70.
 
