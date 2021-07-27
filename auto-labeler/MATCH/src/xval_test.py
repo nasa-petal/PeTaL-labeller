@@ -10,7 +10,7 @@
 '''
 
 import click
-import logging
+import numpy as np
 from ruamel.yaml import YAML
 from pathlib import Path
 
@@ -49,25 +49,26 @@ def xval_test(cnf,
         study (str): Name of study, for logging purposes.
     """
 
-    STUDY_TITLE = study
-
     # Determine amount of training examples to rotate for each fold.
-    tot = cnf['split']['tot'] if cnf['split']['tot'] else 1000 # default
-    skip_interval = tot / 10
+    tot = cnf['split']['tot'] if 'tot' in cnf['split'] else 1000 # default
+    skip_interval = int(tot / 10)
 
-    for skip in range(0, skip_interval * 10, skip_interval):
-        print(f"```\n{STUDY_TITLE} skip={skip}\n")
-        cnf['split']['skip'] = skip
-        run_MATCH_with_PeTaL_data(
-            cnf,
-            verbose,
-            do_split=True,
-            do_transform=True,
-            do_preprocess=True,
-            do_train=True,
-            do_eval=True
-        )
-        print("```\n")
+    for train_proportion in np.arange(0.2, 0.9, 0.1):
+        STUDY_TITLE = f"{study}_train_{train_proportion:.1f}"
+        cnf['split']['train'] = train_proportion
+        for skip in range(0, skip_interval * 10, skip_interval):
+            print(f"```\n{STUDY_TITLE} skip={skip}\n")
+            cnf['split']['skip'] = skip
+            run_MATCH_with_PeTaL_data(
+                cnf,
+                verbose,
+                do_split=True,
+                do_transform=True,
+                do_preprocess=True,
+                do_train=True,
+                do_eval=True
+            )
+            print("```\n")
 
 
 if __name__ == '__main__':
