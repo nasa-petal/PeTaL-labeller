@@ -36,7 +36,7 @@ def main(match_path, plots_path, verbose):
     """
 
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format="[%(asctime)s:%(name)s] %(message)s"
     )
     MCMlogger = logging.getLogger("MCM")  
@@ -68,7 +68,19 @@ def main(match_path, plots_path, verbose):
         for label in label_list:
             label_count[label] += 1
 
-    labels = np.array(sorted(list(set(label for label_list in all_labels for label in label_list)), 
+    # print(label_count)
+    # print(len(label_count))
+
+    ONLY_LEAF_LABELS = True
+    labels = None
+    if ONLY_LEAF_LABELS:
+        labels = np.array(sorted(filter(lambda lbl: not lbl in parent_labels,
+                                list(set(label for label_list in all_labels for label in label_list))
+                            ), 
+                            key=lambda lbl: label_count[lbl],
+                            reverse=True))
+    else:
+        labels = np.array(sorted(list(set(label for label_list in all_labels for label in label_list)), 
                             key=lambda lbl: label_count[lbl],
                             reverse=True))
 
@@ -88,9 +100,11 @@ def main(match_path, plots_path, verbose):
 
     for test_label_list, res_label_list, res_score_list in zip(test_labels, res_labels, res_scores):
         for test_label in test_label_list:
-            test_label_count[test_label] += 1
-            for res_label, res_score in zip(res_label_list, res_score_list):
-                preds_for_test_label[test_label][res_label] += res_score
+            if test_label in test_label_count:
+                test_label_count[test_label] += 1
+                for res_label, res_score in zip(res_label_list, res_score_list):
+                    if res_label in label2idx:
+                        preds_for_test_label[test_label][res_label] += res_score
 
         # print("test_label_list", test_label_list)
         # print("top_res_label_list", top_res_label_list)
@@ -98,14 +112,13 @@ def main(match_path, plots_path, verbose):
     num_labels = len(label2idx)
     conf_matrix = np.array(
         [
-        [
-        # i is label2idx[test_label], j is label2idx[res_label]
-        preds_for_test_label[idx2label[i]][idx2label[j]] / test_label_count[idx2label[i]] if test_label_count[idx2label[i]] > 0 else 0
-        for j in range(num_labels)
-        ]
-        for i in range(num_labels)
-        ]
-        
+            [
+                # i is label2idx[test_label], j is label2idx[res_label]
+                preds_for_test_label[idx2label[i]][idx2label[j]] / test_label_count[idx2label[i]] if test_label_count[idx2label[i]] > 0 else 0
+                for j in range(num_labels)
+            ]
+            for i in range(num_labels)
+        ] 
     )
 
     ########################################
@@ -133,18 +146,18 @@ def main(match_path, plots_path, verbose):
 
     rc('xtick', labelsize=7)
     rc('ytick', labelsize=7)
-    rc('font', size=30)
+    rc('font', size=20)
 
-    label_limit = 131
-    conf_matrix_small = conf_matrix[:label_limit, :label_limit]
-    num_labels = label_limit
+    # label_limit = 100
+    # conf_matrix_small = conf_matrix[:label_limit, :label_limit]
+    # num_labels = label_limit
     row_labels = [idx2label[i] for i in range(num_labels)]
     col_labels = [idx2label[i] for i in range(num_labels)]
 
-    plt.rcParams["figure.figsize"] = (15, 15)
+    plt.rcParams["figure.figsize"] = (10, 10)
     fig, ax = plt.subplots()
-    plt.matshow(conf_matrix_small, fignum=0)
-    ax.set_title('Multilabel Confusion Matrix for MATCH on PeTaL data\nLabels Sorted by Frequency', y=1.0, pad=15)
+    plt.matshow(conf_matrix, fignum=0)
+    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nLeaf Labels Sorted by Frequency', y=1.5, pad=0)
     ax.set_xlabel('Predicted labels')
     ax.set_ylabel('Ground truth labels')
     ax.xaxis.set_label_position('top')
@@ -155,7 +168,7 @@ def main(match_path, plots_path, verbose):
     # plt.rcParams["axes.titley"] = 1.0
     # plt.rcParams["axes.titlepad"] = 15
     PLOT_PATH = os.path.join(PLOTS_PATH, f'mcm_{time_str}')
-    plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
+    plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False, bbox_inches='tight')
     plt.clf()
 
 if __name__ == '__main__':
