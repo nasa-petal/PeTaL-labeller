@@ -81,10 +81,12 @@ def split(prefix='MATCH/PeTaL',
 	# If the default value 0 was passed in as tot,
 	# count the number of examples in the dataset
 	# and use that as the total number of examples.
-	# Otherwise stick with the passed-in total argument.
-	if tot == 0:
-		with open(dataset_path) as fin:
-			tot = sum(1 for _ in json.loads(fin.read()))
+	# Otherwise stick with the passed-in total argument,
+	# unless that exceeds the actual number of examples in the dataset.
+	with open(dataset_path) as fin:
+		num_examples = sum(1 for _ in json.loads(fin.read()))
+		if tot == 0 or tot > num_examples:
+			tot = num_examples
 	if verbose:
 		logger.info(f"{tot} total examples in dataset.")
 

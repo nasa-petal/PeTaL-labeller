@@ -91,6 +91,18 @@ Cleaned experiment logs for various sets of trials are found in `experiment_data
 
 Historical analyses of results are available in `reports/results_up_to_20210714.md`.
 
+### 2021-07-26 First Tests on `golden.json`
+
+We conducted three sets of ten trials. The first involved the whole `golden.json` dataset. The second and third involved only the papers labelled with one of the top 25% and top 10% leaf labels, respectively, for PeTaL Labeller Issue #70.
+
+| Train set options | Dataset size | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- | --- |
+| golden_testing | 1161 | 0.552 ± 0.108 | 0.471 ± 0.056 | 0.365 ± 0.045 | 0.495 ± 0.068 | 0.487 ± 0.064 |
+| golden_top_25% | 773 | 0.526 ± 0.093 | 0.461 ± 0.074 | 0.357 ± 0.044 | 0.491 ± 0.077 | 0.522 ± 0.069 |
+| golden_top_10% | 453 | 0.471 ± 0.113 | 0.274 ± 0.043 | 0.207 ± 0.024 | 0.558 ± 0.092 | 0.626 ± 0.081 |
+
+It seems that the advantage gained by restricting the papers to only the most common labels is outweighed by the disadvantage of having a smaller dataset. Also observe that the nDCG scores increase as the dataset becomes more restricted -- this could be a consequence of the model learning to predict those labels correctly more often, or it could be a consequence of there being fewer labels to predict (and thus, fewer incorrect choices).
+
 ### 2021-07-22 Multilabel Confusion Matrices - A Closer Look
 
 In the following confusion matrix we sort the labels by the frequency by which they appear in the training subset. Observe that the more frequent labels occur at the left and at the top (and these are by and large the parent labels, such as `move` and `sense_send_or_process_information` or the like).

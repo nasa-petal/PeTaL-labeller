@@ -94,7 +94,7 @@ def preprocess(cnf,
             train=float(split_cnf['train']),
             dev=float(split_cnf['dev']),
             skip=int(split_cnf['skip']),
-            tot=int(split_cnf['tot']),
+            tot=int(split_cnf['tot']) if 'tot' in split_cnf else 0,
             verbose=verbose
         )
     
