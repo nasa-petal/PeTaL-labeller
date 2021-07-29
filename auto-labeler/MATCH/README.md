@@ -107,6 +107,12 @@ In the PeTaL taxonomy there are ten Level 1 labels. Their frequencies of occurre
 
 ![Level 1 Labels and Their Frequency of Occurrence in golden.json](reports/figures/goldenlevel1bars.png)
 
+The following are the precisions and nDCG scores of MATCH on only the level 1 labels. P@3, P@5, nDCG@3, and nDCG@5 are largely without meaning, because most papers have only one level l label. The performance is roughly on par with MATCH performance on the entire tree of labels; I am not sure why it is not higher.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| level1 | 0.621 ± 0.032 | 0.339 ± 0.025 | 0.239 ± 0.015 | 0.684 ± 0.030 | 0.732 ± 0.027 |
+
 A multilabel confusion matrix showing what each label tends to be classified as is shown below:
 
 ![MCM for Level 1 Labels in golden.json](plots/20210729_123758_MCM/mcm_20210729_123758.png)
