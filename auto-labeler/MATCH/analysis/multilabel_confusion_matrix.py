@@ -56,8 +56,7 @@ def main(match_path, plots_path, leaf_only, verbose):
         for line in tax_file:
             parent_label = line.split()[0]
             parent_labels.add(parent_label)
-    len(parent_labels)
-
+    
     all_labels = np.concatenate([train_labels, test_labels], axis=0)
 
     label_list = np.array(list(set(label for label_list in all_labels for label in label_list)))
@@ -66,8 +65,8 @@ def main(match_path, plots_path, leaf_only, verbose):
     for label in label_list:
         label_count[label] = 0
 
-    for label_list in all_labels:
-        for label in label_list:
+    for label_list_ in all_labels:
+        for label in label_list_:
             label_count[label] += 1
 
     # print(label_count)
@@ -149,8 +148,8 @@ def main(match_path, plots_path, leaf_only, verbose):
         if verbose:
             MCMlogger.info(f"You already have a plots directory at {PLOTS_PATH}")
 
-    rc('xtick', labelsize=7)
-    rc('ytick', labelsize=7)
+    rc('xtick', labelsize=12)
+    rc('ytick', labelsize=12)
     rc('font', size=20)
 
     # label_limit = 100
@@ -162,7 +161,7 @@ def main(match_path, plots_path, leaf_only, verbose):
     plt.rcParams["figure.figsize"] = (10, 10)
     fig, ax = plt.subplots()
     plt.matshow(conf_matrix, fignum=0)
-    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nLeaf Labels Sorted by Frequency', y=1.5, pad=0)
+    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nLabels Sorted by Frequency', y=1.7, pad=0)
     ax.set_xlabel('Predicted labels')
     ax.set_ylabel('Ground truth labels')
     ax.xaxis.set_label_position('top')

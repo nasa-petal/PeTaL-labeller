@@ -102,15 +102,22 @@ def transform_data(prefix,
                 # text = venue + ' ' + author + ' ' + reference + ' ' + data['text']
                 if 'venue' in data and not no_venue:
                     venue = ' '.join('VENUE_'+x.replace(' ', '_') for x in data['venue'])
-                    text += venue + ' '
+                    venue_mag = ' '.join('VENUE_'+x.replace(' ', '_') for x in data['venue_mag'])
+                    text += venue + ' ' + venue_mag + ' '
                 if 'author' in data and not no_author:
                     author = ' '.join(['AUTHOR_'+str(x) for x in data['author']])
                     text += author + ' '
                 if 'reference' in data and not no_reference:
                     reference = ' '.join(['REFP_'+str(x) for x in data['reference']])
                     text += reference + ' '
-                if 'text' in data and not no_text:
-                    text += data['text']
+                if 'title' in data and not no_text:
+                    title = ' '.join(data['title'])
+                    text += title + ' '
+                if 'abstract' in data and not no_text:
+                    abstract = ' '.join(data['abstract'])
+                    text += abstract + ' '
+                # if 'text' in data and not no_text:
+                #     text += data['text']
                 label = ' '.join(data['label'])
 
                 fou1.write(text+'\n')

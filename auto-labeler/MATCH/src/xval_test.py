@@ -40,8 +40,8 @@ def main(cnf_path,
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    # xval_test(cnf, k, study, verbose)
-    xval_test_ablations(cnf, k, study, verbose)
+    xval_test(cnf, k, study, verbose)
+    # xval_test_ablations(cnf, k, study, verbose)
 
 def xval_test(cnf,
         k=10,
