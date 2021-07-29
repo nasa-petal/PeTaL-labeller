@@ -2,20 +2,21 @@
 
 ## Links
 
-- [What is this?](#what-is-this)
-- [What are all these files?](#what-are-all-these-files)
-- [How do I reproduce your results?](#how-do-i-reproduce-your-results)
-- [Summary of Results](#summary-of-results)
-- [Future Work](#future-work)
+- [What is this?](#overview)
+- [What are all these files?](#contents)
+- [How do I reproduce your results?](#run)
+- [Summary of Results](#results)
+- [Frequently Asked Questions](#faq)
+- [Future Work](#future)
 - [Contact](#contact)
 
-## What is this?
+## What is this? <a name="overview"></a>
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify PeTaL data according to the PeTaL taxonomy.
 
 This README was last updated on 29 July 2021.
 
-## What are all these files?
+## What are all these files? <a name="contents"></a>
 
 - `analysis/` contains scripts for analysing experiment data and results.
 - `experiment_data/` contains cleaned-up experiment logs for various sets of trials.
@@ -28,7 +29,7 @@ This README was last updated on 29 July 2021.
 - `requirements.txt` contains a list of required packages.
 - `setup.py`, for setting up preliminaries (i.e., downloading PeTaL).
 
-## How do I reproduce your results?
+## How do I reproduce your results? <a name="run"></a>
 
 ### Environment and setup
 
@@ -90,7 +91,7 @@ make clean
 
 should you want to remove the dataset that `setup.py` downloaded. This is necessary if you want to download an updated version of the dataset.
 
-## Summary of results
+## Summary of results <a name="results"></a>
 
 In short, what I've found so far seems to indicate that:
 - for the scale of our data in `PeTaL/golden.json` (roughly 1200 papers), dataset size matters a lot. This is encouraging.
@@ -112,6 +113,8 @@ The following are the precisions and nDCG scores of MATCH on only the level 1 la
 | Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
 | --- | --- | --- | --- | --- | --- |
 | level1 | 0.621 ± 0.032 | 0.339 ± 0.025 | 0.239 ± 0.015 | 0.684 ± 0.030 | 0.732 ± 0.027 |
+
+P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
 
 A multilabel confusion matrix showing what each label tends to be classified as is shown below:
 
@@ -137,6 +140,8 @@ Overnight we ran the same suite of ablation studies on `golden.json` and obtaine
 | golden_only_ref | 0.449 ± 0.057 | 0.370 ± 0.067 | 0.310 ± 0.051 | 0.392 ± 0.063 | 0.403 ± 0.059 |
 | golden_only_text | 0.308 ± 0.035 | 0.231 ± 0.022 | 0.201 ± 0.017 | 0.246 ± 0.022 | 0.258 ± 0.021 |
 | golden_none | 0.308 ± 0.035 | 0.230 ± 0.020 | 0.196 ± 0.014 | 0.245 ± 0.021 | 0.255 ± 0.017 |
+
+P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
 
 This was alarming, in that *the text itself appeared to be giving no information at all*. It turned out that the text was being lost during the preprocessing stage (because in `golden.json`, there is no `text` field, but just `title` and `abstract` fields) and I had forgotten to account for that. The data involving the `text` field above are therefore flawed, and a fixed set of trials were run, whose results are shown below.
 
@@ -166,6 +171,8 @@ We increase the number of transformer layers for MATCH on `golden.json` to see i
 | golden_4_layer | 0.597 ± 0.059 | 0.489 ± 0.041 | 0.392 ± 0.031 | 0.521 ± 0.045 | 0.523 ± 0.040 |
 | golden_6_layer | 0.597 ± 0.044 | 0.496 ± 0.045 | 0.392 ± 0.037 | 0.525 ± 0.044 | 0.521 ± 0.042 |
 
+P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+
 ### 2021-07-27 Dataset size testing on `golden.json`
 
 Although we report no improvement over the equivalent tests on `cleaned_lens_output.json`, we confirm that MATCH performance increases roughly linearly with respect to dataset size on `golden.json`.
@@ -180,6 +187,8 @@ Although we report no improvement over the equivalent tests on `cleaned_lens_out
 | 829 | 0.568 ± 0.044 | 0.468 ± 0.039 | 0.366 ± 0.027 | 0.496 ± 0.039 | 0.492 ± 0.036 |
 | 945 | 0.580 ± 0.050 | 0.478 ± 0.043 | 0.373 ± 0.030 | 0.508 ± 0.045 | 0.501 ± 0.043 |
 
+P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+
 ### 2021-07-26 First Tests on `golden.json` - Issue #70
 
 We conducted three sets of ten trials. The first involved the whole `golden.json` dataset. The second and third involved only the papers labelled with one of the top 25% and top 10% leaf labels, respectively, for PeTaL Labeller Issue #70.
@@ -190,17 +199,37 @@ We conducted three sets of ten trials. The first involved the whole `golden.json
 | golden_top_25% | 773 | 0.526 ± 0.093 | 0.461 ± 0.074 | 0.357 ± 0.044 | 0.491 ± 0.077 | 0.522 ± 0.069 |
 | golden_top_10% | 453 | 0.471 ± 0.113 | 0.274 ± 0.043 | 0.207 ± 0.024 | 0.558 ± 0.092 | 0.626 ± 0.081 |
 
+P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+
 It seems that the advantage gained by restricting the papers to only the most common labels is outweighed by the disadvantage of having a smaller dataset. Also observe that the nDCG scores increase as the dataset becomes more restricted -- this could be a consequence of the model learning to predict those labels correctly more often, or it could be a consequence of there being fewer labels to predict (and thus, fewer incorrect choices).
 
-## Future work
+## Frequently Asked Questions <a name="faq"></a>
+
+### What do P@1, P@3, nDCG@1, etc., all mean? <a name="p-and-ndcg"></a>
+
+So MATCH produces a ranking of labels (biomimicry functions) by their relevance. There are a lot of labels, but usually only a few are relevant to each document. **Precision at top k** (P@k) asks "Of the top k labels predicted by MATCH, how many is the document actually (ground-truth) tagged with"?
+
+P@k has a shortcoming in that it is not ranking-aware -- it just checks, one by one, whether each predicted label is also a ground-truth label (whereas in reality, some labels can be more relevant than others!). **Normalized Discounted Cumulative Gain at top k** (nDCG@k) is one way to address this issue, by computing the similarity of MATCH's generated ranking to an ideal ranking.
+
+Both P@k and nDCG@k range from 0.0 (completely off the mark) to 1.0 (picture-perfect).
+
+### What values does nDCG use for an ideal ranking, since we don't have relevancy scores for our labels? <a name="ndcg-ranking"></a>
+
+My understanding is the relevancy score for each ground-truth label is a binary yes or no (1 for relevant, 0 for not).
+
+The ordering of the predictions that MATCH makes can still have an effect on the nDCG score, though!
+
+For example, consider two relevant labels (R) and an irrelevant label (NR). If for a certain paper, a prediction at top 3 is (NR, R, R) and another is (R, NR, R) (where R = a relevant label and NR is a non-relevant label), those two predictions would have different nDCG scores. In computing the nDCG score they would both be compared to the ideal partial ordering (R, R, NR).
+
+## Future work <a name="future"></a>
 
 - Integrate this work with the rest of the PeTaL pipeline.
-- Compare to auto-sklearn (https://github.com/nasa-petal/PeTaL-labeller/issues/56)
-- Investigate using just the most common subset of labels (https://github.com/nasa-petal/PeTaL-labeller/issues/69, https://github.com/nasa-petal/PeTaL-labeller/issues/70) to see if MATCH does better on that.
-- Look into data augmentation techniques (https://github.com/nasa-petal/PeTaL-labeller/issues/65).
+- Compare to [auto-sklearn](https://github.com/nasa-petal/PeTaL-labeller/issues/56)
+- Investigate using just the [most common subset of labels](https://github.com/nasa-petal/PeTaL-labeller/issues/70) to see if MATCH does better on that, and write a [binary classifier to filter out the other labels](https://github.com/nasa-petal/PeTaL-labeller/issues/69).
+- Look into [data augmentation techniques](https://github.com/nasa-petal/PeTaL-labeller/issues/65).
 - conda throws a non-fatal error at the beginning of training? Not sure why, but it still trains well.
-- Figure out how to load MATCH with pretrained weights (https://github.com/nasa-petal/PeTaL-labeller/issues/72).
+- Figure out how to load MATCH with [pretrained weights](https://github.com/nasa-petal/PeTaL-labeller/issues/72).
 
-## Contact
+## Contact <a name="contact"></a>
 
 For questions contact Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com).
