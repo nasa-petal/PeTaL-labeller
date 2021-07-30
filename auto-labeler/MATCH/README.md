@@ -14,7 +14,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify PeTaL data according to the PeTaL taxonomy.
 
-This README was last updated on 29 July 2021.
+This README was last updated on 30 July 2021.
 
 ## What are all these files? <a name="contents"></a>
 
@@ -81,6 +81,19 @@ python eval.py --cnf config.yaml [--verbose]
 
 where `[--verbose]` is an optional parameter.
 
+The trained model will appear in `src/MATCH/PeTaL/models/` and its predictions will appear in `src/MATCH/PeTaL/results/`. The top 5 predictions will also appear in `src/MATCH/predictions.txt` for each test example.
+
+### Running embedding pretraining
+
+This should not be necessary with [the current dataset](https://drive.google.com/file/d/1dTA7h0KAf1bBU40Anpfjg_VMJ_I4JXUQ/view?usp=sharing), which comes with pretrained embeddings in the file `src/MATCH/PeTaL/PeTaL.joint.emb`.
+
+However, if you are creating a new dataset or modifying an existing one, you may have to run embedding pretraining. The MATCH authors provide a [procedure](https://github.com/yuzhimanhua/MATCH#embedding-pre-training) for this. This involves downloading and installing the [GSL](https://drive.google.com/file/d/1UvmgrZbycC7wYAHahYGRB5pRtu6Aurhv/view?usp=sharing) package (in their description). It may be necessary to append the path to your GSL installation to `LD_LIBRARY_PATH`, as follows:
+
+```
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/gsl/lib
+export LD_LIBRARY_PATH
+```
+
 ### Everybody clean up!
 
 There is also the command
@@ -100,7 +113,7 @@ In short, what I've found so far seems to indicate that:
 
 Cleaned experiment logs for various sets of trials are found in `experiment_data/`.
 
-Historical analyses of results are available in `reports/results_up_to_20210714.md`.
+Historical analyses of results are available in `reports/results_up_to_20210714.md` and `reports/results_up_to_20210723.md`.
 
 ### 2021-07-28 Issue #73 testing on `golden.json` - Using Only The Labels At The Highest Level.
 

@@ -116,6 +116,12 @@ def preprocess(cnf,
             no_author=not transform_cnf['use_author'],
             no_reference=not transform_cnf['use_reference'],
             no_text=not transform_cnf['use_text'],
+            no_title=not transform_cnf['use_title'],
+            no_abstract=not transform_cnf['use_abstract'],
+            no_level1=not transform_cnf['use_level1'],
+            no_level2=not transform_cnf['use_level2'],
+            no_level3=not transform_cnf['use_level3'],
+            include_labels_in_features=transform_cnf['include_labels_in_features'],
             verbose=verbose
         )
 

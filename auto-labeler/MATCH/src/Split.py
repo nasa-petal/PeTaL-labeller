@@ -2,7 +2,7 @@
 	Split.py
 
     Run MATCH with PeTaL data.
-    Last modified on 26 July 2021.
+    Last modified on 30 July 2021.
 
 	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -101,7 +101,7 @@ def split(prefix='MATCH/PeTaL',
 			level1Labels = js['level1'] if js['level1'] else []
 			level2Labels = js['level2'] if js['level2'] else []
 			level3Labels = js['level3'] if js['level3'] else []
-			all_labels = level1Labels # + level2Labels + level3Labels
+			all_labels = level1Labels + level2Labels + level3Labels
 
 			if (idx - skip) % tot < tot * train_proportion:
 				for l in all_labels:
@@ -137,7 +137,7 @@ def split(prefix='MATCH/PeTaL',
 			level1Labels = js['level1'] if js['level1'] else []
 			level2Labels = js['level2'] if js['level2'] else []
 			level3Labels = js['level3'] if js['level3'] else []
-			all_labels = level1Labels # + level2Labels + level3Labels
+			all_labels = level1Labels + level2Labels + level3Labels
 
 			if (idx - skip) % tot < tot * train_proportion:
 				for l in all_labels:

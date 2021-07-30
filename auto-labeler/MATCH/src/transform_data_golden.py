@@ -21,6 +21,12 @@ import logging
 @click.option('--no-author', type=click.BOOL, is_flag=True, default=False, required=False)
 @click.option('--no-reference', type=click.BOOL, is_flag=True, default=False, required=False)
 @click.option('--no-text', type=click.BOOL, is_flag=True, default=False, required=False)
+@click.option('--no-title', type=click.BOOL, is_flag=True, default=False, required=False)
+@click.option('--no-abstract', type=click.BOOL, is_flag=True, default=False, required=False)
+@click.option('--no-level1', type=click.BOOL, is_flag=True, default=False, help='Do not include level 1 labels.')
+@click.option('--no-level2', type=click.BOOL, is_flag=True, default=False, help='Do not include level 2 labels.')
+@click.option('--no-level3', type=click.BOOL, is_flag=True, default=False, help='Do not include level 3 labels.')
+@click.option('--include-labels-in-features', type=click.BOOL, is_flag=True, default=False, help='Include labels in train_texts.txt and test_texts.txt.')
 @click.option('-v', '--verbose', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
 def main(prefix,
@@ -31,6 +37,12 @@ def main(prefix,
         no_author=False,
         no_reference=False,
         no_text=False,
+        no_title=False,
+        no_abstract=False,
+        no_level1=False,
+        no_level2=False,
+        no_level3=False,
+        include_labels_in_features=False,
         verbose=False):
     """Transforms newline-delimited json files into MATCH-compatible text files.
 
@@ -46,7 +58,8 @@ def main(prefix,
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
-    transform_data(prefix, dataset, no_mag, no_mesh, no_venue, no_author, no_reference, no_text, verbose)
+    transform_data(prefix, dataset, no_mag, no_mesh, no_venue, no_author, no_reference, no_text,
+        no_title, no_abstract, no_level1, no_level2, no_level3, include_labels_in_features, verbose)
 
 
 def transform_data(prefix,
@@ -57,6 +70,12 @@ def transform_data(prefix,
         no_author=False,
         no_reference=False,
         no_text=False,
+        no_title=False,
+        no_abstract=False,
+        no_level1=False,
+        no_level2=False,
+        no_level3=False,
+        include_labels_in_features=False,
         verbose=False):
     """Transforms newline-delimited json files into MATCH-compatible text files.
 
@@ -110,15 +129,25 @@ def transform_data(prefix,
                 if 'reference' in data and not no_reference:
                     reference = ' '.join(['REFP_'+str(x) for x in data['reference']])
                     text += reference + ' '
-                if 'title' in data and not no_text:
+                if 'title' in data and not (no_text or no_title):
                     title = ' '.join(data['title'])
                     text += title + ' '
-                if 'abstract' in data and not no_text:
+                if 'abstract' in data and not (no_text or no_abstract):
                     abstract = ' '.join(data['abstract'])
                     text += abstract + ' '
                 # if 'text' in data and not no_text:
                 #     text += data['text']
-                label = ' '.join(data['label'])
+
+                # label = ' '.join(data['label'])
+                labels = (
+                    (data['level1'] if data['level1'] and not no_level1 else [])
+                    + (data['level2'] if data['level2'] and not no_level2 else [])
+                    + (data['level3'] if data['level3'] and not no_level3 else [])
+                )
+                label = ' '.join(labels)
+
+                if include_labels_in_features:
+                    text += ' '.join(['LABEL_'+str(x) for x in labels]) + ' '
 
                 fou1.write(text+'\n')
                 fou2.write(label+'\n')

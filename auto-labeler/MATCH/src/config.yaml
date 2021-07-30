@@ -18,6 +18,12 @@ transform:
   use_author: True
   use_reference: True
   use_text: True
+  use_title: True
+  use_abstract: True
+  use_level1: True
+  use_level2: True
+  use_level3: True
+  include_labels_in_features: False
 
 preprocess:
   prefix: MATCH
