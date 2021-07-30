@@ -55,6 +55,14 @@ def main(prefix,
         no_author (bool, optional): Whether to omit author metadata. Defaults to False.
         no_reference (bool, optional): Whether to omit references metadata. Defaults to False.
         no_text (bool, optional): Whether to omit text. Defaults to False.
+        no_title (bool, optional): Whether to omit title. Defaults to False.
+        no_abstract (bool, optional): Whether to omit abstract. Defaults to False.
+        no_level1 (bool, optional): Whether to omit level 1 labels. Defaults to False.
+        no_level2 (bool, optional): Whether to omit level 2 labels. Defaults to False.
+        no_level3 (bool, optional): Whether to omit level 3 labels. Defaults to False.     
+        include_labels_in_features (bool, optional): Whether to include labels in the text.
+            The only reason you might want to do this is to see if MATCH can learn
+            an identity function, copying input over to output. It can. Defaults to False.  
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
@@ -87,7 +95,15 @@ def transform_data(prefix,
         no_venue (bool, optional): Whether to omit venue metadata. Defaults to False.
         no_author (bool, optional): Whether to omit author metadata. Defaults to False.
         no_reference (bool, optional): Whether to omit references metadata. Defaults to False.
-        no_text (bool, optional): Whether to omit text. Defaults to False.
+        no_text (bool, optional): Whether to omit text (title and abstract). Defaults to False.
+        no_title (bool, optional): Whether to omit title. Defaults to False.
+        no_abstract (bool, optional): Whether to omit abstract. Defaults to False.
+        no_level1 (bool, optional): Whether to omit level 1 labels. Defaults to False.
+        no_level2 (bool, optional): Whether to omit level 2 labels. Defaults to False.
+        no_level3 (bool, optional): Whether to omit level 3 labels. Defaults to False.     
+        include_labels_in_features (bool, optional): Whether to include labels in the text.
+            The only reason you might want to do this is to see if MATCH can learn
+            an identity function, copying input over to output. It can. Defaults to False.  
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 

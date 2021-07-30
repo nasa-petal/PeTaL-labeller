@@ -59,7 +59,7 @@ or in context, if you want to strip out the boring bits of the log file before y
 `multilabel_confusion_matrix.py` takes a path to the MATCH directory with `-m` and outputs plots in a `plots` directory with `-p`.
 
 ```
-    python3 multilabel_confusion_matrix.py -m ../src/MATCH -p ../plots [--verbose]
+    python3 multilabel_confusion_matrix.py -m ../src/MATCH -p ../plots [--verbose] [--threshold 0.5]
 ```
 
 `precision_and_recall.py` takes a path to the MATCH directory with `-m` and outputs plots in a `plots` directory with `-p`.

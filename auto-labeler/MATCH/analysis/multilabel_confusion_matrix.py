@@ -14,26 +14,25 @@
 import click
 import os
 import numpy as np
-import pandas as pd
 from matplotlib import pyplot as plt, rc
 from datetime import datetime
 import logging
-from collections import namedtuple
-from tqdm import tqdm
 
 @click.command()
 @click.option('--match', '-m', 'match_path', type=click.Path(exists=True), help='Path of MATCH folder.')
 @click.option('--plots', '-p', 'plots_path', type=click.Path(exists=True), help='Path of plots folder.')
 @click.option('--leaf-only', type=click.BOOL, is_flag=True, default=False, required=False, help='Leaf labels only.')
+@click.option('--threshold', '-t', type=click.FLOAT, default=None, required=False, help='Logits threshold for a positive prediction. Between 0 and 1.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
-def main(match_path, plots_path, leaf_only, verbose):
+def main(match_path, plots_path, leaf_only, threshold, verbose):
     """Plots multilabel confusion matrix.
 
     Args:
         match_path (str): Path of MATCH folder.
         plots_path (str): Path of plots folder.
         leaf_only (bool): Leaf labels only.
+        threshold (float, optional): 'Logits threshold for a positive prediction. Between 0 and 1.'
         verbose (bool): Verbose output.
     """
 
@@ -111,7 +110,7 @@ def main(match_path, plots_path, leaf_only, verbose):
                 test_label_count[test_label] += 1
                 for res_label, res_score in zip(res_label_list, res_score_list):
                     if res_label in label2idx:
-                        preds_for_test_label[test_label][res_label] += res_score
+                        preds_for_test_label[test_label][res_label] += res_score if not threshold else (1 if res_score > threshold else 0)
 
     num_labels = len(label2idx)
     conf_matrix = np.array(
@@ -148,8 +147,8 @@ def main(match_path, plots_path, leaf_only, verbose):
         if verbose:
             MCMlogger.info(f"You already have a plots directory at {PLOTS_PATH}")
 
-    rc('xtick', labelsize=12)
-    rc('ytick', labelsize=12)
+    rc('xtick', labelsize=7)
+    rc('ytick', labelsize=7)
     rc('font', size=20)
 
     # label_limit = 100
@@ -161,7 +160,7 @@ def main(match_path, plots_path, leaf_only, verbose):
     plt.rcParams["figure.figsize"] = (10, 10)
     fig, ax = plt.subplots()
     plt.matshow(conf_matrix, fignum=0)
-    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nLabels Sorted by Frequency', y=1.7, pad=0)
+    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nLabels Sorted by Frequency', y=1.5, pad=0)
     ax.set_xlabel('Predicted labels')
     ax.set_ylabel('Ground truth labels')
     ax.xaxis.set_label_position('top')

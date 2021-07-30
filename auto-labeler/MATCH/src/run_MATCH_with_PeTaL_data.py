@@ -24,6 +24,7 @@ from eval import run_eval
 @click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
 @click.option('--train/--no-train', '-r/-R', 'do_train', default=True, help='Do training.')
 @click.option('--eval/--no-eval', '-e/-E', 'do_eval', default=True, help='Do inference/evaluation.')
+@click.option('--remake-vocab-file', type=click.BOOL, is_flag=True, default=False, help='Force vocab.npy and emb_init.npy to be recomputed.')
 
 def main(cnf_path,
         verbose=False,
@@ -31,7 +32,8 @@ def main(cnf_path,
         do_transform=True,
         do_preprocess=True,
         do_train=True,
-        do_eval=True):
+        do_eval=True,
+        remake_vocab_file=False):
     """Command-line entry function - runs MATCH on PeTaL data.
 
     Args:
@@ -42,12 +44,13 @@ def main(cnf_path,
         do_preprocess (bool): Whether to preprocess txt into npy.
         do_train (bool): Whether to do training.
         do_eval (bool): Whether to do inference/evaluation.
+        remake_vocab_file (bool): Whether to force vocab.npy and emb_init.npy to be recomputed.
     """
 
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    run_MATCH_with_PeTaL_data(cnf, verbose, do_split, do_transform, do_preprocess, do_train, do_eval)
+    run_MATCH_with_PeTaL_data(cnf, verbose, do_split, do_transform, do_preprocess, do_train, do_eval, remake_vocab_file)
 
 def run_MATCH_with_PeTaL_data(cnf,
         verbose=False,
@@ -55,7 +58,8 @@ def run_MATCH_with_PeTaL_data(cnf,
         do_transform=True,
         do_preprocess=True,
         do_train=True,
-        do_eval=True):
+        do_eval=True,
+        remake_vocab_file=False):
     """Runs MATCH on PeTaL data.
 
     Args:
@@ -66,6 +70,7 @@ def run_MATCH_with_PeTaL_data(cnf,
         do_preprocess (bool): Whether to preprocess txt into npy.
         do_train (bool): Whether to do training.
         do_eval (bool): Whether to do inference/evaluation.
+        remake_vocab_file (bool): Whether to force vocab.npy and emb_init.npy to be recomputed.
     """
     logging.basicConfig(
         level=logging.DEBUG,
@@ -81,7 +86,7 @@ def run_MATCH_with_PeTaL_data(cnf,
         transform json to txt, and preprocess txt into npy
         in preprocess.py.
     '''
-    preprocess(cnf, verbose, do_split, do_transform, do_preprocess)
+    preprocess(cnf, verbose, do_split, do_transform, do_preprocess, remake_vocab_file)
 
     '''
         Training: Run training in train.py.

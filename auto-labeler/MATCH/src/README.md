@@ -35,6 +35,7 @@ with optional arguments for toggling on/off different phases:
 - `--train` or `-r` vs. `--no-train` or `-R` for whether to do `train.py` (i.e., run MATCH training on the PeTaL training set. Generally the longest-running task). Defaults to true.
 - `--eval` or `-e` vs. `--no-eval` or `-E` for whether to do `eval.py` (i.e., run MATCH inference on the PeTaL testing set, and generate precision and nDCG scores on that test set). Defaults to true.
 - `--verbose` or `-v` on whether to see logging output. Defaults to false.
+- `--remake-vocab-file` forces the vocabulary and initial embedding files `vocab.npy` and `emb_init.npy` to be deleted and recomputed. This is a helpful option if you are adding or removing vocabulary or classes of metadata to the dataset. Defaults to false.
 
 If you want to tweak a config variable (e.g., train-dev-test split, or whether to use MAG/MeSH terms or not), you can find all of those options in `config.yaml`. Note that you can also use `-c` in place of `--cnf`.
 
@@ -61,6 +62,7 @@ with optional arguments for toggling on/off different phases:
 - `--split` or `-s` vs. `--no-split` or `-S`- for doing `Split.py`
 - `--transform` or `-t` vs. `--no-transform` or `-T` for doing `transform_data_PeTaL.py`.
 - `--preprocess` or `-p` vs. `--no-preprocess` or `-P` for doing `MATCH/preprocess.py`.
+- `--remake-vocab-file` forces the vocabulary and initial embedding files `vocab.npy` and `emb_init.npy` to be deleted and recomputed. This is a helpful option if you are adding or removing vocabulary or classes of metadata to the dataset. Defaults to false.
 - Option `-c` or `--cnf` identifies the configuration file, by default `config.yaml`.
 
 Run training:
