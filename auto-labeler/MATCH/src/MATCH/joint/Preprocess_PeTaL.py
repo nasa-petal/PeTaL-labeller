@@ -3,7 +3,7 @@ from collections import defaultdict
 import argparse
 
 parser = argparse.ArgumentParser(description='main', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument('--dataset', default='MAG', choices=['MAG', 'MeSH', 'PeTaL'])
+parser.add_argument('--dataset', default='PeTaL', choices=['MAG', 'MeSH', 'PeTaL'])
 
 args = parser.parse_args()
 folder = '../'+args.dataset+'/'
@@ -68,7 +68,7 @@ with open(folder+'train.json') as fin, open('network.dat', 'w') as fout:
 		# P-Mesh
 		for Mesh0 in js['mesh']:
 			Mesh = 'MESH_'+Mesh0
-			fout.write(P+' '+Mesh+' 6 1 \n')
+			fout.write(P+' '+Mesh+' 7 1 \n')
 			right.add(Mesh)
 
 		# P-W

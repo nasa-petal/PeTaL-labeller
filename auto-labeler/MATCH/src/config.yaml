@@ -3,10 +3,11 @@ dataset: PeTaL
 
 split:
   prefix: MATCH/PeTaL
-  dataset: cleaned_lens_output.json
+  dataset: golden.json
   train: 0.8
   dev: 0.1
   skip: 0
+  tot: 1161
 
 transform:
   prefix: MATCH
@@ -17,6 +18,12 @@ transform:
   use_author: True
   use_reference: True
   use_text: True
+  use_title: True
+  use_abstract: True
+  use_level1: True
+  use_level2: True
+  use_level3: True
+  include_labels_in_features: False
 
 preprocess:
   prefix: MATCH
@@ -31,4 +38,4 @@ train:
 
 wandb:
   project: MATCH
-  group: integration_20210714a
+  group: golden_20210726a

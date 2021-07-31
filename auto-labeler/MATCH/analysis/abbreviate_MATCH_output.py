@@ -38,7 +38,13 @@ def abbreviate_log(log):
     triple_backtick = '```'
     lines = log.split('\n')
     option = lines[1]
-    ps, nDCGs = lines[-3], lines[-2]
+    # ps, nDCGs = lines[-3], lines[-2]
+    ps, nDCGs = "", ""
+    for line in lines:
+        if line.startswith("Precision@1,3,5: "):
+            ps = line
+        if line.startswith("nDCG@1,3,5: "):
+            nDCGs = line
     return '\n'.join([triple_backtick, option, '...', ps, nDCGs, triple_backtick])
 
 if __name__ == "__main__":

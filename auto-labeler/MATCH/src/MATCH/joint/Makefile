@@ -1,8 +1,8 @@
 CC = g++
 CFLAGS = -lm -pthread -Ofast -march=native -Wall -funroll-loops -Wno-unused-result -lgsl -lm -lgslcblas
-LFLAGS = -lgsl -lm -lgslcblas
-INCLUDES = -I/usr/local/include -Ieigen-3.3.3
-LIBS = -L/usr/local/lib
+LFLAGS = -lgsl -lm -lgslcblas 
+INCLUDES = -I/usr/local/include -Ieigen-3.3.3 -Igsl/include
+LIBS = -L/usr/local/lib -Lgsl/lib
 
 BIN = bin/jointemb
 

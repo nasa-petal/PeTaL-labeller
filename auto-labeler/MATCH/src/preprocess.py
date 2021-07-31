@@ -2,7 +2,7 @@
     preprocess.py
 
     Run MATCH with PeTaL data.
-    Last modified on 21 July 2021.
+    Last modified on 26 July 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -15,7 +15,7 @@ from ruamel.yaml import YAML
 from pathlib import Path
 
 from Split import split
-from transform_data_PeTaL import transform_data
+from transform_data_golden import transform_data
 
 @click.command()
 @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
@@ -23,12 +23,14 @@ from transform_data_PeTaL import transform_data
 @click.option('--split/--no-split', '-s/-S', 'do_split', default=True, help='Perform train-dev-test split.')
 @click.option('--transform/--no-transform', '-t/-T', 'do_transform', default=True, help='Perform transformation from json to text.')
 @click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
+@click.option('--remake-vocab-file', type=click.BOOL, is_flag=True, default=False, help='Force vocab.npy and emb_init.npy to be recomputed.')
 
 def main(cnf_path,
         verbose=False,
         do_split=True,
         do_transform=True,
-        do_preprocess=True):
+        do_preprocess=True,
+        remake_vocab_file=True):
     """
         Command-line entry function -- perform train-dev-test split,
         transform json to txt, and preprocess txt into npy.
@@ -39,18 +41,20 @@ def main(cnf_path,
         do_split (bool): Whether to perform train-dev-test split.
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
+        remake_vocab_file (bool): Whether to force vocab.npy and emb_init.npy to be recomputed.
     """
 
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    preprocess(cnf, verbose, do_split, do_transform, do_preprocess)
+    preprocess(cnf, verbose, do_split, do_transform, do_preprocess, remake_vocab_file)
 
 def preprocess(cnf,
         verbose=False,
         do_split=True,
         do_transform=True,
-        do_preprocess=True):
+        do_preprocess=True,
+        remake_vocab_file=True):
     """
         Perform train-dev-test split, transform json to txt, and preprocess txt into npy.
 
@@ -60,6 +64,7 @@ def preprocess(cnf,
         do_split (bool): Whether to perform train-dev-test split.
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
+        remake_vocab_file (bool): Whether to force vocab.npy and emb_init.npy to be recomputed.
     """
     logging.basicConfig(
         level=logging.DEBUG,
@@ -94,6 +99,7 @@ def preprocess(cnf,
             train=float(split_cnf['train']),
             dev=float(split_cnf['dev']),
             skip=int(split_cnf['skip']),
+            tot=int(split_cnf['tot']) if 'tot' in split_cnf else 0,
             verbose=verbose
         )
     
@@ -101,7 +107,7 @@ def preprocess(cnf,
         Transform data from json objects into txt sequences of tokens.
 
         Notebook code that this accounts for:
-        !python3 transform_data_PeTaL.py --dataset {DATASET} \
+        !python3 transform_data_golden.py --dataset {DATASET} \
         {get_transform_arg_string(config)}
     '''
     if do_transform:
@@ -115,6 +121,12 @@ def preprocess(cnf,
             no_author=not transform_cnf['use_author'],
             no_reference=not transform_cnf['use_reference'],
             no_text=not transform_cnf['use_text'],
+            no_title=not transform_cnf['use_title'],
+            no_abstract=not transform_cnf['use_abstract'],
+            no_level1=not transform_cnf['use_level1'],
+            no_level2=not transform_cnf['use_level2'],
+            no_level3=not transform_cnf['use_level3'],
+            include_labels_in_features=transform_cnf['include_labels_in_features'],
             verbose=verbose
         )
 
@@ -145,6 +157,10 @@ def preprocess(cnf,
         preprocess_cnf = cnf['preprocess']
         os.chdir(preprocess_cnf['prefix'])
 
+        if remake_vocab_file:
+            os.remove(f"{DATASET}/vocab.npy")
+            os.remove(f"{DATASET}/emb_init.npy")
+
         from MATCH.preprocess import main as preprocess_main
 
         preprocess_main.callback(
@@ -170,31 +186,6 @@ def preprocess(cnf,
 
     if verbose:
         logger.info('End preprocessing.')
-
-def get_transform_arg_string(config, verbose=False):
-    """Transforms config arguments into a CLI-option string 
-    for transform_data_PeTaL.py.
-
-    Args:
-        config (dict[str]): JSON dictionary of config arguments.
-
-    Returns:
-        str: CLI-option string
-    """
-    transform_args = []
-    if not config['use_mag']:
-        transform_args.append("--no-mag")
-    if not config['use_mesh']:
-        transform_args.append("--no-mesh")
-    if not config['use_author']:
-        transform_args.append("--no-author")
-    if not config['use_venue']:
-        transform_args.append("--no-venue")
-    if not config['use_references']:
-        transform_args.append("--no-reference")
-    if not config['use_text']:
-        transform_args.append("--no-text")
-    return ' '.join(transform_args)
 
 if __name__ == '__main__':
     main()
@@ -239,4 +230,29 @@ def run_preprocessing(config, verbose=False):
     --text-path {DATASET}/test_texts.txt \
     --label-path {DATASET}/test_labels.txt \
     --vocab-path {DATASET}/vocab.npy \
+
+def get_transform_arg_string(config):
+    """Transforms config arguments into a CLI-option string 
+    for transform_data_PeTaL.py.
+
+    Args:
+        config (dict[str]): JSON dictionary of config arguments.
+
+    Returns:
+        str: CLI-option string
+    """
+    transform_args = []
+    if not config['use_mag']:
+        transform_args.append("--no-mag")
+    if not config['use_mesh']:
+        transform_args.append("--no-mesh")
+    if not config['use_author']:
+        transform_args.append("--no-author")
+    if not config['use_venue']:
+        transform_args.append("--no-venue")
+    if not config['use_references']:
+        transform_args.append("--no-reference")
+    if not config['use_text']:
+        transform_args.append("--no-text")
+    return ' '.join(transform_args)
 '''

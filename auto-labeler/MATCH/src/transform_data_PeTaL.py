@@ -93,23 +93,23 @@ def transform_data(prefix,
                 data = json.loads(line)
                 
                 text = ''
-                if not no_mag:
+                if 'mag' in data and not no_mag:
                     mag = ' '.join(['MAG_'+x for x in data['mag']])
                     text += mag + ' '
-                if not no_mesh:
+                if 'mesh' in data and not no_mesh:
                     mesh = ' '.join(['MESH_'+x for x in data['mesh']])
                     text += mesh + ' '
                 # text = venue + ' ' + author + ' ' + reference + ' ' + data['text']
-                if not no_venue:
+                if 'venue' in data and not no_venue:
                     venue = 'VENUE_'+data['venue'].replace(' ', '_')
                     text += venue + ' '
-                if not no_author:
+                if 'author' in data and not no_author:
                     author = ' '.join(['AUTHOR_'+x for x in data['author']])
                     text += author + ' '
-                if not no_reference:
+                if 'reference' in data and not no_reference:
                     reference = ' '.join(['REFP_'+x for x in data['reference']])
                     text += reference + ' '
-                if not no_text:
+                if 'text' in data and not no_text:
                     text += data['text']
                 label = ' '.join(data['label'])
 

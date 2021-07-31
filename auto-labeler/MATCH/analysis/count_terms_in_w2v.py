@@ -36,6 +36,7 @@ def count(file):
     author_terms = set()
     MAG_terms = set()
     MESH_terms = set()
+    label_terms = set()
     words = set()
     with open(file) as f:
         for line in tqdm(f):
@@ -50,19 +51,22 @@ def count(file):
                 MAG_terms.add(token)
             elif token.startswith('MESH_'):
                 MESH_terms.add(token)
+            elif token.startswith('LABEL_'):
+                label_terms.add(token)
             else:
                 words.add(token)
-    num_refs, num_venues, num_authors, num_MAGs, num_MESHes, num_others = (
+    num_refs, num_venues, num_authors, num_MAGs, num_MESHes, num_labels, num_others = (
         len(ref_terms), len(venue_terms), len(author_terms),
-        len(MAG_terms), len(MESH_terms), len(words)
+        len(MAG_terms), len(MESH_terms), len(label_terms), len(words)
     )
     print(f"Number of unique reference terms: {num_refs}")
     print(f"Number of unique venue terms: {num_venues}")
     print(f"Number of unique author terms: {num_authors}")
     print(f"Number of unique MAG terms: {num_MAGs}")
     print(f"Number of unique MeSH terms: {num_MESHes}")
+    print(f"Number of unique label terms: {num_labels}")
     print(f"Number of unique other words: {num_others}")
-    print(f"Total unique terms: {num_refs + num_venues + num_authors + num_MAGs + num_MESHes + num_others}")
+    print(f"Total unique terms: {num_refs + num_venues + num_authors + num_MAGs + num_MESHes + num_labels + num_others}")
 
 if __name__ == '__main__':
     main()
