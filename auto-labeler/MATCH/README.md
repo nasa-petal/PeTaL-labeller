@@ -115,6 +115,49 @@ Cleaned experiment logs for various sets of trials are found in `experiment_data
 
 Historical analyses of results are available in `reports/results_up_to_20210714.md` and `reports/results_up_to_20210723.md`.
 
+### 2021-08-02 Idealized Multilabel Confusion Matrices
+
+We generate [what the multilabel confusion matrices are supposed to look like if MATCH is functioning ideally](reports/ideal_mcms.md).
+
+### 2021-08-02 Updated ablation studies and size tests
+
+We ran a full suite of ablation studies and size tests to confirm the relationships we have observed [previously](#results) after fixing `golden.json`.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| ablation_all | 0.590 ± 0.058 | 0.467 ± 0.050 | 0.370 ± 0.042 | 0.502 ± 0.050 | 0.502 ± 0.052 |
+| ablation_no_mag | 0.608 ± 0.068 | 0.484 ± 0.043 | 0.381 ± 0.032 | 0.519 ± 0.047 | 0.515 ± 0.042 |
+| ablation_no_mesh | 0.587 ± 0.055 | 0.474 ± 0.061 | 0.373 ± 0.048 | 0.506 ± 0.059 | 0.503 ± 0.059 |
+| ablation_no_venue | 0.566 ± 0.044 | 0.451 ± 0.031 | 0.358 ± 0.026 | 0.484 ± 0.033 | 0.483 ± 0.035 |
+| ablation_no_author | 0.598 ± 0.037 | 0.479 ± 0.031 | 0.376 ± 0.030 | 0.513 ± 0.032 | 0.507 ± 0.032 |
+| ablation_no_ref | 0.597 ± 0.055 | 0.470 ± 0.035 | 0.370 ± 0.038 | 0.504 ± 0.036 | 0.498 ± 0.037 |
+| ablation_no_text | 0.587 ± 0.069 | 0.493 ± 0.054 | 0.384 ± 0.032 | 0.521 ± 0.055 | 0.516 ± 0.048 |
+| ablation_only_mag | 0.497 ± 0.061 | 0.394 ± 0.043 | 0.313 ± 0.036 | 0.422 ± 0.047 | 0.419 ± 0.048 |
+| ablation_only_mesh | 0.308 ± 0.035 | 0.231 ± 0.022 | 0.196 ± 0.011 | 0.247 ± 0.023 | 0.254 ± 0.017 |
+| ablation_only_venue | 0.543 ± 0.057 | 0.485 ± 0.040 | 0.399 ± 0.040 | 0.501 ± 0.042 | 0.510 ± 0.040 |
+| ablation_only_author | 0.344 ± 0.049 | 0.281 ± 0.033 | 0.233 ± 0.028 | 0.297 ± 0.033 | 0.302 ± 0.032 |
+| ablation_only_ref | 0.463 ± 0.064 | 0.378 ± 0.044 | 0.313 ± 0.032 | 0.402 ± 0.048 | 0.411 ± 0.044 |
+| ablation_only_text | 0.531 ± 0.050 | 0.396 ± 0.050 | 0.315 ± 0.034 | 0.432 ± 0.051 | 0.428 ± 0.049 |
+| ablation_none | 0.308 ± 0.035 | 0.223 ± 0.026 | 0.196 ± 0.020 | 0.242 ± 0.027 | 0.254 ± 0.026 |
+
+| Train set study | Size | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- | --- |
+| sizetest_0.15 | 190 | 0.362 ± 0.051 | 0.269 ± 0.037 | 0.219 ± 0.024 | 0.291 ± 0.042 | 0.295 ± 0.036 |
+| sizetest_0.20 | 248 | 0.344 ± 0.051 | 0.255 ± 0.040 | 0.213 ± 0.023 | 0.277 ± 0.044 | 0.283 ± 0.038 |
+| sizetest_0.25 | 306 | 0.374 ± 0.068 | 0.277 ± 0.048 | 0.227 ± 0.029 | 0.301 ± 0.054 | 0.304 ± 0.047 |
+| sizetest_0.30 | 364 | 0.395 ± 0.068 | 0.309 ± 0.054 | 0.249 ± 0.034 | 0.331 ± 0.058 | 0.333 ± 0.051 |
+| sizetest_0.35 | 422 |0.447 ± 0.053 | 0.353 ± 0.046 | 0.279 ± 0.034 | 0.378 ± 0.049 | 0.375 ± 0.047 |
+| sizetest_0.40 | 481 | 0.502 ± 0.063 | 0.386 ± 0.055 | 0.303 ± 0.041 | 0.418 ± 0.058 | 0.414 ± 0.056 |
+| sizetest_0.45 | 539 | 0.461 ± 0.059 | 0.355 ± 0.036 | 0.284 ± 0.026 | 0.382 ± 0.041 | 0.382 ± 0.039 |
+| sizetest_0.50 | 597 | 0.509 ± 0.065 | 0.390 ± 0.064 | 0.309 ± 0.041 | 0.422 ± 0.065 | 0.420 ± 0.058 |
+| sizetest_0.55 | 655 | 0.534 ± 0.036 | 0.421 ± 0.030 | 0.332 ± 0.021 | 0.453 ± 0.033 | 0.449 ± 0.029 |
+| sizetest_0.60 | 713 | 0.539 ± 0.047 | 0.423 ± 0.029 | 0.335 ± 0.025 | 0.455 ± 0.034 | 0.454 ± 0.033 |
+| sizetest_0.65 | 771 | 0.567 ± 0.039 | 0.444 ± 0.035 | 0.354 ± 0.027 | 0.478 ± 0.035 | 0.476 ± 0.034 |
+| sizetest_0.70 | 829 | 0.569 ± 0.083 | 0.440 ± 0.074 | 0.346 ± 0.049 | 0.475 ± 0.077 | 0.471 ± 0.068 |
+| sizetest_0.75 | 887 | 0.582 ± 0.030 | 0.464 ± 0.042 | 0.365 ± 0.032 | 0.498 ± 0.038 | 0.494 ± 0.035 |
+| sizetest_0.80 | 945 | 0.604 ± 0.044 | 0.490 ± 0.037 | 0.388 ± 0.026 | 0.523 ± 0.041 | 0.522 ± 0.038 |
+| sizetest_0.85 | 1001 | 0.586 ± 0.038 | 0.464 ± 0.024 | 0.369 ± 0.026 | 0.496 ± 0.022 | 0.491 ± 0.027 |
+
 ### 2021-07-28 Issue #73 testing on `golden.json` - Using Only The Labels At The Highest Level.
 
 In the PeTaL taxonomy there are ten Level 1 labels. Their frequencies of occurrence in `golden.json` are plotted in the following graph.

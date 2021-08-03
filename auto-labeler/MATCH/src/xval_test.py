@@ -41,7 +41,7 @@ def main(cnf_path,
     cnf = yaml.load(Path(cnf_path))
 
     xval_test(cnf, k, study, verbose)
-    # xval_test_ablations(cnf, k, study, verbose)
+    # xval_test_by_size(cnf, k, study, verbose)
 
 def xval_test(cnf,
         k=10,
@@ -151,8 +151,8 @@ def xval_test_by_size(cnf,
     tot = cnf['split']['tot'] if 'tot' in cnf['split'] else 1000 # default
     skip_interval = int(tot / k)
 
-    for train_proportion in np.arange(0.2, 0.9, 0.1):
-        STUDY_TITLE = f"{study}_{train_proportion:.1f}"
+    for train_proportion in np.linspace(0.15, 0.85, 15):
+        STUDY_TITLE = f"{study}_{train_proportion:.2f}"
         cnf['split']['train'] = train_proportion
         for skip in range(0, skip_interval * k, skip_interval):
             cnf['split']['skip'] = skip
