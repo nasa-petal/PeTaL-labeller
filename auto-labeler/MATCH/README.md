@@ -14,7 +14,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify PeTaL data according to the PeTaL taxonomy.
 
-This README was last updated on 30 July 2021.
+This README was last updated on 10 August 2021.
 
 ## What are all these files? <a name="contents"></a>
 
@@ -113,7 +113,41 @@ In short, what I've found so far seems to indicate that:
 
 Cleaned experiment logs for various sets of trials are found in `experiment_data/`.
 
-Historical analyses of results are available in `reports/results_up_to_20210714.md` and `reports/results_up_to_20210723.md`.
+Historical analyses of results are available in [`reports/results_up_to_20210714.md`](reports/results_up_to_20210714.md), [`reports/results_up_to_20210723.md`](reports/results_up_to_20210723.md), and [`reports/results_up_to_20210802.md`](reports/results_up_to_20210802.md).
+
+### 2021-08-10 Batch size 8 - Multilabel Confusion Matrices
+
+For comparison, we have generated [what the multilabel confusion matrices are supposed to look like if MATCH is functioning ideally](reports/ideal_mcms.md).
+
+Below we present the multilabel confusion matrices with "soft scores" for each paper and label, in the sense that MATCH generates probabilities between 0 and 1 for each paper and label and we average these probabilities for each pixel in the grid. Examples using "hard scores" for each paper, where each soft score is converted to 0.0 or 1.0 based on whether it passes a threshold, can be found in [this directory](plots/20210810_MCM/) for thresholds of 0.1, 0.2, and 0.5.
+
+#### All Levels <a name='all'> </a>
+
+Here's the multilabel confusion matrix (hereafter *MCM*) for all labels across all levels:
+
+![MCM_all_labels](plots/20210810_MCM/mcm_all.png)
+
+Zooming in on the top 25 of all labels:
+
+![MCM_top_25_all_labels](plots/20210810_MCM/mcm_top25_all.png)
+
+#### Leaf Labels <a name='leaf'> </a>
+
+And here's the MCM for only the leaf labels. Notice the lack of most yellow chatter off the diagonal -- the leaf labels generally are uncorrelated (save for a few exceptions) and do not co-occur with each other.
+
+![MCM_leaf_labels](plots/20210810_MCM/mcm_leaf.png)
+
+Zooming in on the top 25 of leaf labels:
+
+![MCM_top_25_leaf_labels](plots/20210810_MCM/mcm_top25_leaf.png)
+
+#### Level 1 Labels <a name='level1'> </a>
+
+And finally, the MCM amongst level 1 labels has a fair signal along the diagonal, demonstrating that MATCH is indeed learning representations of each of these high-level labels.
+
+![ideal_MCM_level_1_labels](plots/20210810_MCM/mcm_level1.png)
+
+In all graphs, the labels are sorted by their frequency of occurrence in my current version of `golden.json`.
 
 ### 2021-08-09 Batch size 8 - Only Level 1 Labels
 
@@ -125,7 +159,8 @@ The following are the precisions and nDCG scores of MATCH on only the level 1 la
 
 | Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
 | --- | --- | --- | --- | --- | --- |
-| level1 | 0.693 ± 0.047 | 0.546 ± 0.028 | 0.428 ± 0.027 | 0.586 ± 0.028 | 0.579 ± 0.030 |
+| level 1 | 0.678 ± 0.040 | 0.362 ± 0.019 | 0.248 ± 0.013 | 0.742 ± 0.023 | 0.782 ± 0.023 |
+| all labels | 0.693 ± 0.047 | 0.546 ± 0.028 | 0.428 ± 0.027 | 0.586 ± 0.028 | 0.579 ± 0.030 |
 
 P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
 
@@ -148,6 +183,10 @@ We perform data augmentation on `golden.json` by producing `N` copies of each pa
 | 5x | 0.709 ± 0.018 | 0.563 ± 0.020 | 0.447 ± 0.018 | 0.603 ± 0.017 | 0.597 ± 0.023 |
 
 P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+
+These results are plotted below.
+
+![Data Augmentation](plots/20210810_perf/augment.png)
 
 ### 2021-08-07 Batch size 8 - Size Testing
 
@@ -175,6 +214,10 @@ We run more granular size testing on MATCH using a batch size optimized for `gol
 
 P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
 
+These results are plotted below.
+
+![Training set size](plots/20210810_perf/size_test.png)
+
 ### 2021-08-07 Batch size 8 - Ablation Studies
 
 We ran a full suite of ablation studies and size tests to confirm the relationships we have observed [previously](#results) after fixing `golden.json`.
@@ -198,6 +241,12 @@ We ran a full suite of ablation studies and size tests to confirm the relationsh
 
 P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
 
+These results are plotted below.
+
+![Ablations from full](plots/20210810_perf/ablations_from_full.png)
+
+![Ablations from none](plots/20210810_perf/ablations_from_none.png)
+
 ### 2021-08-06 Batch size testing
 
 We discover that optimizing the training batch size on `golden.json` increases MATCH's performance significantly on all metrics! This was initially surprising, but a possible explanation and intuition for why training batch size might matter is [here](https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e).
@@ -213,6 +262,10 @@ We discover that optimizing the training batch size on `golden.json` increases M
 | 256 | 0.590 ± 0.058 | 0.467 ± 0.050 | 0.370 ± 0.042 | 0.502 ± 0.050 | 0.502 ± 0.052 |
 
 P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+
+These results are plotted below.
+
+![Batch size test](plots/20210810_perf/batch_size_test.png)
 
 ### 2021-08-02 Idealized Multilabel Confusion Matrices
 

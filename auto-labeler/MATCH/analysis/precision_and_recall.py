@@ -2,7 +2,7 @@
     precision_and_recall.py
 
     Run MATCH with PeTaL data.
-    Last modified on 23 July 2021.
+    Last modified on 10 August 2021.
 
     USAGE
 
@@ -39,7 +39,7 @@ def main(match_path, plots_path, verbose):
     """
 
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format="[%(asctime)s:%(name)s] %(message)s"
     )
     PRlogger = logging.getLogger("P&R")  

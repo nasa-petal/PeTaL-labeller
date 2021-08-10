@@ -135,9 +135,11 @@ def main(match_path, plots_path, leaf_only, threshold, verbose):
         if verbose:
             MCMlogger.info(f"You already have a plots directory at {ALL_PLOTS_PATH}.")
     
-    time_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+    now = datetime.now()
+    date_str = now.strftime("%Y%m%d")
+    time_str = now.strftime("%H%M%S")
     comment = f"MCM"
-    PLOTS_PATH = os.path.join(ALL_PLOTS_PATH, f"{time_str}_{comment}")
+    PLOTS_PATH = os.path.join(ALL_PLOTS_PATH, f"{date_str}_{comment}")
 
     if not os.path.exists(PLOTS_PATH):
         os.mkdir(PLOTS_PATH)
@@ -147,20 +149,28 @@ def main(match_path, plots_path, leaf_only, threshold, verbose):
         if verbose:
             MCMlogger.info(f"You already have a plots directory at {PLOTS_PATH}")
 
-    rc('xtick', labelsize=7)
-    rc('ytick', labelsize=7)
+    rc('xtick', labelsize=8)
+    rc('ytick', labelsize=8)
     rc('font', size=20)
 
-    # label_limit = 100
-    # conf_matrix_small = conf_matrix[:label_limit, :label_limit]
-    # num_labels = label_limit
+    ################################################################################
+    # COMMENT/UNCOMMENT THIS CODE TO FILTER OUT EVERYTHING BUT THE TOP label_limit LABELS
+    label_limit = 25
+    conf_matrix = conf_matrix[:label_limit, :label_limit]
+    num_labels = label_limit
+    ################################################################################
+
     row_labels = [idx2label[i] for i in range(num_labels)]
     col_labels = [idx2label[i] for i in range(num_labels)]
+
+    if verbose:
+        conf_matrix_shape = conf_matrix.shape
+        MCMlogger.info(f"Generating MCM with size {conf_matrix_shape[0]}x{conf_matrix_shape[1]}")
 
     plt.rcParams["figure.figsize"] = (10, 10)
     fig, ax = plt.subplots()
     plt.matshow(conf_matrix, fignum=0)
-    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nLabels Sorted by Frequency', y=1.5, pad=0)
+    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nTop 25 of All Labels Sorted by Frequency', y=1.5, pad=0)
     ax.set_xlabel('Predicted labels')
     ax.set_ylabel('Ground truth labels')
     ax.xaxis.set_label_position('top')
@@ -173,6 +183,8 @@ def main(match_path, plots_path, leaf_only, threshold, verbose):
     PLOT_PATH = os.path.join(PLOTS_PATH, f'mcm_{time_str}')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False, bbox_inches='tight')
     plt.clf()
+    if verbose:
+        MCMlogger.info(f"New plot at {PLOT_PATH}")
 
 if __name__ == '__main__':
     main()
