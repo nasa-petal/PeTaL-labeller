@@ -2,7 +2,7 @@
 	Split.py
 
     Run MATCH with PeTaL data.
-    Last modified on 30 July 2021.
+    Last modified on 9 August 2021.
 
 	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -11,6 +11,8 @@ import json
 import click
 import os
 import logging
+
+from utils import extract_labels
 
 @click.command()
 @click.option('--prefix', default='MATCH/PeTaL', help='Path from current working directory to directory containing dataset.')
@@ -36,6 +38,7 @@ def main(prefix='MATCH/PeTaL',
 		train (float): Proportion, from 0.0 to 1.0, of dataset used for training.
 		dev (float): Proportion, from 0.0 to 1.0, of dataset used for validation.
 		skip (int): Number of training examples by which to rotate the dataset (e.g., for cross-validation).
+		tot (int): Total number of training examples.
 		verbose (bool): Verbose output.
 	"""	
 	split(prefix, dataset, train, dev, skip, tot, verbose)
@@ -55,6 +58,7 @@ def split(prefix='MATCH/PeTaL',
 		train (float): Proportion, from 0.0 to 1.0, of dataset used for training.
 		dev (float): Proportion, from 0.0 to 1.0, of dataset used for validation.
 		skip (int): Number of training examples by which to rotate the dataset (e.g., for cross-validation).
+		tot (int): Total number of training examples.
 		verbose (bool): Verbose output.
 	"""	
 
@@ -98,10 +102,12 @@ def split(prefix='MATCH/PeTaL',
 				continue
 			# js = json.loads(line)
 		
-			level1Labels = js['level1'] if js['level1'] else []
-			level2Labels = js['level2'] if js['level2'] else []
-			level3Labels = js['level3'] if js['level3'] else []
-			all_labels = level1Labels + level2Labels + level3Labels
+			# level1Labels = js['level1'] if js['level1'] else []
+			# level2Labels = js['level2'] if js['level2'] else []
+			# level3Labels = js['level3'] if js['level3'] else []
+			# all_labels = level1Labels + level2Labels + level3Labels
+
+			all_labels = extract_labels(js)
 
 			if (idx - skip) % tot < tot * train_proportion:
 				for l in all_labels:
@@ -133,11 +139,13 @@ def split(prefix='MATCH/PeTaL',
 			if idx >= skip:
 				break
 			# js = json.loads(line)
+		
+			# level1Labels = js['level1'] if js['level1'] else []
+			# level2Labels = js['level2'] if js['level2'] else []
+			# level3Labels = js['level3'] if js['level3'] else []
+			# all_labels = level1Labels + level2Labels + level3Labels
 
-			level1Labels = js['level1'] if js['level1'] else []
-			level2Labels = js['level2'] if js['level2'] else []
-			level3Labels = js['level3'] if js['level3'] else []
-			all_labels = level1Labels + level2Labels + level3Labels
+			all_labels = extract_labels(js)
 
 			if (idx - skip) % tot < tot * train_proportion:
 				for l in all_labels:

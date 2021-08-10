@@ -2,7 +2,7 @@
     run_MATCH_with_PeTaL_data.py
 
     Run MATCH with PeTaL data.
-    Last modified on 26 July 2021.
+    Last modified on 9 August 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -20,6 +20,7 @@ from eval import run_eval
 @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 @click.option('--split/--no-split', '-s/-S', 'do_split', default=True, help='Perform train-dev-test split.')
+@click.option('--augment/--no-augment', '-a/-A', 'do_augment', default=True, help='Augment training set.')
 @click.option('--transform/--no-transform', '-t/-T', 'do_transform', default=True, help='Perform transformation from json to text.')
 @click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
 @click.option('--train/--no-train', '-r/-R', 'do_train', default=True, help='Do training.')
@@ -29,6 +30,7 @@ from eval import run_eval
 def main(cnf_path,
         verbose=False,
         do_split=True,
+        do_augment=True,
         do_transform=True,
         do_preprocess=True,
         do_train=True,
@@ -40,6 +42,7 @@ def main(cnf_path,
         cnf_path (str): Path to configure yaml file.
         verbose (bool): Verbose output.
         do_split (bool): Whether to perform train-dev-test split.
+        do_augment (bool): Whether to perform data augmentation on the training set.
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
         do_train (bool): Whether to do training.
@@ -50,11 +53,12 @@ def main(cnf_path,
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    run_MATCH_with_PeTaL_data(cnf, verbose, do_split, do_transform, do_preprocess, do_train, do_eval, remake_vocab_file)
+    run_MATCH_with_PeTaL_data(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, do_train, do_eval, remake_vocab_file)
 
 def run_MATCH_with_PeTaL_data(cnf,
         verbose=False,
         do_split=True,
+        do_augment=True,
         do_transform=True,
         do_preprocess=True,
         do_train=True,
@@ -66,6 +70,7 @@ def run_MATCH_with_PeTaL_data(cnf,
         cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
         verbose (bool): Verbose output.
         do_split (bool): Whether to perform train-dev-test split.
+        do_augment (bool): Whether to perform data augmentation on the training set.
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
         do_train (bool): Whether to do training.
@@ -86,7 +91,7 @@ def run_MATCH_with_PeTaL_data(cnf,
         transform json to txt, and preprocess txt into npy
         in preprocess.py.
     '''
-    preprocess(cnf, verbose, do_split, do_transform, do_preprocess, remake_vocab_file)
+    preprocess(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, remake_vocab_file)
 
     '''
         Training: Run training in train.py.

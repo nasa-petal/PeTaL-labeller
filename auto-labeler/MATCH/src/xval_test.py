@@ -4,7 +4,7 @@
     Testing using cross-validation and multiple runs of MATCH.
 
     Run MATCH with PeTaL data.
-    Last modified on 26 July 2021.
+    Last modified on 9 August 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -22,11 +22,13 @@ from run_MATCH_with_PeTaL_data import run_MATCH_with_PeTaL_data
 @click.option('-k', type=click.INT, default=10, help='The k in k-fold cross-validation.')
 @click.option('--study', '-s', default='golden_testing', help='Name of study, for logging purposes.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
+@click.option('--mode', '-m', type=click.Choice(['none', 'size', 'ablation', 'augment']), default='none', help='Suite of tests to run.')
 
 def main(cnf_path,
         k=10,
         study='golden_testing',        
-        verbose=False):
+        verbose=False,
+        mode='none'):
     """Command-line entry function
         - runs multiple trials of MATCH for cross-validation.
 
@@ -40,8 +42,14 @@ def main(cnf_path,
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    xval_test(cnf, k, study, verbose)
-    # xval_test_by_size(cnf, k, study, verbose)
+    if mode == 'size':
+        xval_test_by_size(cnf, k, study, verbose)
+    elif mode == 'ablation':
+        xval_test_ablations(cnf, k, study, verbose)
+    elif mode == 'augment':
+        xval_test_augment(cnf, k, study, verbose)
+    else:
+        xval_test(cnf, k, study, verbose)
 
 def xval_test(cnf,
         k=10,
@@ -151,9 +159,44 @@ def xval_test_by_size(cnf,
     tot = cnf['split']['tot'] if 'tot' in cnf['split'] else 1000 # default
     skip_interval = int(tot / k)
 
-    for train_proportion in np.linspace(0.15, 0.85, 15):
+    for train_proportion in np.linspace(0.05, 0.85, 17):
         STUDY_TITLE = f"{study}_{train_proportion:.2f}"
         cnf['split']['train'] = train_proportion
+        for skip in range(0, skip_interval * k, skip_interval):
+            cnf['split']['skip'] = skip
+            print(f"```\n{STUDY_TITLE} skip={skip}\n")
+            run_MATCH_with_PeTaL_data(
+                cnf,
+                verbose,
+                do_split=True,
+                do_transform=True,
+                do_preprocess=True,
+                do_train=True,
+                do_eval=True
+            )
+            print("```\n")
+
+
+def xval_test_augment(cnf,
+        k=10,
+        study='golden_testing',
+        verbose=False):
+    """Runs multiple trials of MATCH for cross-validation.
+
+    Args:
+        cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
+        k (int): The k in k-fold cross-validation.
+        study (str): Name of study, for logging purposes.
+        verbose (bool): Verbose output.
+    """
+
+    # Determine amount of training examples to rotate for each fold.
+    tot = cnf['split']['tot'] if 'tot' in cnf['split'] else 1000 # default
+    skip_interval = int(tot / k)
+
+    for aug_factor in range(1, 6):
+        STUDY_TITLE = f"{study}_{aug_factor}"
+        cnf['augment']['num_aug'] = aug_factor
         for skip in range(0, skip_interval * k, skip_interval):
             cnf['split']['skip'] = skip
             print(f"```\n{STUDY_TITLE} skip={skip}\n")

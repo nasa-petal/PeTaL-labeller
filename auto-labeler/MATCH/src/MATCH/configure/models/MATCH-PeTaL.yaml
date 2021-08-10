@@ -10,16 +10,16 @@ model:
   src_max_len: 500
 
 train:
-  batch_size: 256
+  batch_size: 8 # 256
   step: 10
   nb_epoch: 1000
   swa_warmup: 4
-  early: 10
+  early: 25
 
 valid:
-  batch_size: 256
+  batch_size: 8
 
 predict:
-  batch_size: 256
+  batch_size: 8
 
 path: PeTaL/models

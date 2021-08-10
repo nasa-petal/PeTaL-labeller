@@ -115,50 +115,7 @@ Cleaned experiment logs for various sets of trials are found in `experiment_data
 
 Historical analyses of results are available in `reports/results_up_to_20210714.md` and `reports/results_up_to_20210723.md`.
 
-### 2021-08-02 Idealized Multilabel Confusion Matrices
-
-We generate [what the multilabel confusion matrices are supposed to look like if MATCH is functioning ideally](reports/ideal_mcms.md).
-
-### 2021-08-02 Updated ablation studies and size tests
-
-We ran a full suite of ablation studies and size tests to confirm the relationships we have observed [previously](#results) after fixing `golden.json`.
-
-| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
-| --- | --- | --- | --- | --- | --- |
-| ablation_all | 0.590 ± 0.058 | 0.467 ± 0.050 | 0.370 ± 0.042 | 0.502 ± 0.050 | 0.502 ± 0.052 |
-| ablation_no_mag | 0.608 ± 0.068 | 0.484 ± 0.043 | 0.381 ± 0.032 | 0.519 ± 0.047 | 0.515 ± 0.042 |
-| ablation_no_mesh | 0.587 ± 0.055 | 0.474 ± 0.061 | 0.373 ± 0.048 | 0.506 ± 0.059 | 0.503 ± 0.059 |
-| ablation_no_venue | 0.566 ± 0.044 | 0.451 ± 0.031 | 0.358 ± 0.026 | 0.484 ± 0.033 | 0.483 ± 0.035 |
-| ablation_no_author | 0.598 ± 0.037 | 0.479 ± 0.031 | 0.376 ± 0.030 | 0.513 ± 0.032 | 0.507 ± 0.032 |
-| ablation_no_ref | 0.597 ± 0.055 | 0.470 ± 0.035 | 0.370 ± 0.038 | 0.504 ± 0.036 | 0.498 ± 0.037 |
-| ablation_no_text | 0.587 ± 0.069 | 0.493 ± 0.054 | 0.384 ± 0.032 | 0.521 ± 0.055 | 0.516 ± 0.048 |
-| ablation_only_mag | 0.497 ± 0.061 | 0.394 ± 0.043 | 0.313 ± 0.036 | 0.422 ± 0.047 | 0.419 ± 0.048 |
-| ablation_only_mesh | 0.308 ± 0.035 | 0.231 ± 0.022 | 0.196 ± 0.011 | 0.247 ± 0.023 | 0.254 ± 0.017 |
-| ablation_only_venue | 0.543 ± 0.057 | 0.485 ± 0.040 | 0.399 ± 0.040 | 0.501 ± 0.042 | 0.510 ± 0.040 |
-| ablation_only_author | 0.344 ± 0.049 | 0.281 ± 0.033 | 0.233 ± 0.028 | 0.297 ± 0.033 | 0.302 ± 0.032 |
-| ablation_only_ref | 0.463 ± 0.064 | 0.378 ± 0.044 | 0.313 ± 0.032 | 0.402 ± 0.048 | 0.411 ± 0.044 |
-| ablation_only_text | 0.531 ± 0.050 | 0.396 ± 0.050 | 0.315 ± 0.034 | 0.432 ± 0.051 | 0.428 ± 0.049 |
-| ablation_none | 0.308 ± 0.035 | 0.223 ± 0.026 | 0.196 ± 0.020 | 0.242 ± 0.027 | 0.254 ± 0.026 |
-
-| Train set study | Size | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
-| --- | --- | --- | --- | --- | --- | --- |
-| sizetest_0.15 | 190 | 0.362 ± 0.051 | 0.269 ± 0.037 | 0.219 ± 0.024 | 0.291 ± 0.042 | 0.295 ± 0.036 |
-| sizetest_0.20 | 248 | 0.344 ± 0.051 | 0.255 ± 0.040 | 0.213 ± 0.023 | 0.277 ± 0.044 | 0.283 ± 0.038 |
-| sizetest_0.25 | 306 | 0.374 ± 0.068 | 0.277 ± 0.048 | 0.227 ± 0.029 | 0.301 ± 0.054 | 0.304 ± 0.047 |
-| sizetest_0.30 | 364 | 0.395 ± 0.068 | 0.309 ± 0.054 | 0.249 ± 0.034 | 0.331 ± 0.058 | 0.333 ± 0.051 |
-| sizetest_0.35 | 422 |0.447 ± 0.053 | 0.353 ± 0.046 | 0.279 ± 0.034 | 0.378 ± 0.049 | 0.375 ± 0.047 |
-| sizetest_0.40 | 481 | 0.502 ± 0.063 | 0.386 ± 0.055 | 0.303 ± 0.041 | 0.418 ± 0.058 | 0.414 ± 0.056 |
-| sizetest_0.45 | 539 | 0.461 ± 0.059 | 0.355 ± 0.036 | 0.284 ± 0.026 | 0.382 ± 0.041 | 0.382 ± 0.039 |
-| sizetest_0.50 | 597 | 0.509 ± 0.065 | 0.390 ± 0.064 | 0.309 ± 0.041 | 0.422 ± 0.065 | 0.420 ± 0.058 |
-| sizetest_0.55 | 655 | 0.534 ± 0.036 | 0.421 ± 0.030 | 0.332 ± 0.021 | 0.453 ± 0.033 | 0.449 ± 0.029 |
-| sizetest_0.60 | 713 | 0.539 ± 0.047 | 0.423 ± 0.029 | 0.335 ± 0.025 | 0.455 ± 0.034 | 0.454 ± 0.033 |
-| sizetest_0.65 | 771 | 0.567 ± 0.039 | 0.444 ± 0.035 | 0.354 ± 0.027 | 0.478 ± 0.035 | 0.476 ± 0.034 |
-| sizetest_0.70 | 829 | 0.569 ± 0.083 | 0.440 ± 0.074 | 0.346 ± 0.049 | 0.475 ± 0.077 | 0.471 ± 0.068 |
-| sizetest_0.75 | 887 | 0.582 ± 0.030 | 0.464 ± 0.042 | 0.365 ± 0.032 | 0.498 ± 0.038 | 0.494 ± 0.035 |
-| sizetest_0.80 | 945 | 0.604 ± 0.044 | 0.490 ± 0.037 | 0.388 ± 0.026 | 0.523 ± 0.041 | 0.522 ± 0.038 |
-| sizetest_0.85 | 1001 | 0.586 ± 0.038 | 0.464 ± 0.024 | 0.369 ± 0.026 | 0.496 ± 0.022 | 0.491 ± 0.027 |
-
-### 2021-07-28 Issue #73 testing on `golden.json` - Using Only The Labels At The Highest Level.
+### 2021-08-09 Batch size 8 - Only Level 1 Labels
 
 In the PeTaL taxonomy there are ten Level 1 labels. Their frequencies of occurrence in `golden.json` are plotted in the following graph.
 
@@ -168,96 +125,98 @@ The following are the precisions and nDCG scores of MATCH on only the level 1 la
 
 | Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
 | --- | --- | --- | --- | --- | --- |
+| level1 | 0.693 ± 0.047 | 0.546 ± 0.028 | 0.428 ± 0.027 | 0.586 ± 0.028 | 0.579 ± 0.030 |
+
+P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+
+This is a marked improvement for P@1 over the previous Level 1 label tests, which had an average performance below.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
 | level1 | 0.621 ± 0.032 | 0.339 ± 0.025 | 0.239 ± 0.015 | 0.684 ± 0.030 | 0.732 ± 0.027 |
 
-P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+### 2021-08-09 Data Augmentation
 
-A multilabel confusion matrix showing what each label tends to be classified as is shown below:
+We perform data augmentation on `golden.json` by producing `N` copies of each paper, each of whose titles and abstracts are perturbed slightly by replacing some words with their synonyms (according to vector similarity using WordNet). The following results suggest that data augmentation did not produce an advantage, despite taking longer to train.
 
-![MCM for Level 1 Labels in golden.json](plots/20210729_123758_MCM/mcm_20210729_123758.png)
-
-### 2021-07-27 Ablation Studies - `golden.json`.
-
-Overnight we ran the same suite of ablation studies on `golden.json` and obtained the following results.
-
-| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| Train set augmentation factor | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
 | --- | --- | --- | --- | --- | --- |
-| golden_all | 0.584 ± 0.055 | 0.485 ± 0.032 | 0.382 ± 0.027 | 0.513 ± 0.036 | 0.510 ± 0.034 |
-| golden_no_mag | 0.533 ± 0.037 | 0.447 ± 0.029 | 0.352 ± 0.020 | 0.473 ± 0.028 | 0.469 ± 0.024 |
-| golden_no_mesh | 0.562 ± 0.057 | 0.472 ± 0.061 | 0.373 ± 0.046 | 0.498 ± 0.060 | 0.495 ± 0.058 |
-| golden_no_venue | 0.544 ± 0.044 | 0.437 ± 0.041 | 0.354 ± 0.037 | 0.467 ± 0.042 | 0.471 ± 0.044 |
-| golden_no_author | 0.596 ± 0.051 | 0.487 ± 0.038 | 0.379 ± 0.032 | 0.519 ± 0.039 | 0.512 ± 0.040 |
-| golden_no_ref | 0.568 ± 0.047 | 0.472 ± 0.053 | 0.373 ± 0.038 | 0.499 ± 0.052 | 0.495 ± 0.046 |
-| golden_no_text | 0.571 ± 0.053 | 0.486 ± 0.046 | 0.379 ± 0.037 | 0.511 ± 0.047 | 0.506 ± 0.045 |
-| golden_only_mag | 0.519 ± 0.053 | 0.412 ± 0.046 | 0.327 ± 0.032 | 0.440 ± 0.046 | 0.437 ± 0.040 |
-| golden_only_mesh | 0.308 ± 0.035 | 0.228 ± 0.022 | 0.194 ± 0.017 | 0.245 ± 0.023 | 0.253 ± 0.019 |
-| golden_only_venue | 0.592 ± 0.051 | 0.533 ± 0.039 | 0.434 ± 0.041 | 0.551 ± 0.040 | 0.557 ± 0.039 |
-| golden_only_author | 0.362 ± 0.053 | 0.287 ± 0.045 | 0.235 ± 0.027 | 0.307 ± 0.047 | 0.309 ± 0.040 |
-| golden_only_ref | 0.449 ± 0.057 | 0.370 ± 0.067 | 0.310 ± 0.051 | 0.392 ± 0.063 | 0.403 ± 0.059 |
-| golden_only_text | 0.308 ± 0.035 | 0.231 ± 0.022 | 0.201 ± 0.017 | 0.246 ± 0.022 | 0.258 ± 0.021 |
-| golden_none | 0.308 ± 0.035 | 0.230 ± 0.020 | 0.196 ± 0.014 | 0.245 ± 0.021 | 0.255 ± 0.017 |
+| 1x (no augmentation) | 0.710 ± 0.050 | 0.561 ± 0.023 | 0.442 ± 0.022 | 0.602 ± 0.032 | 0.596 ± 0.033 |
+| 2x | 0.710 ± 0.039 | 0.591 ± 0.032 | 0.456 ± 0.024 | 0.624 ± 0.033 | 0.610 ± 0.028 |
+| 3x | 0.731 ± 0.032 | 0.591 ± 0.030 | 0.467 ± 0.023 | 0.629 ± 0.031 | 0.622 ± 0.029 |
+| 4x | 0.683 ± 0.033 | 0.567 ± 0.034 | 0.449 ± 0.020 | 0.601 ± 0.036 | 0.597 ± 0.033 |
+| 5x | 0.709 ± 0.018 | 0.563 ± 0.020 | 0.447 ± 0.018 | 0.603 ± 0.017 | 0.597 ± 0.023 |
 
 P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
 
-This was alarming, in that *the text itself appeared to be giving no information at all*. It turned out that the text was being lost during the preprocessing stage (because in `golden.json`, there is no `text` field, but just `title` and `abstract` fields) and I had forgotten to account for that. The data involving the `text` field above are therefore flawed, and a fixed set of trials were run, whose results are shown below.
+### 2021-08-07 Batch size 8 - Size Testing
 
-| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
-| --- | --- | --- | --- | --- | --- |
-| fixed_golden_all | 0.570 ± 0.053 | 0.471 ± 0.035 | 0.370 ± 0.032 | 0.499 ± 0.038 | 0.495 ± 0.039 |
-| fixed_golden_no_text | 0.554 ± 0.050 | 0.458 ± 0.043 | 0.364 ± 0.034 | 0.485 ± 0.044 | 0.484 ± 0.041 |
-| fixed_golden_only_text | 0.501 ± 0.033 | 0.373 ± 0.029 | 0.294 ± 0.021 | 0.406 ± 0.030 | 0.402 ± 0.027 |
+We run more granular size testing on MATCH using a batch size optimized for `golden.json`. We find that the linear increase of MATCH's performance with respect to dataset size is not quite linear -- although the increase is still monotonic, the slope begins to taper off, suggesting that linear increases in dataset size may not help as much as we initially thought. This is expected, in that it is natural that these metrics, which range from 0 to 1, will have to reach a plateau at some point. That plateau has not been reached, but the rate of increase is slowing down.
 
-From this we see that text is giving some information, but it does not appreciably improve the final result. (In other words, the metadata give enough information to make the text redundant.)
-
-### 2021-07-27 Multilabel Confusion Matrices - `golden.json`.
-
-We plot multilabel confusion matrices for the top 25% of leaf labels for MATCH on `golden.json`, for issues #65 and #70.
-
-![Multilabel Confusion Matrix for MATCH on golden](plots/20210727_144449_MCM/mcm_20210727_144449.png)
-
-![Multilabel Confusion Matrix for MATCH on golden, leaf labels only](plots/20210727_145715_MCM/mcm_20210727_145715.png)
-
-### 2021-07-27 Increasing the number of transformer layers on `golden.json`
-
-We increase the number of transformer layers for MATCH on `golden.json` to see if that makes a difference. Our preliminary investigations seem to indicate that increasing number of layers beyond 4 is not fruitful. In fact, with any more than 6 transformer layers, it is impossible for the GPU on `triglav.grc.nasa.gov` to fit the entire model.
-
-| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
-| --- | --- | --- | --- | --- | --- |
-| golden_3_layer | 0.552 ± 0.108 | 0.471 ± 0.056 | 0.365 ± 0.045 | 0.495 ± 0.068 | 0.487 ± 0.064 |
-| golden_4_layer | 0.597 ± 0.059 | 0.489 ± 0.041 | 0.392 ± 0.031 | 0.521 ± 0.045 | 0.523 ± 0.040 |
-| golden_6_layer | 0.597 ± 0.044 | 0.496 ± 0.045 | 0.392 ± 0.037 | 0.525 ± 0.044 | 0.521 ± 0.042 |
-
-P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
-
-### 2021-07-27 Dataset size testing on `golden.json`
-
-Although we report no improvement over the equivalent tests on `cleaned_lens_output.json`, we confirm that MATCH performance increases roughly linearly with respect to dataset size on `golden.json`.
-
-| Train set size | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
-| --- | --- | --- | --- | --- | --- |
-| 248 | 0.315 ± 0.020 | 0.242 ± 0.022 | 0.208 ± 0.012 | 0.262 ± 0.022 | 0.273 ± 0.016 |
-| 364 | 0.394 ± 0.062 | 0.303 ± 0.048 | 0.248 ± 0.037 | 0.326 ± 0.053 | 0.331 ± 0.052 |
-| 481 | 0.437 ± 0.076 | 0.360 ± 0.064 | 0.286 ± 0.046 | 0.381 ± 0.069 | 0.380 ± 0.065 |
-| 597 | 0.510 ± 0.031 | 0.405 ± 0.027 | 0.321 ± 0.019 | 0.434 ± 0.028 | 0.431 ± 0.027 |
-| 713 | 0.515 ± 0.046 | 0.415 ± 0.036 | 0.332 ± 0.029 | 0.443 ± 0.039 | 0.444 ± 0.039 |
-| 829 | 0.568 ± 0.044 | 0.468 ± 0.039 | 0.366 ± 0.027 | 0.496 ± 0.039 | 0.492 ± 0.036 |
-| 945 | 0.580 ± 0.050 | 0.478 ± 0.043 | 0.373 ± 0.030 | 0.508 ± 0.045 | 0.501 ± 0.043 |
-
-P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
-
-### 2021-07-26 First Tests on `golden.json` - Issue #70
-
-We conducted three sets of ten trials. The first involved the whole `golden.json` dataset. The second and third involved only the papers labelled with one of the top 25% and top 10% leaf labels, respectively, for PeTaL Labeller Issue #70.
-
-| Train set options | Dataset size | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| Train set options | Train set size | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
 | --- | --- | --- | --- | --- | --- | --- |
-| golden_testing | 1161 | 0.552 ± 0.108 | 0.471 ± 0.056 | 0.365 ± 0.045 | 0.495 ± 0.068 | 0.487 ± 0.064 |
-| golden_top_25% | 773 | 0.526 ± 0.093 | 0.461 ± 0.074 | 0.357 ± 0.044 | 0.491 ± 0.077 | 0.522 ± 0.069 |
-| golden_top_10% | 453 | 0.471 ± 0.113 | 0.274 ± 0.043 | 0.207 ± 0.024 | 0.558 ± 0.092 | 0.626 ± 0.081 |
+| batch_8_0.05 | 74 | 0.296 ± 0.040 | 0.231 ± 0.022 | 0.193 ± 0.015 | 0.247 ± 0.025 | 0.251 ± 0.022 |
+| batch_8_0.10 | 132 | 0.364 ± 0.045 | 0.286 ± 0.010 | 0.233 ± 0.009 | 0.305 ± 0.015 | 0.307 ± 0.014 |
+| batch_8_0.15 | 190 | 0.428 ± 0.045 | 0.329 ± 0.020 | 0.268 ± 0.016 | 0.352 ± 0.024 | 0.355 ± 0.023 |
+| batch_8_0.20 | 248 | 0.484 ± 0.020 | 0.363 ± 0.011 | 0.288 ± 0.008 | 0.393 ± 0.011 | 0.389 ± 0.008 |
+| batch_8_0.25 | 306 | 0.516 ± 0.039 | 0.385 ± 0.034 | 0.308 ± 0.025 | 0.418 ± 0.035 | 0.416 ± 0.033 |
+| batch_8_0.30 | 364 | 0.551 ± 0.022 | 0.413 ± 0.012 | 0.328 ± 0.009 | 0.449 ± 0.015 | 0.445 ± 0.012 |
+| batch_8_0.35 | 422 | 0.560 ± 0.038 | 0.429 ± 0.019 | 0.341 ± 0.013 | 0.463 ± 0.024 | 0.460 ± 0.021 |
+| batch_8_0.40 | 481 | 0.582 ± 0.057 | 0.444 ± 0.028 | 0.350 ± 0.022 | 0.481 ± 0.032 | 0.476 ± 0.031 |
+| batch_8_0.45 | 539 | 0.615 ± 0.024 | 0.473 ± 0.019 | 0.371 ± 0.017 | 0.510 ± 0.020 | 0.503 ± 0.020 |
+| batch_8_0.50 | 597 | 0.629 ± 0.031 | 0.473 ± 0.020 | 0.373 ± 0.017 | 0.514 ± 0.023 | 0.509 ± 0.023 |
+| batch_8_0.55 | 655 | 0.645 ± 0.024 | 0.500 ± 0.019 | 0.393 ± 0.011 | 0.538 ± 0.017 | 0.532 ± 0.014 |
+| batch_8_0.60 | 713 | 0.647 ± 0.017 | 0.498 ± 0.025 | 0.388 ± 0.023 | 0.539 ± 0.023 | 0.530 ± 0.025 |
+| batch_8_0.65 | 771 | 0.665 ± 0.023 | 0.510 ± 0.022 | 0.404 ± 0.019 | 0.551 ± 0.023 | 0.546 ± 0.025 |
+| batch_8_0.70 | 829 | 0.678 ± 0.026 | 0.529 ± 0.019 | 0.414 ± 0.018 | 0.570 ± 0.020 | 0.562 ± 0.020 |
+| batch_8_0.75 | 887 | 0.672 ± 0.021 | 0.532 ± 0.031 | 0.414 ± 0.022 | 0.571 ± 0.026 | 0.562 ± 0.024 |
+| batch_8_0.80 | 945 | 0.689 ± 0.034 | 0.541 ± 0.033 | 0.421 ± 0.027 | 0.582 ± 0.034 | 0.573 ± 0.033 |
+| batch_8_0.85 | 1003 | 0.702 ± 0.053 | 0.552 ± 0.046 | 0.430 ± 0.040 | 0.592 ± 0.046 | 0.581 ± 0.052 |
 
 P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
 
-It seems that the advantage gained by restricting the papers to only the most common labels is outweighed by the disadvantage of having a smaller dataset. Also observe that the nDCG scores increase as the dataset becomes more restricted -- this could be a consequence of the model learning to predict those labels correctly more often, or it could be a consequence of there being fewer labels to predict (and thus, fewer incorrect choices).
+### 2021-08-07 Batch size 8 - Ablation Studies
+
+We ran a full suite of ablation studies and size tests to confirm the relationships we have observed [previously](#results) after fixing `golden.json`.
+
+| Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| batch_8_all | 0.689 ± 0.048 | 0.541 ± 0.041 | 0.426 ± 0.026 | 0.581 ± 0.040 | 0.575 ± 0.033 |
+| batch_8_no_mag | 0.692 ± 0.032 | 0.546 ± 0.039 | 0.423 ± 0.033 | 0.586 ± 0.038 | 0.575 ± 0.042 |
+| batch_8_no_mesh | 0.702 ± 0.030 | 0.554 ± 0.033 | 0.429 ± 0.026 | 0.594 ± 0.032 | 0.583 ± 0.031 |
+| batch_8_no_venue | 0.660 ± 0.088 | 0.508 ± 0.064 | 0.403 ± 0.050 | 0.548 ± 0.070 | 0.542 ± 0.067 |
+| batch_8_no_author | 0.688 ± 0.045 | 0.541 ± 0.039 | 0.428 ± 0.026 | 0.582 ± 0.039 | 0.577 ± 0.034 |
+| batch_8_no_ref | 0.696 ± 0.044 | 0.528 ± 0.036 | 0.420 ± 0.021 | 0.573 ± 0.036 | 0.570 ± 0.028 |
+| batch_8_no_text | 0.659 ± 0.032 | 0.527 ± 0.030 | 0.417 ± 0.023 | 0.563 ± 0.031 | 0.559 ± 0.028 |
+| batch_8_only_mag | 0.558 ± 0.039 | 0.445 ± 0.036 | 0.352 ± 0.026 | 0.475 ± 0.035 | 0.472 ± 0.030 |
+| batch_8_only_mesh | 0.308 ± 0.035 | 0.225 ± 0.020 | 0.195 ± 0.014 | 0.242 ± 0.021 | 0.252 ± 0.017 |
+| batch_8_only_venue | 0.546 ± 0.048 | 0.480 ± 0.038 | 0.400 ± 0.035 | 0.498 ± 0.036 | 0.512 ± 0.031 |
+| batch_8_only_author | 0.447 ± 0.037 | 0.339 ± 0.025 | 0.279 ± 0.022 | 0.364 ± 0.025 | 0.368 ± 0.021 |
+| batch_8_only_ref | 0.573 ± 0.036 | 0.447 ± 0.029 | 0.361 ± 0.020 | 0.480 ± 0.028 | 0.481 ± 0.024 |
+| batch_8_only_text | 0.630 ± 0.036 | 0.484 ± 0.026 | 0.390 ± 0.025 | 0.524 ± 0.028 | 0.526 ± 0.032 |
+| batch_8_none | 0.308 ± 0.035 | 0.224 ± 0.020 | 0.193 ± 0.021 | 0.241 ± 0.023 | 0.250 ± 0.023 |
+
+P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+
+### 2021-08-06 Batch size testing
+
+We discover that optimizing the training batch size on `golden.json` increases MATCH's performance significantly on all metrics! This was initially surprising, but a possible explanation and intuition for why training batch size might matter is [here](https://medium.com/mini-distill/effect-of-batch-size-on-training-dynamics-21c14f7a716e).
+
+| Training batch size | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+| --- | --- | --- | --- | --- | --- |
+| 4 | 0.694 ± 0.061 | 0.539 ± 0.060 | 0.425 ± 0.044 | 0.581 ± 0.059 | 0.575 ± 0.055 |
+| 8 | 0.698 ± 0.050 | 0.545 ± 0.034 | 0.425 ± 0.025 | 0.586 ± 0.036 | 0.576 ± 0.031 |
+| 16 | 0.688 ± 0.041 | 0.533 ± 0.032 | 0.421 ± 0.028 | 0.575 ± 0.030 | 0.570 ± 0.028 |
+| 32 | 0.661 ± 0.042 | 0.530 ± 0.036 | 0.420 ± 0.031 | 0.567 ± 0.035 | 0.564 ± 0.036 |
+| 64 | 0.655 ± 0.052 | 0.512 ± 0.049 | 0.402 ± 0.037 | 0.552 ± 0.048 | 0.545 ± 0.048 |
+| 128 | 0.614 ± 0.045 | 0.478 ± 0.038 | 0.375 ± 0.035 | 0.515 ± 0.038 | 0.508 ± 0.042 |
+| 256 | 0.590 ± 0.058 | 0.467 ± 0.050 | 0.370 ± 0.042 | 0.502 ± 0.050 | 0.502 ± 0.052 |
+
+P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumulative Gain at top k. For more detail on what these are see the [FAQ](#p-and-ndcg).
+
+### 2021-08-02 Idealized Multilabel Confusion Matrices
+
+We generate [what the multilabel confusion matrices are supposed to look like if MATCH is functioning ideally](reports/ideal_mcms.md).
 
 ## Frequently Asked Questions <a name="faq"></a>
 
@@ -282,7 +241,7 @@ For example, consider two relevant labels (R) and an irrelevant label (NR). If f
 - Integrate this work with the rest of the PeTaL pipeline.
 - Compare to [auto-sklearn](https://github.com/nasa-petal/PeTaL-labeller/issues/56)
 - Investigate using just the [most common subset of labels](https://github.com/nasa-petal/PeTaL-labeller/issues/70) to see if MATCH does better on that, and write a [binary classifier to filter out the other labels](https://github.com/nasa-petal/PeTaL-labeller/issues/69).
-- Look into [data augmentation techniques](https://github.com/nasa-petal/PeTaL-labeller/issues/65).
+- Continue looking into [data augmentation techniques](https://github.com/nasa-petal/PeTaL-labeller/issues/65).
 - conda throws a non-fatal error at the beginning of training? Not sure why, but it still trains well.
 - Figure out how to load MATCH with [pretrained weights](https://github.com/nasa-petal/PeTaL-labeller/issues/72).
 

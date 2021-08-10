@@ -9,6 +9,11 @@ split:
   skip: 0
   tot: 1161
 
+augment:
+  prefix: MATCH/PeTaL
+  factor: 1
+  balance_aware: False
+
 transform:
   prefix: MATCH
   dataset: PeTaL

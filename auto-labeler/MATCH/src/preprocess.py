@@ -2,7 +2,7 @@
     preprocess.py
 
     Run MATCH with PeTaL data.
-    Last modified on 26 July 2021.
+    Last modified on 9 August 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -15,12 +15,14 @@ from ruamel.yaml import YAML
 from pathlib import Path
 
 from Split import split
+from augment import augment
 from transform_data_golden import transform_data
 
 @click.command()
 @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 @click.option('--split/--no-split', '-s/-S', 'do_split', default=True, help='Perform train-dev-test split.')
+@click.option('--augment/--no-augment', '-a/-A', 'do_augment', default=True, help='Augment training set.')
 @click.option('--transform/--no-transform', '-t/-T', 'do_transform', default=True, help='Perform transformation from json to text.')
 @click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
 @click.option('--remake-vocab-file', type=click.BOOL, is_flag=True, default=False, help='Force vocab.npy and emb_init.npy to be recomputed.')
@@ -28,6 +30,7 @@ from transform_data_golden import transform_data
 def main(cnf_path,
         verbose=False,
         do_split=True,
+        do_augment=True,
         do_transform=True,
         do_preprocess=True,
         remake_vocab_file=True):
@@ -39,6 +42,7 @@ def main(cnf_path,
         cnf (str): Path to configure yaml file.
         verbose (bool): Verbose output.
         do_split (bool): Whether to perform train-dev-test split.
+        do_augment (bool): Whether to perform data augmentation on the training set.
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
         remake_vocab_file (bool): Whether to force vocab.npy and emb_init.npy to be recomputed.
@@ -47,11 +51,12 @@ def main(cnf_path,
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    preprocess(cnf, verbose, do_split, do_transform, do_preprocess, remake_vocab_file)
+    preprocess(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, remake_vocab_file)
 
 def preprocess(cnf,
         verbose=False,
         do_split=True,
+        do_augment=True,
         do_transform=True,
         do_preprocess=True,
         remake_vocab_file=True):
@@ -62,6 +67,7 @@ def preprocess(cnf,
         cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
         verbose (bool): Verbose output.
         do_split (bool): Whether to perform train-dev-test split.
+        do_augment (bool): Whether to perform data augmentation on the training set.
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
         remake_vocab_file (bool): Whether to force vocab.npy and emb_init.npy to be recomputed.
@@ -102,6 +108,16 @@ def preprocess(cnf,
             tot=int(split_cnf['tot']) if 'tot' in split_cnf else 0,
             verbose=verbose
         )
+
+    if do_augment:
+        augment_cnf = cnf['augment']
+        augment(
+            dataset_path=f"{augment_cnf['prefix']}/train.json",
+            factor=augment_cnf['factor'],
+            balance_aware=augment_cnf['balance_aware'],
+            verbose=verbose
+        )
+
     
     '''
         Transform data from json objects into txt sequences of tokens.
