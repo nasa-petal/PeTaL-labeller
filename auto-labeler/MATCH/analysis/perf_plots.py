@@ -257,6 +257,138 @@ def main(results_path, plots_path, verbose):
 
     plt.clf()
 
+    ########################################
+    # LEARNING RATE
+    ########################################
+
+    table_path = os.path.join(results_path, 'learning_rate.txt')
+    columns, stds = extract_data(table_path)
+    size = columns['Learning rate']
+    p1 = columns['P@1=nDCG@1']
+    p3 = columns['P@3']
+    p5 = columns['P@5']
+    n3 = columns['nDCG@3']
+    n5 = columns['nDCG@5']
+    p1err = stds['P@1=nDCG@1']
+    p3err = stds['P@3']
+    p5err = stds['P@5']
+    n3err = stds['nDCG@3']
+    n5err = stds['nDCG@5']
+
+    plt.grid()
+    plt.errorbar(size, p1, yerr=p1err, linestyle='-', marker='o', label='P@1')
+    plt.errorbar(size, p3, yerr=p3err, linestyle='-', marker='o', label='P@3')
+    plt.errorbar(size, p5, yerr=p5err, linestyle='-', marker='o', label='P@5')
+    plt.errorbar(size, n3, yerr=n3err, linestyle=':', marker='o', label='nDCG@3')
+    plt.errorbar(size, n5, yerr=n5err, linestyle=':', marker='o', label='nDCG@5')
+    plt.xlabel('Adam optimizer learning rate')
+    plt.xlim(0, 0.005)
+    # plt.xticks(size)
+    # plt.xscale('log')
+    plt.ylabel('Metrics')
+    plt.ylim(0, 1)
+    plt.legend()
+
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_learning_rate.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Effect of learning rate on MATCH performance')
+    PLOT_PATH = os.path.join(PLOTS_PATH, f'learning_rate.png')
+    plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A plot is saved as {PLOT_PATH}")
+
+    plt.clf()
+
+    ########################################
+    # WEIGHT DECAY
+    ########################################
+
+    table_path = os.path.join(results_path, 'weight_decay.txt')
+    columns, stds = extract_data(table_path)
+    size = columns['Weight decay']
+    p1 = columns['P@1=nDCG@1']
+    p3 = columns['P@3']
+    p5 = columns['P@5']
+    n3 = columns['nDCG@3']
+    n5 = columns['nDCG@5']
+    p1err = stds['P@1=nDCG@1']
+    p3err = stds['P@3']
+    p5err = stds['P@5']
+    n3err = stds['nDCG@3']
+    n5err = stds['nDCG@5']
+
+    plt.grid()
+    plt.errorbar(size, p1, yerr=p1err, linestyle='-', marker='o', label='P@1')
+    plt.errorbar(size, p3, yerr=p3err, linestyle='-', marker='o', label='P@3')
+    plt.errorbar(size, p5, yerr=p5err, linestyle='-', marker='o', label='P@5')
+    plt.errorbar(size, n3, yerr=n3err, linestyle=':', marker='o', label='nDCG@3')
+    plt.errorbar(size, n5, yerr=n5err, linestyle=':', marker='o', label='nDCG@5')
+    plt.xlabel('Adam optimizer weight decay')
+    plt.xlim(0, 0.1)
+    # plt.xticks(size)
+    # plt.xscale('log')
+    plt.ylabel('Metrics')
+    plt.ylim(0, 1)
+    plt.legend()
+
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_weight_decay.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Effect of weight decay on MATCH performance')
+    PLOT_PATH = os.path.join(PLOTS_PATH, f'weight_decay.png')
+    plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A plot is saved as {PLOT_PATH}")
+
+    plt.clf()
+
+    ########################################
+    # MESH SIZE TEST
+    ########################################
+
+    table_path = os.path.join(results_path, 'mesh_size_test.txt')
+    columns, stds = extract_data(table_path)
+    size = columns['Train set size']
+    p1 = columns['P@1=nDCG@1']
+    p3 = columns['P@3']
+    p5 = columns['P@5']
+    n3 = columns['nDCG@3']
+    n5 = columns['nDCG@5']
+    p1err = stds['P@1=nDCG@1']
+    p3err = stds['P@3']
+    p5err = stds['P@5']
+    n3err = stds['nDCG@3']
+    n5err = stds['nDCG@5']
+
+    plt.grid()
+    plt.errorbar(size, p1, yerr=p1err, linestyle='-', marker='o', label='P@1')
+    plt.errorbar(size, p3, yerr=p3err, linestyle='-', marker='o', label='P@3')
+    plt.errorbar(size, p5, yerr=p5err, linestyle='-', marker='o', label='P@5')
+    plt.errorbar(size, n3, yerr=n3err, linestyle=':', marker='o', label='nDCG@3')
+    plt.errorbar(size, n5, yerr=n5err, linestyle=':', marker='o', label='nDCG@5')
+    plt.xlabel('Training set size')
+    plt.xlim(100, 10000)
+    plt.xscale('log')
+    plt.ylabel('Metrics')
+    plt.ylim(0, 1)
+    plt.legend()
+
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_mesh_size_test.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Effect of training set size on MATCH performance on PubMed dataset')
+    PLOT_PATH = os.path.join(PLOTS_PATH, f'mesh_size_test.png')
+    plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A plot is saved as {PLOT_PATH}")
+
+    plt.clf()
+
+    ########################################
+    # THAT'S IT
+    ########################################
+
     perfLogger.info("Finish plotting performance plots.")
 
 
