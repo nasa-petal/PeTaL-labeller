@@ -38,7 +38,7 @@ def main(dataset_path,
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
-    augment(dataset_path, factor, verbose)
+    augment(dataset_path, factor, balance_aware, verbose)
 
 
 def augment(dataset_path,

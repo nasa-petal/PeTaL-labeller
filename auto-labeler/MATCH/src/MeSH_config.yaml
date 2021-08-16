@@ -1,22 +1,22 @@
 model: MATCH
-dataset: PeTaL
+dataset: MeSH
 
 split:
-  prefix: MATCH/PeTaL
-  dataset: golden.json
+  prefix: MATCH/MeSH
+  dataset: MeSH.json
   train: 0.8
   dev: 0.1
-  skip: 116
-  tot: 1161
+  skip: 0
+  tot: 10000
 
 augment:
-  prefix: MATCH/PeTaL
+  prefix: MATCH/MeSH
   factor: 1
   balance_aware: False
 
 transform:
   prefix: MATCH
-  dataset: PeTaL
+  dataset: MeSH
   use_mag: True
   use_mesh: True
   use_venue: True
@@ -43,4 +43,4 @@ train:
 
 wandb:
   project: MATCH
-  group: golden_20210726a
+  group: MeSH_20210815

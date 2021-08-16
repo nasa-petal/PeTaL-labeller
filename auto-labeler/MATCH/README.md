@@ -14,7 +14,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify PeTaL data according to the PeTaL taxonomy.
 
-This README was last updated on 10 August 2021.
+This README was last updated on 16 August 2021.
 
 ## What are all these files? <a name="contents"></a>
 
@@ -186,7 +186,7 @@ P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumu
 
 These results are plotted below.
 
-![Data Augmentation](plots/20210810_perf/augment.png)
+![Data Augmentation](plots/20210816_perf/augment.png)
 
 ### 2021-08-07 Batch size 8 - Size Testing
 
@@ -216,7 +216,7 @@ P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumu
 
 These results are plotted below.
 
-![Training set size](plots/20210810_perf/size_test.png)
+![Training set size](plots/20210816_perf/size_test.png)
 
 ### 2021-08-07 Batch size 8 - Ablation Studies
 
@@ -243,9 +243,9 @@ P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumu
 
 These results are plotted below.
 
-![Ablations from full](plots/20210810_perf/ablations_from_full.png)
+![Ablations from full](plots/20210816_perf/ablations_from_full.png)
 
-![Ablations from none](plots/20210810_perf/ablations_from_none.png)
+![Ablations from none](plots/20210816_perf/ablations_from_none.png)
 
 ### 2021-08-06 Batch size testing
 
@@ -265,7 +265,7 @@ P@k refers to precision at top k and nDCG@k refers to Normalized Discounted Cumu
 
 These results are plotted below.
 
-![Batch size test](plots/20210810_perf/batch_size_test.png)
+![Batch size test](plots/20210816_perf/batch_size_test.png)
 
 ### 2021-08-02 Idealized Multilabel Confusion Matrices
 

@@ -73,27 +73,41 @@ def main(results_path, plots_path, verbose):
     ########################################
 
     table_path = os.path.join(results_path, 'size_test.txt')
-    columns = extract_data(table_path)
+    columns, stds = extract_data(table_path)
     size = columns['Train set size']
     p1 = columns['P@1=nDCG@1']
     p3 = columns['P@3']
     p5 = columns['P@5']
     n3 = columns['nDCG@3']
     n5 = columns['nDCG@5']
+    p1err = stds['P@1=nDCG@1']
+    p3err = stds['P@3']
+    p5err = stds['P@5']
+    n3err = stds['nDCG@3']
+    n5err = stds['nDCG@5']
 
     plt.grid()
-    plt.title(f'Effect of training set size on MATCH performance')
-    plt.plot(size, p1, linestyle='-', marker='o', label='P@1')
-    plt.plot(size, p3, linestyle='-', marker='o', label='P@3')
-    plt.plot(size, p5, linestyle='-', marker='o', label='P@5')
-    plt.plot(size, n3, linestyle=':', marker='o', label='nDCG@3')
-    plt.plot(size, n5, linestyle=':', marker='o', label='nDCG@5')
+    # plt.plot(size, p1, linestyle='-', marker='o', label='P@1')
+    # plt.plot(size, p3, linestyle='-', marker='o', label='P@3')
+    # plt.plot(size, p5, linestyle='-', marker='o', label='P@5')
+    # plt.plot(size, n3, linestyle=':', marker='o', label='nDCG@3')
+    # plt.plot(size, n5, linestyle=':', marker='o', label='nDCG@5')
+    plt.errorbar(size, p1, yerr=p1err, linestyle='-', marker='o', label='P@1')
+    plt.errorbar(size, p3, yerr=p3err, linestyle='-', marker='o', label='P@3')
+    plt.errorbar(size, p5, yerr=p5err, linestyle='-', marker='o', label='P@5')
+    plt.errorbar(size, n3, yerr=n3err, linestyle=':', marker='o', label='nDCG@3')
+    plt.errorbar(size, n5, yerr=n5err, linestyle=':', marker='o', label='nDCG@5')
     plt.xlabel('Training set size')
     plt.xlim(0, 1004)
     plt.ylabel('Metrics')
     plt.ylim(0, 1)
     plt.legend()
 
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_size_test.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Effect of training set size on MATCH performance')
     PLOT_PATH = os.path.join(PLOTS_PATH, f'size_test.png')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
     perfLogger.info(f"A plot is saved as {PLOT_PATH}")
@@ -105,21 +119,25 @@ def main(results_path, plots_path, verbose):
     ########################################
 
     table_path = os.path.join(results_path, 'batch_size_test.txt')
-    columns = extract_data(table_path)
+    columns, stds = extract_data(table_path)
     size = columns['Training batch size']
     p1 = columns['P@1=nDCG@1']
     p3 = columns['P@3']
     p5 = columns['P@5']
     n3 = columns['nDCG@3']
     n5 = columns['nDCG@5']
+    p1err = stds['P@1=nDCG@1']
+    p3err = stds['P@3']
+    p5err = stds['P@5']
+    n3err = stds['nDCG@3']
+    n5err = stds['nDCG@5']
 
     plt.grid()
-    plt.title(f'Effect of training batch size on MATCH performance')
-    plt.plot(size, p1, linestyle='-', marker='o', label='P@1')
-    plt.plot(size, p3, linestyle='-', marker='o', label='P@3')
-    plt.plot(size, p5, linestyle='-', marker='o', label='P@5')
-    plt.plot(size, n3, linestyle=':', marker='o', label='nDCG@3')
-    plt.plot(size, n5, linestyle=':', marker='o', label='nDCG@5')
+    plt.errorbar(size, p1, yerr=p1err, linestyle='-', marker='o', label='P@1')
+    plt.errorbar(size, p3, yerr=p3err, linestyle='-', marker='o', label='P@3')
+    plt.errorbar(size, p5, yerr=p5err, linestyle='-', marker='o', label='P@5')
+    plt.errorbar(size, n3, yerr=n3err, linestyle=':', marker='o', label='nDCG@3')
+    plt.errorbar(size, n5, yerr=n5err, linestyle=':', marker='o', label='nDCG@5')
     plt.xlabel('Training batch size')
     plt.xlim(1, 1024)
     plt.xticks(size)
@@ -128,6 +146,11 @@ def main(results_path, plots_path, verbose):
     plt.ylim(0, 1)
     plt.legend()
 
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_batch_size_test.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Effect of training batch size on MATCH performance')
     PLOT_PATH = os.path.join(PLOTS_PATH, f'batch_size_test.png')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
     perfLogger.info(f"A plot is saved as {PLOT_PATH}")
@@ -139,27 +162,36 @@ def main(results_path, plots_path, verbose):
     ########################################
 
     table_path = os.path.join(results_path, 'augment.txt')
-    columns = extract_data(table_path)
+    columns, stds = extract_data(table_path)
     aug_factors = columns['Train set augmentation factor']
     p1 = columns['P@1=nDCG@1']
     p3 = columns['P@3']
     p5 = columns['P@5']
     n3 = columns['nDCG@3']
     n5 = columns['nDCG@5']
+    p1err = stds['P@1=nDCG@1']
+    p3err = stds['P@3']
+    p5err = stds['P@5']
+    n3err = stds['nDCG@3']
+    n5err = stds['nDCG@5']
 
     plt.grid()
-    plt.title(f'Effect of training set augmentation on MATCH performance')
-    plt.plot(aug_factors, p1, linestyle='-', marker='o', label='P@1')
-    plt.plot(aug_factors, p3, linestyle='-', marker='o', label='P@3')
-    plt.plot(aug_factors, p5, linestyle='-', marker='o', label='P@5')
-    plt.plot(aug_factors, n3, linestyle=':', marker='o', label='nDCG@3')
-    plt.plot(aug_factors, n5, linestyle=':', marker='o', label='nDCG@5')
+    plt.errorbar(aug_factors, p1, yerr=p1err, linestyle='-', marker='o', label='P@1')
+    plt.errorbar(aug_factors, p3, yerr=p3err, linestyle='-', marker='o', label='P@3')
+    plt.errorbar(aug_factors, p5, yerr=p5err, linestyle='-', marker='o', label='P@5')
+    plt.errorbar(aug_factors, n3, yerr=n3err, linestyle=':', marker='o', label='nDCG@3')
+    plt.errorbar(aug_factors, n5, yerr=n5err, linestyle=':', marker='o', label='nDCG@5')
     plt.xlabel('Training set augmentation factor')
     plt.xlim(0, 6)
     plt.ylabel('Metrics')
     plt.ylim(0, 1)
     plt.legend()
 
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_augment.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Effect of training set augmentation on MATCH performance')
     PLOT_PATH = os.path.join(PLOTS_PATH, f'augment.png')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
     perfLogger.info(f"A plot is saved as {PLOT_PATH}")
@@ -171,19 +203,25 @@ def main(results_path, plots_path, verbose):
     ########################################
 
     table_path = os.path.join(results_path, 'ablations_from_full.txt')
-    columns = extract_data(table_path)
+    columns, stds = extract_data(table_path)
 
     opts = columns['Train set options']
     p1 = columns['P@1=nDCG@1']
+    p1err = stds['P@1=nDCG@1']
 
     plt.grid(axis='y')
-    plt.title(f'Effect of removing metadata separately on MATCH performance')
-    plt.bar(opts, p1, label='P@1')  
+
+    plt.bar(opts, p1, yerr=p1err, label='P@1')  
     plt.xlabel('Train set options')
     plt.ylabel('Precision at top 1')
     plt.ylim(0, 1)
     # plt.legend()
 
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_ablations_from_full.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Effect of removing metadata separately on MATCH performance')
     PLOT_PATH = os.path.join(PLOTS_PATH, f'ablations_from_full.png')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
     perfLogger.info(f"A plot is saved as {PLOT_PATH}")
@@ -195,19 +233,24 @@ def main(results_path, plots_path, verbose):
     ########################################
 
     table_path = os.path.join(results_path, 'ablations_from_none.txt')
-    columns = extract_data(table_path)
+    columns, stds = extract_data(table_path)
 
     opts = columns['Train set options']
     p1 = columns['P@1=nDCG@1']
+    p1err = stds['P@1=nDCG@1']
 
     plt.grid(axis='y')
-    plt.title(f'Effect of adding metadata separately on MATCH performance')
-    plt.bar(opts, p1, label='P@1')  
+    plt.bar(opts, p1, yerr=p1err, label='P@1')  
     plt.xlabel('Train set options')
     plt.ylabel('Precision at top 1')
     plt.ylim(0, 1)
     # plt.legend()
 
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_ablations_from_none.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Effect of adding metadata separately on MATCH performance')
     PLOT_PATH = os.path.join(PLOTS_PATH, f'ablations_from_none.png')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
     perfLogger.info(f"A plot is saved as {PLOT_PATH}")
@@ -231,21 +274,29 @@ def extract_data(path):
     with open(path) as fin:
         column_names = []
         columns = dict()
+        stds = dict()
         for idx, line in enumerate(fin):
             items = [x.strip() for x in line.strip('| \n').split('|')]
             if idx == 0:
                 column_names = items
                 for column_name in column_names:
                     columns[column_name] = []
+                    stds[column_name] = []
             elif idx == 1:
                 continue
             else:
-                cleaned_items = [x.split('±')[0].strip() for x in items]
+                ext_cleaned_items = [x.split('±') for x in items]
+                cleaned_items = [x[0].strip() for x in ext_cleaned_items]
+                cleaned_stds = [x[1].strip() if len(x) > 1 else None for x in ext_cleaned_items]
                 for idx, item in enumerate(cleaned_items):
                     if is_num(item):
                         item = float(item)
                     columns[column_names[idx]].append(item)
-    return columns
+                for idx, item in enumerate(cleaned_stds):
+                    if item and is_num(item):
+                        item = float(item)
+                    stds[column_names[idx]].append(item)
+    return columns, stds
 
 def is_num(n):
     """is_num utility function.

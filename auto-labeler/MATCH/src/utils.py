@@ -16,6 +16,9 @@ def extract_labels(js):
     Returns:
         List(str): all of its labels concatenated into a single list
     """
+
+    if 'label' in js:
+        return js['label']
     
     level1labels = js['level1'] if js['level1'] else []
     level2labels = js['level2'] if js['level2'] else []

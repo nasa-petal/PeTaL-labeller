@@ -137,8 +137,10 @@ def transform_data(prefix,
                 # text = venue + ' ' + author + ' ' + reference + ' ' + data['text']
                 if 'venue' in data and not no_venue:
                     venue = ' '.join('VENUE_'+x.replace(' ', '_') for x in data['venue'])
-                    venue_mag = ' '.join('VENUE_'+x.replace(' ', '_') for x in data['venue_mag'])
-                    text += venue + ' ' + venue_mag + ' '
+                    text += venue + ' '
+                    if 'venue_mag' in data:
+                        venue_mag = ' '.join('VENUE_'+x.replace(' ', '_') for x in data['venue_mag'])
+                        text += venue_mag + ' '
                 if 'author' in data and not no_author:
                     author = ' '.join(['AUTHOR_'+str(x) for x in data['author']])
                     text += author + ' '
@@ -159,7 +161,7 @@ def transform_data(prefix,
                     (data['level1'] if data['level1'] and not no_level1 else [])
                     + (data['level2'] if data['level2'] and not no_level2 else [])
                     + (data['level3'] if data['level3'] and not no_level3 else [])
-                )
+                ) if not data['label'] else data['label']
                 label = ' '.join(labels)
 
                 if include_labels_in_features:

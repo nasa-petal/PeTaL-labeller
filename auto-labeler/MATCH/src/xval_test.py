@@ -159,8 +159,10 @@ def xval_test_by_size(cnf,
     tot = cnf['split']['tot'] if 'tot' in cnf['split'] else 1000 # default
     skip_interval = int(tot / k)
 
-    for train_proportion in np.linspace(0.05, 0.85, 17):
-        STUDY_TITLE = f"{study}_{train_proportion:.2f}"
+    # for train_proportion in np.linspace(0.05, 0.85, 17):
+    for train_proportion in [0.02, 0.04, 0.07, 0.1, 0.2, 0.4, 0.7]: # np.linspace(0.1, 0.8, 8):
+        # STUDY_TITLE = f"{study}_{train_proportion:.2f}"
+        STUDY_TITLE = f"{study}_{int(train_proportion * tot)}"
         cnf['split']['train'] = train_proportion
         for skip in range(0, skip_interval * k, skip_interval):
             cnf['split']['skip'] = skip
