@@ -258,6 +258,65 @@ def main(results_path, plots_path, verbose):
     plt.clf()
 
     ########################################
+    # OLD ABLATIONS FROM FULL
+    ########################################
+
+    table_path = os.path.join(results_path, 'old_ablations_from_full.txt')
+    columns, stds = extract_data(table_path)
+
+    opts = columns['Train set options']
+    p1 = columns['P@1=nDCG@1']
+    p1err = stds['P@1=nDCG@1']
+
+    plt.grid(axis='y')
+
+    plt.bar(opts, p1, yerr=p1err, label='P@1')  
+    plt.xlabel('Train set options')
+    plt.ylabel('Precision at top 1')
+    plt.ylim(0, 1)
+    # plt.legend()
+
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_old_ablations_from_full.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Preliminary effect of removing metadata separately on MATCH performance')
+    PLOT_PATH = os.path.join(PLOTS_PATH, f'old_ablations_from_full.png')
+    plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A plot is saved as {PLOT_PATH}")
+
+    plt.clf()
+
+    ########################################
+    # ABLATIONS FROM NONE
+    ########################################
+
+    table_path = os.path.join(results_path, 'old_ablations_from_none.txt')
+    columns, stds = extract_data(table_path)
+
+    opts = columns['Train set options']
+    p1 = columns['P@1=nDCG@1']
+    p1err = stds['P@1=nDCG@1']
+
+    plt.grid(axis='y')
+    plt.bar(opts, p1, yerr=p1err, label='P@1')  
+    plt.xlabel('Train set options')
+    plt.ylabel('Precision at top 1')
+    plt.ylim(0, 1)
+    # plt.legend()
+
+    NO_TITLE_PLOT_PATH = os.path.join(PLOTS_PATH, f'no_title_old_ablations_from_none.png')
+    plt.savefig(fname=NO_TITLE_PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A titleless plot is saved as {NO_TITLE_PLOT_PATH}")
+
+    plt.title(f'Preliminary effect of adding metadata separately on MATCH performance')
+    PLOT_PATH = os.path.join(PLOTS_PATH, f'old_ablations_from_none.png')
+    plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
+    perfLogger.info(f"A plot is saved as {PLOT_PATH}")
+
+    plt.clf()
+
+    ########################################
     # LEARNING RATE
     ########################################
 
