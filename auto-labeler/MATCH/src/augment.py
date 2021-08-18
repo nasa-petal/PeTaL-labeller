@@ -2,17 +2,18 @@
     augment.py
 
     Run MATCH with PeTaL data.
-    Last modified on 9 August 2021.
+    Last modified on 18 August 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
 
+import os
 import json
 import click
 import logging
 import copy
 from collections import defaultdict
-from math import exp, floor
+from math import floor
 from tqdm import tqdm
 
 import nlpaug.augmenter.word as naw
@@ -35,6 +36,7 @@ def main(dataset_path,
     Args:
         dataset (string): Path to training set.
         factor (int): Factor by which to augment training set size.
+        balance_aware (bool): Whether to use balance-aware data augmentation (not fully tested yet).
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
@@ -50,6 +52,8 @@ def augment(dataset_path,
     Args:
         dataset (string): Path to training set.
         factor (int): Factor by which to augment training set size.
+        infer_mode (bool): Whether to run in inference mode.
+        balance_aware (bool): Whether to use balance-aware data augmentation (not fully tested yet).
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
@@ -59,13 +63,18 @@ def augment(dataset_path,
     )
     logger = logging.getLogger("augment")
 
-    if verbose:
-        logger.info(f"Begin training set augmentation.")    
+    if not os.path.exists(dataset_path):
+        if verbose:
+            logger.info(f'Skipping training set augmentation, for {dataset_path} not found.')
+        return
 
     if factor < 2:
         if verbose:
             logger.info(f'Skipping training set augmentation, for factor is {factor} < 2.')
         return
+
+    if verbose:
+        logger.info(f"Begin training set augmentation.")    
 
     aug = naw.SynonymAug(aug_src='wordnet')
     nltk.download('averaged_perceptron_tagger')

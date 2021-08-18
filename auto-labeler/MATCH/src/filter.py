@@ -18,12 +18,12 @@ import logging
 @click.option('-v', '--verbose', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
 def main(input_path, output_path, verbose=False):
-    """[summary]
+    """Filters out a subset of the golden dataset.
 
     Args:
-        input_path ([type]): [description]
-        output_path ([type]): [description]
-        verbose (bool, optional): [description]. Defaults to False.
+        input_path (str): Input json dataset (e.g., golden.json).
+        output_path (str): Output json dataset (e.g., filtered.json).
+        verbose (bool, optional): Enable verbose output.
     """
 
     logging.basicConfig(

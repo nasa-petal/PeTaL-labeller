@@ -26,6 +26,7 @@ from transform_data_golden import transform_data
 @click.option('--augment/--no-augment', '-a/-A', 'do_augment', default=True, help='Augment training set.')
 @click.option('--transform/--no-transform', '-t/-T', 'do_transform', default=True, help='Perform transformation from json to text.')
 @click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
+@click.option('--infer-mode', '-i', type=click.BOOL, is_flag=True, default=False, help='Inference mode.')
 @click.option('--remake-vocab-file', type=click.BOOL, is_flag=True, default=False, help='Force vocab.npy and emb_init.npy to be recomputed.')
 
 def main(cnf_path,
@@ -34,6 +35,7 @@ def main(cnf_path,
         do_augment=True,
         do_transform=True,
         do_preprocess=True,
+        infer_mode=False,
         remake_vocab_file=True):
     """
         Command-line entry function -- perform train-dev-test split,
@@ -46,13 +48,14 @@ def main(cnf_path,
         do_augment (bool): Whether to perform data augmentation on the training set.
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
+        infer_mode (bool): Whether to run in inference mode.
         remake_vocab_file (bool): Whether to force vocab.npy and emb_init.npy to be recomputed.
     """
 
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    preprocess(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, remake_vocab_file)
+    preprocess(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, infer_mode, remake_vocab_file)
 
 def preprocess(cnf,
         verbose=False,
@@ -60,6 +63,7 @@ def preprocess(cnf,
         do_augment=True,
         do_transform=True,
         do_preprocess=True,
+        infer_mode=False,
         remake_vocab_file=True):
     """
         Perform train-dev-test split, transform json to txt, and preprocess txt into npy.
@@ -71,6 +75,7 @@ def preprocess(cnf,
         do_augment (bool): Whether to perform data augmentation on the training set.
         do_transform (bool): Whether to transform json to txt.
         do_preprocess (bool): Whether to preprocess txt into npy.
+        infer_mode (bool): Whether to run in inference mode.
         remake_vocab_file (bool): Whether to force vocab.npy and emb_init.npy to be recomputed.
     """
     logging.basicConfig(
@@ -107,6 +112,7 @@ def preprocess(cnf,
             dev=float(split_cnf['dev']),
             skip=int(split_cnf['skip']),
             tot=int(split_cnf['tot']) if 'tot' in split_cnf else 0,
+            infer_mode=infer_mode,
             verbose=verbose
         )
 
@@ -144,6 +150,7 @@ def preprocess(cnf,
             no_level2=not transform_cnf['use_level2'],
             no_level3=not transform_cnf['use_level3'],
             include_labels_in_features=transform_cnf['include_labels_in_features'],
+            infer_mode=infer_mode,
             verbose=verbose
         )
 
@@ -180,15 +187,16 @@ def preprocess(cnf,
 
         from MATCH.preprocess import main as preprocess_main
 
-        preprocess_main.callback(
-            text_path=f"{DATASET}/train_texts.txt",
-            label_path=f"{DATASET}/train_labels.txt",
-            vocab_path=f"{DATASET}/vocab.npy",
-            emb_path=f"{DATASET}/emb_init.npy",
-            w2v_model=f"{DATASET}/{DATASET}.joint.emb",
-            vocab_size=int(preprocess_cnf['vocab_size']),
-            max_len=int(preprocess_cnf['max_len']),
-        )
+        if not infer_mode: # if not in inference mode, run the training
+            preprocess_main.callback(
+                text_path=f"{DATASET}/train_texts.txt",
+                label_path=f"{DATASET}/train_labels.txt",
+                vocab_path=f"{DATASET}/vocab.npy",
+                emb_path=f"{DATASET}/emb_init.npy",
+                w2v_model=f"{DATASET}/{DATASET}.joint.emb",
+                vocab_size=int(preprocess_cnf['vocab_size']),
+                max_len=int(preprocess_cnf['max_len']),
+            )
 
         preprocess_main.callback(
             text_path=f"{DATASET}/test_texts.txt",

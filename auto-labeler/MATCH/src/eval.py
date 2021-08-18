@@ -19,28 +19,31 @@ from pathlib import Path
 
 @click.command()
 @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
+@click.option('--infer-mode', '-i', type=click.BOOL, is_flag=True, default=False, help='Inference mode.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
-def main(cnf_path, verbose):
+def main(cnf_path, infer_mode, verbose):
     """
         Command-line entry function - runs testing.
 
     Args:
         cnf (str): Path to configure yaml file.
+        infer_mode (bool): Whether to run in inference mode.
         verbose (bool): Verbose output.
     """
 
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    run_eval(cnf, verbose)
+    run_eval(cnf, infer_mode, verbose)
 
-def run_eval(cnf, verbose):
+def run_eval(cnf, infer_mode, verbose):
     """
         Run testing.
 
     Args:
         cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
+        infer_mode (bool): Whether to run in inference mode.
         verbose (bool): Verbose output.
     """
     logging.basicConfig(

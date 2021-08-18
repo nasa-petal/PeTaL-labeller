@@ -18,28 +18,31 @@ import wandb
 
 @click.command()
 @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
+@click.option('--infer-mode', '-i', type=click.BOOL, is_flag=True, default=False, help='Inference mode.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
-def main(cnf_path, verbose):
+def main(cnf_path, infer_mode, verbose):
     """
         Run training.
 
     Args:
         cnf_path (str): Path to configure yaml file.
+        infer_mode (bool): Whether to run in inference mode.
         verbose (bool): Verbose output.
     """
 
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
     
-    run_train(cnf, verbose)
+    run_train(cnf, infer_mode, verbose)
 
-def run_train(cnf, verbose):
+def run_train(cnf, infer_mode, verbose):
     """
         Run training.
 
     Args:
         cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
+        infer_mode (bool): Whether to run in inference mode.
         verbose (bool): Verbose output.
     """
     logging.basicConfig(
@@ -47,6 +50,11 @@ def run_train(cnf, verbose):
         format="[%(asctime)s:%(name)s] %(message)s"
     )
     logger = logging.getLogger("train")
+
+    if infer_mode:
+        if verbose:
+            logger.info("Skipping training in inference mode.")
+        return
 
     if verbose:
         logger.info("Begin training.")
