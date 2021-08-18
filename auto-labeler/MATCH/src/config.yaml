@@ -3,10 +3,10 @@ dataset: PeTaL
 
 split:
   prefix: MATCH/PeTaL
-  dataset: golden.json
+  dataset: filtered.json
   train: 0.8
   dev: 0.1
-  skip: 116
+  skip: 0
   tot: 1161
 
 augment:
@@ -37,9 +37,20 @@ preprocess:
 
 train:
   prefix: MATCH
+  sample: True
+  num_samples: 2
   hypernymy_regularization: True
   leaf_labels_only: False
   notes: ''
+
+eval:
+  prefix: MATCH
+  sample: True
+  num_samples: 5
+  criterion: top_k
+  top_k: 5
+  threshold: 0.2
+  num_text_tokens: 10
 
 wandb:
   project: MATCH

@@ -129,10 +129,10 @@ def transform_data(prefix,
                 
                 text = ''
                 if 'mag' in data and not no_mag:
-                    mag = ' '.join(['MAG_'+x for x in data['mag']])
+                    mag = ' '.join(['MAG_'+x.replace(' ', '_') for x in data['mag']])
                     text += mag + ' '
                 if 'mesh' in data and not no_mesh:
-                    mesh = ' '.join(['MESH_'+x for x in data['mesh']])
+                    mesh = ' '.join(['MESH_'+x.replace(' ', '_') for x in data['mesh']])
                     text += mesh + ' '
                 # text = venue + ' ' + author + ' ' + reference + ' ' + data['text']
                 if 'venue' in data and not no_venue:

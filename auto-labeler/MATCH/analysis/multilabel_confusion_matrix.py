@@ -4,6 +4,44 @@
     Run MATCH with PeTaL data.
     Last modified on 23 July 2021.
 
+    DESCRIPTION
+
+        multilabel_confusion_matrix.py plots multilabel confusion matrices
+        based on the data in MATCH/PeTaL/results.
+
+        In a multilabel confusion matrix, the rows correspond to 
+        ground-truth labels $l_{true}$ and the columns correspond to 
+        predicted labels $l_{pred}$. Each cell sports a colour representing 
+        the average confidence score MATCH predicts for the label $l_{pred}$ 
+        across all papers bearing the actual label $l_{true}$. This colour 
+        is brighter for averages closer to 1, and darker for averages closer
+        to 0.
+
+        In an ideal classifier, there would be a bright line streaking
+        across the diagonal from the top left to the bottom right. Cells on
+        the diagonal represent correct predictions; most cells off the
+        diagonal represent mispredictions.
+
+        Labels are sorted by their frequency of occurrence in the dataset;
+        labels at the top and left are more common; labels at the bottom and
+        right are rarer.
+
+    OPTIONS
+
+        -m, --match PATH/TO/MATCH
+            Path of MATCH folder.
+        -p, --plots PATH/TO/plots
+            Path of plots folder.
+        --leaf-only
+            Only include leaf labels in the matrix. Defualts to false.
+        --threshold
+            Logits threshold for a positive prediction, between 0 and 1.
+            If it exists, we convert all confidence scores above threshold to 1
+            and all other confidence scores to 0. ("hard" prediction)
+            If not, we don't transform the confidence scores. ("soft" prediction)
+        -v, --verbose
+            Enables verbose output.
+
     USAGE
 
         python3 multilabel_confusion_matrix.py -m ../src/MATCH -p ../plots --verbose

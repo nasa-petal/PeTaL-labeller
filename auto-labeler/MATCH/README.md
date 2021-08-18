@@ -10,13 +10,13 @@
 - [Future Work](#future)
 - [Contact](#contact)
 
-## What is this? <a name="overview"></a>
+## <a name="overview"></a> What is this? 
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify PeTaL data according to the PeTaL taxonomy.
 
-This README was last updated on 16 August 2021.
+This README was last updated on 17 August 2021.
 
-## What are all these files? <a name="contents"></a>
+## <a name="contents"></a> What are all these files? 
 
 - `analysis/` contains scripts for analysing experiment data and results.
 - `experiment_data/` contains cleaned-up experiment logs for various sets of trials.
@@ -29,7 +29,7 @@ This README was last updated on 16 August 2021.
 - `requirements.txt` contains a list of required packages.
 - `setup.py`, for setting up preliminaries (i.e., downloading PeTaL).
 
-## How do I reproduce your results? <a name="run"></a>
+## <a name="run"></a> How do I reproduce your results? 
 
 ### Environment and setup
 
@@ -104,7 +104,7 @@ make clean
 
 should you want to remove the dataset that `setup.py` downloaded. This is necessary if you want to download an updated version of the dataset.
 
-## Summary of results <a name="results"></a>
+## <a name="results"></a> Summary of results 
 
 In short, what I've found so far seems to indicate that:
 - for the scale of our data in `PeTaL/golden.json` (roughly 1200 papers), dataset size matters a lot. This is encouraging.
@@ -121,7 +121,7 @@ For comparison, we have generated [what the multilabel confusion matrices are su
 
 Below we present the multilabel confusion matrices with "soft scores" for each paper and label, in the sense that MATCH generates probabilities between 0 and 1 for each paper and label and we average these probabilities for each pixel in the grid. Examples using "hard scores" for each paper, where each soft score is converted to 0.0 or 1.0 based on whether it passes a threshold, can be found in [this directory](plots/20210810_MCM/) for thresholds of 0.1, 0.2, and 0.5.
 
-#### All Levels <a name='all'> </a>
+#### <a name='all'> </a> All Levels 
 
 Here's the multilabel confusion matrix (hereafter *MCM*) for all labels across all levels:
 
@@ -131,7 +131,7 @@ Zooming in on the top 25 of all labels:
 
 ![MCM_top_25_all_labels](plots/20210810_MCM/mcm_top25_all.png)
 
-#### Leaf Labels <a name='leaf'> </a>
+#### <a name='leaf'> </a> Leaf Labels 
 
 And here's the MCM for only the leaf labels. Notice the lack of most yellow chatter off the diagonal -- the leaf labels generally are uncorrelated (save for a few exceptions) and do not co-occur with each other.
 
@@ -141,7 +141,7 @@ Zooming in on the top 25 of leaf labels:
 
 ![MCM_top_25_leaf_labels](plots/20210810_MCM/mcm_top25_leaf.png)
 
-#### Level 1 Labels <a name='level1'> </a>
+#### <a name='level1'> </a> Level 1 Labels 
 
 And finally, the MCM amongst level 1 labels has a fair signal along the diagonal, demonstrating that MATCH is indeed learning representations of each of these high-level labels.
 
@@ -271,9 +271,9 @@ These results are plotted below.
 
 We generate [what the multilabel confusion matrices are supposed to look like if MATCH is functioning ideally](reports/ideal_mcms.md).
 
-## Frequently Asked Questions <a name="faq"></a>
+## <a name="faq"></a> Frequently Asked Questions 
 
-### What do P@1, P@3, nDCG@1, etc., all mean? <a name="p-and-ndcg"></a>
+### <a name="p-and-ndcg"></a> What do P@1, P@3, nDCG@1, etc., all mean? 
 
 So MATCH produces a ranking of labels (biomimicry functions) by their relevance. There are a lot of labels, but usually only a few are relevant to each document. **Precision at top k** (P@k) asks "Of the top k labels predicted by MATCH, how many is the document actually (ground-truth) tagged with"?
 
@@ -281,7 +281,7 @@ P@k has a shortcoming in that it is not ranking-aware -- it just checks, one by 
 
 Both P@k and nDCG@k range from 0.0 (completely off the mark) to 1.0 (picture-perfect).
 
-### What values does nDCG use for an ideal ranking, since we don't have relevancy scores for our labels? <a name="ndcg-ranking"></a>
+### <a name="ndcg-ranking"></a> What values does nDCG use for an ideal ranking, since we don't have relevancy scores for our labels? 
 
 My understanding is the relevancy score for each ground-truth label is a binary yes or no (1 for relevant, 0 for not).
 
@@ -289,7 +289,19 @@ The ordering of the predictions that MATCH makes can still have an effect on the
 
 For example, consider two relevant labels (R) and an irrelevant label (NR). If for a certain paper, a prediction at top 3 is (NR, R, R) and another is (R, NR, R) (where R = a relevant label and NR is a non-relevant label), those two predictions would have different nDCG scores. In computing the nDCG score they would both be compared to the ideal partial ordering (R, R, NR).
 
-## Future work <a name="future"></a>
+### <a name="mcm-read"></a> How do you read a multilabel confusion matrix?
+
+Consider the following multilabel confusion matrix.
+
+![Multilabel confusion matrix](plots/20210810_MCM/mcm_top25_all.png)
+
+The rows correspond to ground-truth labels $l_{true}$; the columns correspond to predicted labels $l_{pred}$. Each cell sports a colour representing the average confidence score MATCH predicts for the label $l_{pred}$ across all papers bearing the actual label $l_{true}$. This colour is brighter for averages closer to 1, and darker for averages closer to 0. For example, the uppermost leftmost cell sports a colour representing the average confidence score of predicting "protect from harm" across all true "protect from harm" papers.
+
+In an ideal classifier, there would be a bright line streaking across the diagonal from the top left to the bottom right. Cells on the diagonal represent correct predictions; most cells off the diagonal represent mispredictions. Not all off-diagonal cells represent mispredictions, though; the bright spot at $l_{true} = $ "prevent_structural_failure" vs. $l_{pred} = $ "maintain_structural_integrity" is expected because "prevent_structural_failure" is in fact a sub-label of "maintain_structural_integrity".
+
+Labels are sorted by their frequency of occurrence in the dataset; labels at the top and left are more common; labels at the bottom and right are rarer. That the brightness of the diagonal fades toward the bottom right is a sign that rarer labels are less well-predicted.
+
+## <a name="future"></a> Future work 
 
 - Integrate this work with the rest of the PeTaL pipeline.
 - Compare to [auto-sklearn](https://github.com/nasa-petal/PeTaL-labeller/issues/56)
@@ -298,6 +310,6 @@ For example, consider two relevant labels (R) and an irrelevant label (NR). If f
 - conda throws a non-fatal error at the beginning of training? Not sure why, but it still trains well.
 - Figure out how to load MATCH with [pretrained weights](https://github.com/nasa-petal/PeTaL-labeller/issues/72).
 
-## Contact <a name="contact"></a>
+## <a name="contact"></a> Contact 
 
 For questions contact Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com).

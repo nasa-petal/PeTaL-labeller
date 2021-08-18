@@ -80,10 +80,27 @@ def run_train(cnf, verbose):
         config=wandb_config
     )
 
-
     sys.path.insert(1, os.path.join(os.getcwd(), 'MATCH'))
 
     os.chdir(train_cnf['prefix'])
+
+    sample = train_cnf['sample']
+    if sample:
+        num_samples = train_cnf['num_samples']
+
+        logger.info(f"Sampling _{num_samples}_ texts and their labels.")
+
+        print('--- TRAINING SAMPLES')
+        with open(f"{DATASET}/train_texts.txt") as fin1, open(f"{DATASET}/train_labels.txt") as fin2:
+            for idx, (text, labels) in enumerate(zip(fin1, fin2)):
+                if idx >= num_samples:
+                    break
+                print(f"FULL TEXT: {text.strip()}")
+                print(f"LABELS: {labels.strip()}")
+                print('---')
+
+        logger.info(f"End of training samples.")
+        
 
     from MATCH.main import main as match_main # main.py
 

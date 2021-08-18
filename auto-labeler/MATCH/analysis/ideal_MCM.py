@@ -4,9 +4,48 @@
     Run MATCH with PeTaL data.
     Last modified on 23 July 2021.
 
+    DESCRIPTION
+
+        ideal_MCM.py produces the "idealized" multilabel confusion matrix
+        for a dataset. This is the multilabel confusion matrix for a classifier
+        which predicts perfectly every label in the training set in
+        MATCH/PeTaL/results.
+
+        In a multilabel confusion matrix, the rows correspond to 
+        ground-truth labels $l_{true}$ and the columns correspond to 
+        predicted labels $l_{pred}$. Each cell sports a colour representing 
+        the average confidence score MATCH predicts for the label $l_{pred}$ 
+        across all papers bearing the actual label $l_{true}$. This colour 
+        is brighter for averages closer to 1, and darker for averages closer
+        to 0.
+
+        In an ideal classifier, there would be a bright line streaking
+        across the diagonal from the top left to the bottom right. Cells on
+        the diagonal represent correct predictions; most cells off the
+        diagonal represent mispredictions.
+
+        Labels are sorted by their frequency of occurrence in the dataset;
+        labels at the top and left are more common; labels at the bottom and
+        right are rarer.
+
+    OPTIONS
+
+        -m, --match PATH/TO/MATCH
+            Path of MATCH folder.
+        -p, --plots PATH/TO/plots
+            Path of plots folder.
+        --leaf-only
+            Only include leaf labels in the matrix. Defualts to false.
+        -v, --verbose
+            Enables verbose output.
+
     USAGE
 
         python3 ideal_MCM.py -m ../src/MATCH -p ../plots --verbose
+
+    NOTES
+
+        Not a necessary file by any means.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -23,10 +62,9 @@ import json
 @click.option('--match', '-m', 'match_path', type=click.Path(exists=True), help='Path of MATCH folder.')
 @click.option('--plots', '-p', 'plots_path', type=click.Path(exists=True), help='Path of plots folder.')
 @click.option('--leaf-only', type=click.BOOL, is_flag=True, default=False, required=False, help='Leaf labels only.')
-@click.option('--threshold', '-t', type=click.FLOAT, default=None, required=False, help='Logits threshold for a positive prediction. Between 0 and 1.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
-def main(match_path, plots_path, leaf_only, threshold, verbose):
+def main(match_path, plots_path, leaf_only, verbose):
     """Plots ideal multilabel confusion matrix.
 
     Args:
@@ -108,7 +146,6 @@ def main(match_path, plots_path, leaf_only, threshold, verbose):
                 for res_label in res_label_list:
                     if res_label in label2idx:
                         preds_for_test_label[test_label][res_label] += 1 if res_label in test_label_list else 0
-                        # preds_for_test_label[test_label][res_label] += res_score if not threshold else (1 if res_score > threshold else 0)
 
     num_labels = len(label2idx)
     conf_matrix = np.array(
@@ -149,16 +186,20 @@ def main(match_path, plots_path, leaf_only, threshold, verbose):
     rc('ytick', labelsize=12)
     rc('font', size=20)
 
+    ################################################################################
+    # COMMENT/UNCOMMENT THIS CODE TO FILTER OUT EVERYTHING BUT THE TOP label_limit LABELS
     label_limit = 25
-    conf_matrix_small = conf_matrix[:label_limit, :label_limit]
+    conf_matrix = conf_matrix[:label_limit, :label_limit]
     num_labels = label_limit
+    ################################################################################
+
     row_labels = [idx2label[i] for i in range(num_labels)]
     col_labels = [idx2label[i] for i in range(num_labels)]
 
     plt.rcParams["figure.figsize"] = (15, 15)
     fig, ax = plt.subplots()
-    plt.matshow(conf_matrix_small, fignum=0)
-    ax.set_title('Ideal Multilabel Confusion Matrix for MATCH on golden.json\nTop 25 of All Labels Sorted by Frequency', y=1.5, pad=0)
+    plt.matshow(conf_matrix, fignum=0)
+    ax.set_title(f'Ideal Multilabel Confusion Matrix for MATCH on golden.json\nTop {label_limit} of {"Leaf" if ONLY_LEAF_LABELS else "All"} Labels Sorted by Frequency', y=1.5, pad=0)
     ax.set_xlabel('Predicted labels')
     ax.set_ylabel('Ground truth labels')
     ax.xaxis.set_label_position('top')

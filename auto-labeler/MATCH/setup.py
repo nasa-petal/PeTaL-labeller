@@ -2,7 +2,7 @@
     setup.py
 
     Run MATCH with PeTaL data.
-    Last modified on 14 July 2021.
+    Last modified on 17 August 2021.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -44,7 +44,8 @@ def setup(verbose):
         if verbose:
             logger.info("Downloading the PeTaL dataset with pretrained embeddings.")
 #       url = "https://drive.google.com/uc?id=1yYHYpmwsgQMI1-5HfY-QVOxRi8JQQ4v4" # PeTaL_20210720
-        url = "https://drive.google.com/uc?id=1dTA7h0KAf1bBU40Anpfjg_VMJ_I4JXUQ" # PeTaL_golden_20210723
+#       url = "https://drive.google.com/uc?id=1dTA7h0KAf1bBU40Anpfjg_VMJ_I4JXUQ" # PeTaL_golden_20210723
+        url = "https://drive.google.com/uc?id=1MbmyMzUkd-ke4Tnl-scTuspPmnWcRb6x" # PeTaL_20210817
         output = "PeTaL.tar.gz"
         gdown.download(url, output, quiet=not verbose)
         os.system("tar -xvf PeTaL.tar.gz -C src/MATCH")

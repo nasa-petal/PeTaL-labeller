@@ -4,9 +4,38 @@
     Run MATCH with PeTaL data.
     Last modified on 10 August 2021.
 
+    DESCRIPTION
+
+        Produces matplotlib plots based on markdown tables in results folder.
+        The results folder ought to contain:
+        - ablations_from_full.txt
+        - ablations_from_none.txt
+        - augment.txt
+        - batch_size_test.txt
+        - learning_rate.txt
+        - mesh_size_test.txt
+        - old_ablations_from_full.txt
+        - old_ablations_from_none.txt
+        - size_test.txt
+        - weight_decay.txt
+
+    OPTIONS
+
+        -r, --results PATH/TO/results
+            Path of results folder.
+        -p, --plots PATH/TO/plots
+            Path of plots folder.
+        -v, --verbose
+            Enables verbose output.
+
     USAGE
 
         python3 perf_plots.py -r ../experiment_data/results -p ../plots --verbose
+
+    NOTES
+        
+        Not a very extensible script -- it plots these plots and these plots only
+        but it does them well.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''

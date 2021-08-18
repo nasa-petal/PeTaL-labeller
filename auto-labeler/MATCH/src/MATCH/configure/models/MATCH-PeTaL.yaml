@@ -5,7 +5,7 @@ model:
   n_layers: 3
   n_probes: 8
   n_aheads: 2
-  intermediate_size: 400
+  intermediate_size: 800
   dropout: 0.1
   src_max_len: 500
 
@@ -15,6 +15,10 @@ train:
   nb_epoch: 1000
   swa_warmup: 4
   early: 25
+  learning_rate: 0.002
+  weight_decay: 0
+  beta1: 0.9
+  beta2: 0.999
 
 valid:
   batch_size: 8
@@ -22,4 +26,4 @@ valid:
 predict:
   batch_size: 8
 
-path: PeTaL/models
+path: PeTaL/models  
