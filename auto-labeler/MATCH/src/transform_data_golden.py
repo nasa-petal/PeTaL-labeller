@@ -27,6 +27,7 @@ import logging
 @click.option('--no-level2', type=click.BOOL, is_flag=True, default=False, help='Do not include level 2 labels.')
 @click.option('--no-level3', type=click.BOOL, is_flag=True, default=False, help='Do not include level 3 labels.')
 @click.option('--include-labels-in-features', type=click.BOOL, is_flag=True, default=False, help='Include labels in train_texts.txt and test_texts.txt.')
+@click.option('--infer-mode', '-i', type=click.BOOL, is_flag=True, default=False, help='Inference mode.')
 @click.option('-v', '--verbose', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
 def main(prefix,
@@ -43,6 +44,7 @@ def main(prefix,
         no_level2=False,
         no_level3=False,
         include_labels_in_features=False,
+        infer_mode=False,
         verbose=False):
     """Transforms newline-delimited json files into MATCH-compatible text files.
 
@@ -62,12 +64,13 @@ def main(prefix,
         no_level3 (bool, optional): Whether to omit level 3 labels. Defaults to False.     
         include_labels_in_features (bool, optional): Whether to include labels in the text.
             The only reason you might want to do this is to see if MATCH can learn
-            an identity function, copying input over to output. It can. Defaults to False.  
+            an identity function, copying input over to output. It can. Defaults to False. 
+        infer_mode (bool): Whether to run in inference mode. 
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
     transform_data(prefix, dataset, no_mag, no_mesh, no_venue, no_author, no_reference, no_text,
-        no_title, no_abstract, no_level1, no_level2, no_level3, include_labels_in_features, verbose)
+        no_title, no_abstract, no_level1, no_level2, no_level3, include_labels_in_features, infer_mode, verbose)
 
 
 def transform_data(prefix,
@@ -84,6 +87,7 @@ def transform_data(prefix,
         no_level2=False,
         no_level3=False,
         include_labels_in_features=False,
+        infer_mode=False,
         verbose=False):
     """Transforms newline-delimited json files into MATCH-compatible text files.
 
@@ -104,6 +108,7 @@ def transform_data(prefix,
         include_labels_in_features (bool, optional): Whether to include labels in the text.
             The only reason you might want to do this is to see if MATCH can learn
             an identity function, copying input over to output. It can. Defaults to False.  
+        infer_mode (bool): Whether to run in inference mode.
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
@@ -111,12 +116,19 @@ def transform_data(prefix,
         level=logging.DEBUG,
         format="[%(asctime)s:%(name)s] %(message)s"
     )
-    logger = logging.getLogger("transform_data_golden")    
+    logger = logging.getLogger("transform_data_golden") 
 
-    for src_json, dst_txt, file_mode in zip(
-            ['train', 'dev', 'test'],
-            ['train', 'train', 'test'],
-            ['w', 'a', 'w']):
+    zip_options = zip(
+        ['test'],
+        ['test'],
+        ['w']
+    ) if infer_mode else zip(
+        ['train', 'dev', 'test'],
+        ['train', 'train', 'test'],
+        ['w', 'a', 'w']
+    )
+
+    for src_json, dst_txt, file_mode in zip_options:
         dataset_path = os.path.join(prefix, dataset, f"{src_json}.json")
         texts_path = os.path.join(prefix, dataset, f"{dst_txt}_texts.txt")
         labels_path = os.path.join(prefix, dataset, f"{dst_txt}_labels.txt")
@@ -161,7 +173,7 @@ def transform_data(prefix,
                     (data['level1'] if data['level1'] and not no_level1 else [])
                     + (data['level2'] if data['level2'] and not no_level2 else [])
                     + (data['level3'] if data['level3'] and not no_level3 else [])
-                ) if not data['label'] else data['label']
+                ) if not 'label' in data else data['label']
                 label = ' '.join(labels)
 
                 if include_labels_in_features:
