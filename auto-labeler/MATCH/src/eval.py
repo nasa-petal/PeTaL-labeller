@@ -73,6 +73,16 @@ def run_eval(cnf, infer_mode, verbose):
         reg=0
     )
 
+    ########################################
+    # determine how many papers have labels
+    ########################################
+
+    with open(f"{DATASET}/test_labels.txt") as fin:
+        test_labels = [line.strip() for line in fin]
+        num_papers = len(test_labels)
+        num_with_labels = len([label for label in test_labels if label])
+        logger.info(f"Of {num_papers} papers, {num_with_labels}, or {100 * num_with_labels / num_papers :2.1f}%, have labels.")
+
     sample = eval_cnf['sample']
 
     if sample:
@@ -105,8 +115,11 @@ def run_eval(cnf, infer_mode, verbose):
             print(f"TEXT: {text_tokens_str} ")
 
             actual_labels = targets[idx] 
-            actual_labels_str = ', '.join(actual_labels)
-            print(f"ACTUAL LABELS: {actual_labels_str}")
+            if len(actual_labels) == 0:
+                print('ACTUAL LABELS: (none)')
+            else:
+                actual_labels_str = ', '.join(actual_labels)
+                print(f"ACTUAL LABELS: {actual_labels_str}")
 
             if criterion == 'threshold':
                 top_k = np.argmax(res_scores[idx] < threshold) # top_k becomes the number of labels scoring above the threshold
@@ -120,6 +133,11 @@ def run_eval(cnf, infer_mode, verbose):
             print("---")
 
         logger.info("End of prediction samples.")
+
+    if num_with_labels == 0:
+        logger.info("Because no papers have labels, the following statistics are expected to be zero.")
+    elif num_with_labels < num_papers:
+        logger.info(f"Because only {100 * num_with_labels / num_papers :2.1f}% of papers have labels, the following statistics may not be reliable.")
 
     evaluation_main.callback(
         results=f"{DATASET}/results/{MODEL}-{DATASET}-labels.npy",

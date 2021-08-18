@@ -52,7 +52,7 @@ Stats = namedtuple("Stats", "threshold topk precision recall f1")
 @click.command()
 @click.option('--match', '-m', 'match_path', type=click.Path(exists=True), help='Path of MATCH folder.')
 @click.option('--plots', '-p', 'plots_path', type=click.Path(exists=True), help='Path of plots folder.')
-@click.option('--dataset', '-m', 'dataset', default='PeTaL', help='Name of dataset, e.g., "PeTaL".')
+@click.option('--dataset', '-d', 'dataset', default='PeTaL', help='Name of dataset, e.g., "PeTaL".')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
 def main(match_path, plots_path, dataset, verbose):
@@ -68,7 +68,7 @@ def main(match_path, plots_path, dataset, verbose):
         level=logging.INFO,
         format="[%(asctime)s:%(name)s] %(message)s"
     )
-    PRlogger = logging.getLogger("P&R")  
+    PRlogger = logging.getLogger("P&R") 
 
     DATASET = dataset
     MODEL = 'MATCH'
