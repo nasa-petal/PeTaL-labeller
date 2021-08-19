@@ -13,6 +13,8 @@ augment:
   prefix: MATCH/PeTaL
   factor: 1
   balance_aware: False
+  alpha: 0.7
+  beta: 1
 
 transform:
   prefix: MATCH

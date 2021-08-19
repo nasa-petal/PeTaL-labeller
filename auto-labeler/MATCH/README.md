@@ -14,7 +14,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify PeTaL data according to the PeTaL taxonomy.
 
-This README was last updated on 18 August 2021.
+This README was last updated on 19 August 2021.
 
 ## <a name="contents"></a> What are all these files? 
 

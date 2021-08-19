@@ -14,7 +14,7 @@
 
 This directory contains the source files for running MATCH on PeTaL data.
 
-This README was last updated on 9 August 2021.
+This README was last updated on 19 August 2021.
 
 ## <a name='files'></a> What are all these files?
 
