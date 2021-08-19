@@ -2,7 +2,87 @@
 	Split.py
 
     Run MATCH with PeTaL data.
-    Last modified on 9 August 2021.
+    Last modified on 18 August 2021.
+
+	DESCRIPTION
+
+        Split.py performs a training-validation test split on the dataset.
+		For example, it can take filtered.json
+
+        - MATCH/
+          - PeTaL/
+            - filtered.json
+
+		and produce files
+
+        - MATCH/
+          - PeTaL/
+            - filtered.json
+			- train.json (NEW)
+			- dev.json (NEW)
+			- test.json (NEW)
+        
+        These three files, {train|dev|test}.json, are merely partitions of the dataset
+		with the exception that they are now in newline-delimited json format. That is,
+		filtered.json, a json array, looks like this:
+
+			[
+				{'paper': 2103410568, "mag": ["bubble nest", "nest", "mixing", ...], ...},
+				{"paper": 2138292607, "mag": ["sunset", "earth s magnetic field", ...], ...},
+				...
+			]
+
+		but train.json looks like this:
+
+			{'paper': 2103410568, "mag": ["bubble nest", "nest", "mixing", ...], ...}
+			{"paper": 2138292607, "mag": ["sunset", "earth s magnetic field", ...], ...}
+			...
+
+		Additionally, it removes the labels in the validation and test sets that do not
+		appear in the training set.
+
+    OPTIONS
+
+		-p, --prefix
+			Path from current working directory to directory containing dataset.
+			Default: MATCH/PeTaL
+		-d, --dataset
+			Filename of newline-delimited json dataset.
+			Default: filtered.json
+		--train
+			Proportion, from 0.0 to 1.0, of dataset used for training.
+			Default: 0.8
+		--dev
+			Proportion, from 0.0 to 1.0, of dataset used for validation.
+			Default: 0.1
+		--skip
+			Number of training examples by which to rotate the dataset
+			(e.g., for cross-validation).
+			Default: 0
+		--tot
+			Total number of examples to use (defaults to whole dataset).
+			Default: 0 (zero means use the whole dataset)
+		--infer-mode
+			Enable inference mode. Will just copy the whole dataset to test.json
+			directly.
+			Default: False
+	    -v, --verbose
+            Enable verbose output
+
+    USAGE
+
+        python3 Split.py [--prefix MATCH/PeTaL] [--dataset filtered.json] [--verbose]
+
+    NOTES
+
+        preprocess.py calls Split.py, passing in options in config.yaml.
+		Input validation checks will throw an error and return if
+			train < 0
+			dev < 0
+			train + dev > 0
+			tot < 0
+		If train.json, dev.json, or test.json already exist, they will be
+		overwritten during Split.py.
 
 	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -16,7 +96,7 @@ from utils import extract_labels
 
 @click.command()
 @click.option('--prefix', default='MATCH/PeTaL', help='Path from current working directory to directory containing dataset.')
-@click.option('--dataset', default='golden.json', help='Filename of newline-delimited json dataset.')
+@click.option('--dataset', default='filtered.json', help='Filename of newline-delimited json dataset.')
 @click.option('--train', default=0.8, type=click.FLOAT, help='Proportion, from 0.0 to 1.0, of dataset used for training.')
 @click.option('--dev', default=0.1, type=click.FLOAT, help='Proportion, from 0.0 to 1.0, of dataset used for validation.')
 @click.option('--skip', default=0, type=click.INT, help='Number of training examples by which to rotate the dataset (e.g., for cross-validation).')
@@ -46,6 +126,15 @@ def main(prefix='MATCH/PeTaL',
 	"""	
 	split(prefix, dataset, train, dev, skip, tot, infer_mode, verbose)
 
+########################################
+#
+# NOTE
+#   main just calls split
+#   main is for Click to transform this file into a command-line program
+#   split is for other files to import if they need
+#
+########################################
+
 def split(prefix='MATCH/PeTaL',
 		dataset='cleaned_lens_output.json',
 		train=0.8,
@@ -73,10 +162,36 @@ def split(prefix='MATCH/PeTaL',
 	)
 	logger = logging.getLogger("Split")
 
+	########################################
+	#
+	# INPUT VALIDATION CHECKS
+	#
+	########################################
+
 	dataset_path = os.path.join(prefix, dataset)
 	if not os.path.exists(dataset_path):
 		logger.error(f"ERROR: Unable to find dataset json file {os.path.join(os.getcwd(), dataset_path)}.")
 		return
+
+	if train < 0:
+		logger.error(f"ERROR: train proportion {train} is less than 0.")
+		return
+	elif dev < 0:
+		logger.error(f"ERROR: dev proportion {dev} is less than 0.")
+		return
+	elif train + dev <= 1:
+		logger.error(f"ERROR: train proportion {train} + dev proportion {dev} exceeds 1.")
+		return
+	elif tot < 0:
+		logger.error(f"ERROR: total parameter (tot) {tot} is less than 0.")
+		return
+
+	########################################
+	#
+	# INFERENCE MODE
+	# 	just copy the whole dataset into test.json 
+	#
+	########################################
 
 	if infer_mode:
 		infer_path = os.path.join(prefix, 'test.json')
@@ -88,6 +203,13 @@ def split(prefix='MATCH/PeTaL',
 			golden = json.loads(fin.read())
 			for js in golden:
 				fout.write(json.dumps(js)+'\n')
+
+	########################################
+	#
+	# NOT INFERENCE MODE: 
+	#	do train-validation-test split
+	#
+	########################################
 	
 	else:
 		train_path = os.path.join(prefix, 'train.json')
@@ -98,19 +220,29 @@ def split(prefix='MATCH/PeTaL',
 			logger.info(f"Transforming from {dataset_path} to {train_path}, {dev_path}, and {test_path}.")
 
 		train_proportion, dev_proportion = train, dev
+
 		train_labels = set()
 
+		########################################
 		# If the default value 0 was passed in as tot,
 		# count the number of examples in the dataset
 		# and use that as the total number of examples.
 		# Otherwise stick with the passed-in total argument,
 		# unless that exceeds the actual number of examples in the dataset.
+		########################################
 		with open(dataset_path) as fin:
 			num_examples = sum(1 for _ in json.loads(fin.read()))
 			if tot == 0 or tot > num_examples:
 				tot = num_examples
 		if verbose:
 			logger.info(f"{tot} total examples in dataset.")
+
+
+		########################################
+		# This part figures out what labels appear in the training set
+		# and then filters out all other labels from the dev and testing sets
+		# while constructing train.json, dev.json, and test.json.
+		########################################
 
 		with open(dataset_path) as fin, open(train_path, 'w') as fou1, open(dev_path, 'w') as fou2, open(test_path, 'w') as fou3:
 			golden = json.loads(fin.read())
@@ -120,10 +252,12 @@ def split(prefix='MATCH/PeTaL',
 					continue
 				# js = json.loads(line)
 			
+				######################################## moved to utils.extract_labels
 				# level1Labels = js['level1'] if js['level1'] else []
 				# level2Labels = js['level2'] if js['level2'] else []
 				# level3Labels = js['level3'] if js['level3'] else []
 				# all_labels = level1Labels + level2Labels + level3Labels
+				########################################
 
 				all_labels = extract_labels(js)
 
@@ -158,10 +292,12 @@ def split(prefix='MATCH/PeTaL',
 					break
 				# js = json.loads(line)
 			
+				######################################## moved to utils.extract_labels
 				# level1Labels = js['level1'] if js['level1'] else []
 				# level2Labels = js['level2'] if js['level2'] else []
 				# level3Labels = js['level3'] if js['level3'] else []
 				# all_labels = level1Labels + level2Labels + level3Labels
+				########################################
 
 				all_labels = extract_labels(js)
 

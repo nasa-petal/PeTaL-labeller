@@ -2,7 +2,102 @@
     preprocess.py
 
     Run MATCH with PeTaL data.
-    Last modified on 9 August 2021.
+    Last modified on 18 August 2021.
+
+    DESCRIPTION
+
+        preprocess.py runs the entire preprocessing suite:
+        - Split.py
+        - augment.py
+        - transform_data_golden.py
+        and some more preprocessing from MATCH/preprocess.py
+        prepared by the MATCH authors.
+
+        It begins with
+
+        - MATCH/
+          - PeTaL/
+            - filtered.json
+            - PeTaL.joint.emb
+            - taxonomy.txt
+        
+        It runs Split.py, augment.py, and transform_data_golden.py to produce
+
+        - MATCH/
+          - PeTaL/
+            - filtered.json
+            - PeTaL.joint.emb
+            - taxonomy.txt
+            - train.json (NEW)
+            - dev.json (NEW)
+            - test.json (NEW)
+            - train_texts.txt (NEW)
+            - train_labels.txt (NEW)
+            - test_texts.txt (NEW)
+            - test_labels.txt (NEW)
+        
+        and then runs MATCH/preprocess.py to produce
+
+        - MATCH/
+          - PeTaL/
+            - filtered.json
+            - PeTaL.joint.emb
+            - taxonomy.txt
+            - train.json
+            - dev.json
+            - test.json
+            - train_texts.txt
+            - train_labels.txt
+            - test_texts.txt
+            - test_labels.txt
+            - train_texts.npy (NEW)
+            - train_labels.npy (NEW)
+            - test_texts.npy (NEW)
+            - test_labels.npy (NEW) 
+            - emb_init.npy (NEW)
+            - vocab.npy (NEW)
+
+        train_texts.npy, train_labels.npy, test_texts.npy, and test_labels.npy
+        are their respective txt files encoded in numpy arrays.
+        vocab.npy is a list of tokens.
+        emb_init.npy is a list of token embeddings.
+        
+        At this point, the PeTaL/ directory has all it needs to begin training.
+
+    OPTIONS
+
+        -c, --cnf
+            Path of configure yaml.
+        -v, --verbose
+            Enable verbose output.
+            Defaults to False.
+        -s/-S, --split/--no-split
+            Perform train-dev-test split. (i.e., Split.py)
+            Defaults to True (-s, --split).
+        -a/-A, --augment/--no-augment
+            Augment training set. (i.e., augment.py)
+            Defaults to True (-a, --augment).
+        -t/-T, --transform/--no-transform
+            Perform transformation from json to text (i.e., transform.py)
+            Defaults to True (-t, --transform).
+        -p/-P, --preprocess/--no-preprocess
+            Perform preprocessing (i.e., MATCH/preprocessing.py)
+            Defaults to True (-p, --preprocess)
+        -i, --infer-mode
+            Enable inference mode.
+            Defaults to False.
+        --remake-vocab-file
+            Force vocab.npy and emb_init.npy to be recomputed.
+            Occasionally this is necessary, especially if you have changed the dataset.
+            Defaults to False.
+
+    USAGE
+
+        preprocess.py --cnf config.yaml [--verbose]
+
+    NOTES
+
+        config.yaml holds options for all of the scripts that preprocess.py calls.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -56,6 +151,15 @@ def main(cnf_path,
     cnf = yaml.load(Path(cnf_path))
 
     preprocess(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, infer_mode, remake_vocab_file)
+
+########################################
+#
+# NOTE
+#   main just calls preprocess
+#   main is for Click to transform this file into a command-line program
+#   preprocess is for other files to import if they need
+#
+########################################
 
 def preprocess(cnf,
         verbose=False,

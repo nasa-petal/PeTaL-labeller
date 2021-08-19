@@ -2,7 +2,38 @@
 	filter.py
 
     Run MATCH with PeTaL data.
-    Last modified on 12 August 2021.
+    Last modified on 18 August 2021.
+
+    DESCRIPTION
+
+        filter.py filters out biomimicry papers from an input dataset
+        (e.g., golden.json) to produce a smaller output dataset
+        (e.g., filtered.json).
+
+        Currently the filter only allows papers which
+        - are biomimicry papers
+        - have labels.
+
+        To change the filter, modify the code indicated by the comment
+        # TO CHANGE THE FILTER
+
+    OPTIONS
+
+        -i, --input-path
+            Path to input json dataset (e.g., golden.json.)
+            Required, and must exist.
+        -o, --output-path
+            Path to output json dataest (e.g., filtered.json.)
+            Required
+        --verbose
+            Enable verbose output.
+            Default: False.
+
+    USAGE
+
+        python filter.py -i MATCH/PeTaL/golden.json -o MATCH/PeTaL/filtered.json
+
+    NOTES
 
 	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -42,6 +73,14 @@ def main(input_path, output_path, verbose=False):
 
         out_set = []
         for js in in_set:
+            ########################################
+            # TO CHANGE THE FILTER
+            #
+            # Currently filters out all non-biomimicry papers
+            # and all papers without labels.
+            #
+            # Modify this if-statement if you want a different filter.
+            ########################################
             if js['isBiomimicry'] == 'Y' and js['level1']:
                 out_set.append(js)
 

@@ -4,6 +4,58 @@
     Run MATCH with PeTaL data.
     Last modified on 18 August 2021.
 
+    DESCRIPTION
+
+        augment.py performs _data augmentation_ on train.json. It takes
+    
+        - MATCH/
+          - PeTaL/
+        	- train.json
+        
+        and produces
+
+        - MATCH/
+          - PeTaL/
+        	- train.json (MODIFIED)
+
+        To perform data augmentation, augment.py takes each paper and 
+        _augments_ it by a factor N. That is, it produces N - 1 copies
+        of the paper and _perturbs_ them slightly by replacing random
+        words in the title and the abstract by synonyms (based on the
+        WordNet graph).
+
+        If you are feeling adventurous you can turn on _balance-aware_
+        data augmentation, which changes N for each paper based on how
+        common or rare the paper's labels are. See the rareness_score
+        function for how this calculation would happen.
+
+    OPTIONS
+
+        -d, --dataset-path
+            Path to training set.
+        -f, --factor
+            Factor by which to augment training set size.
+            Default: 2.
+        -b, --balance-aware
+            Use balance-aware data augmentation.
+            Default: False
+        -v, --verbose
+            Enable verbose output.
+            Default: False
+
+    USAGE
+
+        python3 augment.py --dataset-path MATCH/PeTaL/train.json.
+
+    NOTES
+
+        Called by preprocess.py, which is called by run_MATCH_with_PeTaL.py.
+        Does not run if INFERENCE MODE is on in run_MATCH_with_PeTaL_data.py.
+
+        We found that dataset augmentation (and balance-aware dataset augmentation)
+        preliminary does not help. In config.yaml, we have set augmentation factor
+        to 1, which basically tells augment.py to skip.
+
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
 
@@ -42,6 +94,14 @@ def main(dataset_path,
 
     augment(dataset_path, factor, balance_aware, verbose)
 
+########################################
+#
+# NOTE
+#   main just calls augment
+#   main is for Click to transform this file into a command-line program
+#   augment is for other files to import if they need
+#
+########################################
 
 def augment(dataset_path,
         factor,
@@ -149,6 +209,16 @@ def rareness_score(paper, label_count):
 
 
 def get_label_count(dataset):
+    """Computes the label count dictionary: labels to their occurrence counts
+    inside the dataset.
+
+    Args:
+        dataset (list(dict(str))): A dataset, i.e., a list of json objects fitting
+            the Golden Dataset Schema.
+
+    Returns:
+        dict(str): Labels mapped to the amount of times they occur in the dataset.
+    """
     label_count = defaultdict(int)
     for label_list in [extract_labels(js) for js in dataset]:
         for label in label_list:
@@ -158,6 +228,17 @@ def get_label_count(dataset):
 
 
 def analyze_for_balance_awareness(dataset):
+    """Computes minimum rareness score, maximum rareness score,
+    and spread factor (the second divided by the first).
+    The spread factor is the most copies by which a paper can be augmented.
+
+    Args:
+         dataset (list(dict(str))): A dataset, i.e., a list of json objects fitting
+            the Golden Dataset Schema.
+
+    Returns:
+        tuple(min_rareness, max_rareness, spread_factor): Those three quantities.
+    """
     label_count = get_label_count(dataset)
     rarenesses = [rareness_score(paper, label_count) for paper in dataset]
     filtered_rarenesses = [x for x in rarenesses if x > 0]

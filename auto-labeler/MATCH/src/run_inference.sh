@@ -1,5 +1,26 @@
 #!/usr/bin/env bash
 
+########################################
+# 
+# ./run_inference.sh
+#   takes one argument
+#   and that is a path of the dataset on which to run inference.
+#   This path must conform to the golden dataset schema.
+#
+#   For example, you would run the following command in bash
+#
+#       ./run_inference MATCH/PeTaL/golden.json
+#
+#   The predictions, as well as their confidence scores
+#   are to be found in
+#     $MODEL/$DATASET/results/$MODEL-$DATASET-labels.npy
+#     $MODEL/$DATASET/results/$MODEL-$DATASET-scores.npy
+#   that is to say,
+#     MATCH/PeTaL/results/MATCH-PeTaL-labels.npy
+#     MATCH/PeTaL/results/MATCH-PeTaL-scores.npy
+#
+########################################
+
 DATASET=PeTaL
 MODEL=MATCH
 

@@ -2,7 +2,111 @@
     transform_data_golden.py
 
     Run MATCH with PeTaL data.
-    Last modified on 26 July 2021.
+    Last modified on 18 August 2021.
+
+    DESCRIPTION
+
+        transform_data_golden.py transforms the files that Split.py
+        produced, that is:
+
+        - MATCH/
+          - PeTaL/
+			- train.json
+			- dev.json
+			- test.json
+
+        into token sequence text files and label files:
+
+        - MATCH/
+          - PeTaL/
+        	- train.json
+			- dev.json
+			- test.json
+			- train_texts.txt (NEW)
+            - train_labels.txt (NEW)
+			- test_texts.txt (NEW)
+			- test_labels.txt (NEW)
+
+        train.json and dev.json go into train_texts.txt, while test.json
+        goes into test_texts.txt.
+
+        train_texts.txt and test_text.txt are text files whose lines are each
+        sequences of tokens, beginning with metadata tokens (MAG, VENUE, AUTHOR, REFP)
+        and then continuing with title and abstract text tokens.
+
+            MAG_bubble_nest ... REFP_1794681095 building home foam tungara frog ...
+            MAG_sunset ... REFP_2040802987 nocturnal mammal greater mouse eared bat ...
+        
+        train_labels.txt and test_labels.txt are text files whose lines are each
+        a space-separated list of biomimicry functions:
+
+            physically_assemble/disassemble protect_from_harm ...
+            sense_send_or_process_information sense_signals/environmental_cues ...
+
+    USAGE
+
+        python3 transform_data_golden.py [--prefix MATCH] [--dataset PeTaL] [--verbose]
+
+    OPTIONS
+
+        --prefix
+            Path from current working directory to MATCH directory.
+            Default: MATCH
+        --dataset
+            Name of dataset (the directory within MATCH/).
+            Default: PeTaL
+        --no-mag
+            Whether to omit MAG field of study metadata.
+            Default: False
+        --no-mesh
+            Whether to omit MeSH term metadata.
+            Default: False
+        --no-venue
+            Whether to omit venue metadata.
+            Default: False
+        --no-author
+            Whether to omit author metadata.
+            Default: False
+        --no-reference
+            Whether to omit references metadata.
+            Default: False
+        --no-text
+            Whether to omit text.
+            Default: False
+        --no-title
+            Whether to omit title.
+            Default: False
+        --no-abstract
+            Whether to omit abstract.
+            Default: False
+        --no-level1
+            Whether to omit level 1 labels.
+            Default: False
+        --no-level2
+            Whether to omit level 2 labels.
+            Default: False
+        --no-level3
+            Whether to omit level 3 labels.
+            Default: False
+        --include-labels-in-features
+            Whether to include labels in the text.
+            The only reason you might want to do this is to see if MATCH can learn
+            an identity function, copying input over to output. It can, to a certain extent.
+            Default: False
+        --infer_mode
+            Enable inference mode.
+            Without this, transform_data_golden.json considers train.json, dev.json, and test.json
+            With this, transfomr_data_golden.json considers only test.json.
+            Default: False
+        --verbose
+            Enable verbose output. 
+            Default: False
+
+    NOTES
+    
+        There may also be another file, transform_data_PeTaL.py, in this directory.
+        This script strictly supersedes that one.
+
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -72,6 +176,14 @@ def main(prefix,
     transform_data(prefix, dataset, no_mag, no_mesh, no_venue, no_author, no_reference, no_text,
         no_title, no_abstract, no_level1, no_level2, no_level3, include_labels_in_features, infer_mode, verbose)
 
+########################################
+#
+# NOTE
+#   main just calls transform_data
+#   main is for Click to transform this file into a command-line program
+#   transform_data is for other files to import if they need
+#
+########################################
 
 def transform_data(prefix,
         dataset,
@@ -116,7 +228,19 @@ def transform_data(prefix,
         level=logging.DEBUG,
         format="[%(asctime)s:%(name)s] %(message)s"
     )
-    logger = logging.getLogger("transform_data_golden") 
+    logger = logging.getLogger("transform_data_golden")
+
+    ########################################
+    #
+    # INFERENCE vs. NOT INFERENCE MODE
+    #   In zip_options, each item in each list
+    #   represents one file to process.
+    #   If in INFERENCE MODE,
+    #     only work with test.json
+    #   but in NOT INFERENCE MODE
+    #     work with train.json, dev.json, and test.json
+    #
+    ########################################
 
     zip_options = zip(
         ['test'],
@@ -128,6 +252,10 @@ def transform_data(prefix,
         ['w', 'a', 'w']
     )
 
+    ########################################
+    # Loop through json sources.
+    ########################################
+
     for src_json, dst_txt, file_mode in zip_options:
         dataset_path = os.path.join(prefix, dataset, f"{src_json}.json")
         texts_path = os.path.join(prefix, dataset, f"{dst_txt}_texts.txt")
@@ -138,6 +266,10 @@ def transform_data(prefix,
         with open(dataset_path) as fin, open(texts_path, file_mode) as fou1, open(labels_path, file_mode) as fou2:
             for line in fin:
                 data = json.loads(line)
+
+                ########################################
+                # Construct the concatenated token sequence.
+                ########################################
                 
                 text = ''
                 if 'mag' in data and not no_mag:
@@ -167,8 +299,12 @@ def transform_data(prefix,
                     text += abstract + ' '
                 # if 'text' in data and not no_text:
                 #     text += data['text']
-
                 # label = ' '.join(data['label'])
+
+                ########################################
+                # Construct the label list by joining all the labels on all levels.
+                ########################################
+
                 labels = (
                     (data['level1'] if data['level1'] and not no_level1 else [])
                     + (data['level2'] if data['level2'] and not no_level2 else [])

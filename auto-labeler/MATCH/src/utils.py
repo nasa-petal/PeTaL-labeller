@@ -4,6 +4,24 @@
     Run MATCH with PeTaL data.
     Last modified on 9 August 2021.
 
+    DESCRIPTION
+
+        Just a utility file containing one lonesome function
+        shared by a few of the files in the MATCH-PeTaL pipeline.
+
+    OPTIONS
+
+        There are no options because you're not going to call this
+        from the command line.
+
+    USAGE
+
+        Trust me, you're not going to call this from the command line.
+
+    NOTES
+
+        I have no further notes for this file.
+
 	Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
 

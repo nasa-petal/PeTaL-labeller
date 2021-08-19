@@ -107,6 +107,7 @@ You can redirect output to a file that `../analysis/analyse_MATCH_output.py` can
 - `gdown` for downloading from Google Drive.
 - `json` for json data interpretation.
 - `ruamel.yaml` for YAML config file interpretation.
+- `nlpaug` and `nltk` for text data augmentation.
 - `os`, `sys`, `pathlib`, and other Python system-wrangling modules.
 
 ## Contact

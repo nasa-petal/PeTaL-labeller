@@ -2,7 +2,82 @@
     eval.py
 
     Run MATCH with PeTaL data.
-    Last modified on 17 August 2021.
+    Last modified on 18 August 2021.
+
+    DESCRIPTION
+
+        eval.py runs the model evaluation portion of MATCH,
+        mostly adapting MATCH/main.py --mode eval
+        prepared by the MATCH authors.
+
+        It begins with
+
+        - MATCH/
+          - PeTaL/
+            - models/ (NEW)
+              - MATCH-PeTaL (NEW)
+            - test_texts.npy
+            - test_labels.npy 
+            - emb_init.npy
+            - vocab.npy
+            - labels_binarizer
+
+        and ends up with
+
+        - MATCH/
+          - PeTaL/
+            - models/
+              - MATCH-PeTaL
+            - results/ (NEW)
+              - MATCH-PeTaL-labels.npy (NEW)
+              - MATCH-PeTaL-scores.npy (NEW)
+            - test_texts.npy
+            - test_labels.npy 
+            - emb_init.npy
+            - vocab.npy
+            - labels_binarizer
+
+        The exciting addition is the results directory, which contains
+        MATCH-PeTaL-labels.npy
+            which holds the top 100 labels predicted by MATCH for each token sequence
+        MATCH-PeTaL-scores.npy
+            which holds the "confidence scores" associated with those top 100 labels
+        Both are numpy arrays and can be read with numpy.load(PATH, allow_pickle=True)
+
+        eval.py also prints out, for a few test samples:
+        - its first few text tokens
+        - the ground-truth labels associated with it
+        - the top labels MATCH predicted for it, and their confidence scores
+        The amount of test samples, text tokens, and predicted labels can be configured
+        in config.yaml.
+
+        You can either choose to see the top k predictions
+            (in config.yaml:) criterion: top_k
+        Or to see the predictions whose confidences exceed a threshold
+            (in config.yaml:) criterion: threshold
+
+        It also calls MATCH/evaluation.py to obtain the average precision and 
+        normalized discounted cumulative gain scores. These scores can be
+        collected and further analyzed.
+
+    OPTIONS
+
+        -c, --cnf
+            Path of configure yaml.
+        -i, --infer-mode
+            Enable inference mode.
+            Defaults to False.
+        -v, --verbose
+            Enable verbose output.
+            Defaults to False.
+
+    USAGE
+
+        eval.py --cnf config.yaml [--verbose]
+
+    NOTES
+
+        config.yaml holds eval.py configuration settings.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -36,6 +111,15 @@ def main(cnf_path, infer_mode, verbose):
     cnf = yaml.load(Path(cnf_path))
 
     run_eval(cnf, infer_mode, verbose)
+
+########################################
+#
+# NOTE
+#   main just calls run_eval
+#   main is for Click to transform this file into a command-line program
+#   run_Eval is for other files to import if they need
+#
+########################################
 
 def run_eval(cnf, infer_mode, verbose):
     """
@@ -82,6 +166,15 @@ def run_eval(cnf, infer_mode, verbose):
         num_papers = len(test_labels)
         num_with_labels = len([label for label in test_labels if label])
         logger.info(f"Of {num_papers} papers, {num_with_labels}, or {100 * num_with_labels / num_papers :2.1f}%, have labels.")
+
+    ########################################
+    # Sample some test papers
+    # and their predictions and confidences
+    # You can either choose to see the top k predictions
+    #   (criterion: top_k)
+    # Or to see the predictions whose confidences exceed a threshold
+    #   (criterion: threshold)
+    ########################################
 
     sample = eval_cnf['sample']
 
@@ -138,6 +231,10 @@ def run_eval(cnf, infer_mode, verbose):
         logger.info("Because no papers have labels, the following statistics are expected to be zero.")
     elif num_with_labels < num_papers:
         logger.info(f"Because only {100 * num_with_labels / num_papers :2.1f}% of papers have labels, the following statistics may not be reliable.")
+
+    ########################################
+    # Call MATCH/evaluation.py to get scores for test set.
+    ########################################
 
     evaluation_main.callback(
         results=f"{DATASET}/results/{MODEL}-{DATASET}-labels.npy",
