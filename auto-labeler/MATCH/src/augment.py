@@ -39,13 +39,19 @@
         -b, --balance-aware
             Use balance-aware data augmentation.
             Default: False
+        --alpha
+            alpha parameter in balance-aware data augmentation.
+            Default: 0.7
+        --beta
+            beta parameter in balance-aware data augmentation.
+            Default: 1
         -v, --verbose
             Enable verbose output.
             Default: False
 
     USAGE
 
-        python3 augment.py --dataset-path MATCH/PeTaL/train.json.
+        python3 augment.py --dataset-path MATCH/PeTaL/train.json
 
     NOTES
 
@@ -77,11 +83,15 @@ from utils import extract_labels
 @click.option('-d', '--dataset-path', type=click.Path(exists=True), required=True, help='Path to training set.')
 @click.option('-f', '--factor', type=click.INT, default=2, help='Factor by which to augment training set size.')
 @click.option('-b', '--balance-aware', type=click.BOOL, is_flag=True, default=False, required=False, help='Use balance-aware data augmentation.')
+@click.option('--alpha', type=click.FLOAT, default=0.7, help='Alpha parameter in balance-aware data augmentation.')
+@click.option('--beta', type=click.FLOAT, default=1, help='Beta parameter in balance-aware data augmentation.')
 @click.option('-v', '--verbose', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
 def main(dataset_path,
         factor=2,
         balance_aware=False,
+        alpha=0.7,
+        beta=1,
         verbose=False):
     """Augments a dataset in place using nlpaug.
 
@@ -89,10 +99,12 @@ def main(dataset_path,
         dataset (string): Path to training set.
         factor (int): Factor by which to augment training set size.
         balance_aware (bool): Whether to use balance-aware data augmentation (not fully tested yet).
+        alpha (float): Alpha parameter in balance-aware data augmentation.
+        beta (float): Beta parameter in balance-aware data augmentation.
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
-    augment(dataset_path, factor, balance_aware, verbose)
+    augment(dataset_path, factor, balance_aware, alpha, beta, verbose)
 
 ########################################
 #
@@ -106,14 +118,17 @@ def main(dataset_path,
 def augment(dataset_path,
         factor,
         balance_aware=False,
+        alpha=0.7,
+        beta=1,
         verbose=False):
     """Augments a dataset in place using nlpaug.
 
     Args:
         dataset (string): Path to training set.
         factor (int): Factor by which to augment training set size.
-        infer_mode (bool): Whether to run in inference mode.
         balance_aware (bool): Whether to use balance-aware data augmentation (not fully tested yet).
+        alpha (float): Alpha parameter in balance-aware data augmentation.
+        beta (float): Beta parameter in balance-aware data augmentation.
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
@@ -149,7 +164,7 @@ def augment(dataset_path,
     label_count = get_label_count(golden)
 
     if balance_aware:
-        min_rareness, max_rareness, spread_factor = analyze_for_balance_awareness(golden)
+        min_rareness, max_rareness, spread_factor = analyze_for_balance_awareness(golden, alpha, beta)
         if verbose:
             logger.info(f"Analyzing papers in {dataset_path} for balance-aware data augmentation.")
             logger.info(f"Minimum rareness score is {min_rareness}.")
@@ -166,7 +181,7 @@ def augment(dataset_path,
                     fout.write(json.dumps(js)+'\n')
                 else:
                     if balance_aware:
-                        relative_rareness = floor(rareness_score(js, label_count) / min_rareness)
+                        relative_rareness = floor(rareness_score(js, label_count, alpha, beta) / min_rareness)
                         if relative_rareness <= epoch:
                             continue
                     title = ' '.join(js['title'])
@@ -184,7 +199,7 @@ def augment(dataset_path,
         logger.info(f"Finish training set augmentation.")    
 
 
-def rareness_score(paper, label_count):
+def rareness_score(paper, label_count, alpha, beta):
     '''
         Computes a rareness score for a json paper.
 
@@ -192,20 +207,22 @@ def rareness_score(paper, label_count):
         Score =  | ------------------------------------------------------ |
                  \                 number of labels in paper              /
 
-    Params:
-        paper (Dict): a json dictionary, a paper from the golden dataset (or formatted as such)
+    Args:
+        paper (dict): a json dictionary, a paper from the golden dataset (or formatted as such)
+        label_count (dict(str)): Labels mapped to the amount of times they occur in the dataset.
+        alpha (float): Alpha parameter in balance-aware data augmentation.
+        beta (float): Beta parameter in balance-aware data augmentation.
     Returns:
         score (float): computed rareness score
 
     '''
-    ALPHA, BETA = 1, 1
     paper_labels = extract_labels(paper)
     if not paper_labels:
         return 0.0
     score = 0.0
     for paper_label in paper_labels:
-        score += (1 / label_count[paper_label]) ** ALPHA
-    return (score / len(paper_labels)) ** BETA
+        score += (1 / label_count[paper_label]) ** alpha
+    return (score / len(paper_labels)) ** beta
 
 
 def get_label_count(dataset):
@@ -215,6 +232,8 @@ def get_label_count(dataset):
     Args:
         dataset (list(dict(str))): A dataset, i.e., a list of json objects fitting
             the Golden Dataset Schema.
+        alpha (float): Alpha parameter in balance-aware data augmentation.
+        beta (float): Beta parameter in balance-aware data augmentation.
 
     Returns:
         dict(str): Labels mapped to the amount of times they occur in the dataset.
@@ -227,20 +246,21 @@ def get_label_count(dataset):
     return label_count
 
 
-def analyze_for_balance_awareness(dataset):
+def analyze_for_balance_awareness(dataset, alpha, beta):
     """Computes minimum rareness score, maximum rareness score,
     and spread factor (the second divided by the first).
     The spread factor is the most copies by which a paper can be augmented.
 
     Args:
-         dataset (list(dict(str))): A dataset, i.e., a list of json objects fitting
+        dataset (list(dict(str))): A dataset, i.e., a list of json objects fitting
             the Golden Dataset Schema.
+        
 
     Returns:
         tuple(min_rareness, max_rareness, spread_factor): Those three quantities.
     """
     label_count = get_label_count(dataset)
-    rarenesses = [rareness_score(paper, label_count) for paper in dataset]
+    rarenesses = [rareness_score(paper, label_count, alpha, beta) for paper in dataset]
     filtered_rarenesses = [x for x in rarenesses if x > 0]
     min_rareness = min(filtered_rarenesses)
     max_rareness = max(filtered_rarenesses)

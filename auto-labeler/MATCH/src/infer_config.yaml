@@ -7,7 +7,7 @@ split:
   train: 0
   dev: 0
   skip: 0
-#  tot: 1161
+  tot: 0
 
 augment:
   prefix: MATCH/PeTaL

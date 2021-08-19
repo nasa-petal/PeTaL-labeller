@@ -179,7 +179,7 @@ def split(prefix='MATCH/PeTaL',
 	elif dev < 0:
 		logger.error(f"ERROR: dev proportion {dev} is less than 0.")
 		return
-	elif train + dev <= 1:
+	elif train + dev >= 1:
 		logger.error(f"ERROR: train proportion {train} + dev proportion {dev} exceeds 1.")
 		return
 	elif tot < 0:

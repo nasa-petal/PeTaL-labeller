@@ -226,9 +226,10 @@ def preprocess(cnf,
             dataset_path=f"{augment_cnf['prefix']}/train.json",
             factor=augment_cnf['factor'],
             balance_aware=augment_cnf['balance_aware'],
+            alpha=augment_cnf['alpha'],
+            beta=augment_cnf['beta'],
             verbose=verbose
         )
-
     
     '''
         Transform data from json objects into txt sequences of tokens.

@@ -14,7 +14,7 @@
 
 This directory contains work done for investigating the use of the MATCH (https://github.com/yuzhimanhua/MATCH) algorithm to classify PeTaL data according to the PeTaL taxonomy.
 
-This README was last updated on 17 August 2021.
+This README was last updated on 18 August 2021.
 
 ## <a name="contents"></a> What are all these files? 
 
@@ -26,8 +26,11 @@ This README was last updated on 17 August 2021.
 - `src/` contains python source files and other source files needed for reproducing this work in a non-notebook environment. Probably the source of primary development from 2021-07-14 onward.
 - `Makefile` is a simple Makefile for building the setup and cleaning.
 - `README.md` is this (self-referential) document.
+- `files_outline.md` is an annotated diagram of the structure of this directory.
 - `requirements.txt` contains a list of required packages.
 - `setup.py`, for setting up preliminaries (i.e., downloading PeTaL).
+
+Each major directory (e.g. `src/`, `analysis/`, `experiment_data/`, ...) also has a `README.md` for its own contents. An annotated diagram of the structure of this directory may be found in [files_outline.md](files_outline.md).
 
 ## <a name="run"></a> How do I reproduce your results? 
 
@@ -82,6 +85,24 @@ python eval.py --cnf config.yaml [--verbose]
 where `[--verbose]` is an optional parameter.
 
 The trained model will appear in `src/MATCH/PeTaL/models/` and its predictions will appear in `src/MATCH/PeTaL/results/`. The top 5 predictions will also appear in `src/MATCH/predictions.txt` for each test example.
+
+For _much more_ detailed information visit [src/README.md](src/README.md) and the documentation at the beginning of each source file.
+
+#### Inference mode
+
+To run in _inference mode_, which skips the training portion of the pipeline, run
+
+```
+./run_inference.sh PATH/TO/DATASET.json
+```
+where `PATH/TO/DATASET.json` is a path to a dataset matching the golden dataset schema.
+
+Alternatively, you may run
+
+```
+python3 run_MATCH_with_PeTaL_data.py --infer-mode --cnf infer_config.yaml --verbose
+```
+where `infer.json` exists in `src/MATCH/PeTaL` and is a dataset matching the golden dataset schema.
 
 ### Running embedding pretraining
 
@@ -308,7 +329,9 @@ Labels are sorted by their frequency of occurrence in the dataset; labels at the
 - Investigate using just the [most common subset of labels](https://github.com/nasa-petal/PeTaL-labeller/issues/70) to see if MATCH does better on that, and write a [binary classifier to filter out the other labels](https://github.com/nasa-petal/PeTaL-labeller/issues/69).
 - Continue looking into [data augmentation techniques](https://github.com/nasa-petal/PeTaL-labeller/issues/65).
 - conda throws a non-fatal error at the beginning of training? Not sure why, but it still trains well.
+  - This error is thrown when `conda list` is run. There seem to be [problems with using conda and pip in concert](https://www.anaconda.com/blog/using-pip-in-a-conda-environment).
 - Figure out how to load MATCH with [pretrained weights](https://github.com/nasa-petal/PeTaL-labeller/issues/72).
+- Figure out how to save training checkpoints.
 
 ## <a name="contact"></a> Contact 
 
