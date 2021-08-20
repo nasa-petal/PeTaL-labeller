@@ -4,16 +4,19 @@ import argparse
 
 parser = argparse.ArgumentParser(description='main', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--dataset', default='PeTaL', choices=['MAG', 'MeSH', 'PeTaL'])
+parser.add_argument('--json-file', default='filtered.json')
 
 args = parser.parse_args()
-folder = '../'+args.dataset+'/'
+dataset = args.dataset
+json_file = args.json_file
+folder = '../'+dataset+'/'
 
 thrs = 5
 left = set()
 right = set()
 
 node2cnt = defaultdict(int)
-with open(folder+'golden.json') as fin:
+with open(folder+json_file) as fin:
 	golden = json.loads(fin.read())
 	# for idx, line in enumerate(fin):
 	for idx, js in enumerate(golden):
@@ -34,7 +37,7 @@ with open(folder+'golden.json') as fin:
 			V = 'VENUE_' + V0.replace(' ', '_')
 			node2cnt[V] += 1
 
-with open(folder+'golden.json') as fin, open('network.dat', 'w') as fout:
+with open(folder+json_file) as fin, open('network.dat', 'w') as fout:
 	golden = json.loads(fin.read())
 	# for idx, line in enumerate(fin):
 	for idx, js in enumerate(golden):

@@ -4,12 +4,55 @@
     Run MATCH with PeTaL data.
     Last modified on 16 July 2021.
 
+    DESCRIPTION
+
+        MATCH produces an output to stdout of the form
+
+        ```
+        TRAIN_SET_OPTIONS skip=N
+        ...
+        (STUFF)
+        ...
+        Precision@1,3,5: 0.7413793103448276 0.5718390804597702 0.4396551724137931
+        nDCG@1,3,5: 0.7413793103448276 0.6131173000787031 0.6022903445480057
+        ```
+
+        analyse_MATCH_output.py takes the TRAIN_SET_OPTIONS string, skip number,
+        precisions, and nDCGs, and computes, for each distinct TRAIN_SET_OPTIONS:
+        - P@1 mean and standard deviation
+        - P@3 mean and standard deviation
+        - P@5 mean and standard deviation
+        - nDCG@3 mean and standard deviation
+        - nDCG@5 mean and standard deviation
+
+        It produces a markdown-formatted table somewhat like the following.
+
+        | Train set options | P@1=nDCG@1 | P@3 | P@5 | nDCG@3 | nDCG@5 |
+        | --- | --- | --- | --- | --- | --- |
+        | all | 0.689 ± 0.048 | 0.541 ± 0.041 | 0.426 ± 0.026 | 0.581 ± 0.040 | 0.575 ± 0.033 |
+        | no_mag | 0.692 ± 0.032 | 0.546 ± 0.039 | 0.423 ± 0.033 | 0.586 ± 0.038 | 0.575 ± 0.042 |
+        | no_venue | 0.660 ± 0.088 | 0.508 ± 0.064 | 0.403 ± 0.050 | 0.548 ± 0.070 | 0.542 ± 0.067 |
+        | no_author | 0.688 ± 0.045 | 0.541 ± 0.039 | 0.428 ± 0.026 | 0.582 ± 0.039 | 0.577 ± 0.034 |
+        | no_ref | 0.696 ± 0.044 | 0.528 ± 0.036 | 0.420 ± 0.021 | 0.573 ± 0.036 | 0.570 ± 0.028 |
+        | no_text | 0.659 ± 0.032 | 0.527 ± 0.030 | 0.417 ± 0.023 | 0.563 ± 0.031 | 0.559 ± 0.028 |
+
+        which can then be plotted by perf_plots.py.
+
+    OPTIONS
+
+        -f, --file LOG_FILE_NAME
+            path to input log file (must exist)
+
     USAGE
 
         python3 analyse_MATCH_output.py -f LOG_FILE_NAME
 
     or in context, if you want to strip out the boring bits of the log file
     before you save it (you don't have to do this)
+
+        cd ../src
+        python3 xval_test.py -c config.yaml --k 10 -s STUDY_NAME --verbose | tee -a LOG_FILE_NAME
+        cd ../analysis
 
         python3 abbreviate_MATCH_output.py -i LOG_FILE_NAME -o ABBR_LOG_FILE_NAME
         python3 analyse_MATCH_output.py -f ABBR_LOG_FILE_NAME

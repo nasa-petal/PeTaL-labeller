@@ -1,8 +1,9 @@
 #!/bin/sh
 
 dataset=PeTaL
+json_file=filtered.json
 
-python Preprocess_golden.py --dataset $dataset
+python Preprocess_golden.py --dataset $dataset --json-file $json_file
 # python Preprocess_PeTaL.py --dataset $dataset
 
 # unzip eigen-3.3.3.zip

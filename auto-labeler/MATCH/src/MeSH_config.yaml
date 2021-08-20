@@ -1,0 +1,46 @@
+model: MATCH
+dataset: MeSH
+
+split:
+  prefix: MATCH/MeSH
+  dataset: MeSH.json
+  train: 0.8
+  dev: 0.1
+  skip: 0
+  tot: 10000
+
+augment:
+  prefix: MATCH/MeSH
+  factor: 1
+  balance_aware: False
+
+transform:
+  prefix: MATCH
+  dataset: MeSH
+  use_mag: True
+  use_mesh: True
+  use_venue: True
+  use_author: True
+  use_reference: True
+  use_text: True
+  use_title: True
+  use_abstract: True
+  use_level1: True
+  use_level2: True
+  use_level3: True
+  include_labels_in_features: False
+
+preprocess:
+  prefix: MATCH
+  vocab_size: 500000
+  max_len: 500
+
+train:
+  prefix: MATCH
+  hypernymy_regularization: True
+  leaf_labels_only: False
+  notes: ''
+
+wandb:
+  project: MATCH
+  group: MeSH_20210815

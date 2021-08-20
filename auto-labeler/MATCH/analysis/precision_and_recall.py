@@ -2,7 +2,32 @@
     precision_and_recall.py
 
     Run MATCH with PeTaL data.
-    Last modified on 23 July 2021.
+    Last modified on 10 August 2021.
+
+    DESCRIPTION
+
+        precision_and_recall.py produces three plots from results in MATCH/PeTaL.
+        These three plots appear in plots/YYYYMMDD_precision_recall and are
+        as follows:
+
+        - HHMMSS_labels_MATCH_PeTaL.png, which varies threshold and plots number
+        of labels predicted. Higher threshold means fewer labels get past the threshold.
+        - HHMMSS_prc_MATCH_PeTaL.png, which plots a precision-recall curve by varying
+        the threshold. As threshold decreases from 1 to 0, precision goes down but recall
+        goes up (because more labels get past the threshold).
+        - HHMMSS_prf1_MATCH_PeTaL.png, which plots how precision, recall, and F1 score
+        vary as threshold varies from 0 to 1.
+
+    OPTIONS
+
+        -m, --match PATH/TO/MATCH
+            Path of MATCH folder.
+        -p, --plots PATH/TO/plots
+            Path of plots folder.
+        -d, --dataset PeTaL
+            Name of dataset, e.g., "PeTaL".
+        -v, --verbose
+            Enable verbosity.
 
     USAGE
 
@@ -27,9 +52,10 @@ Stats = namedtuple("Stats", "threshold topk precision recall f1")
 @click.command()
 @click.option('--match', '-m', 'match_path', type=click.Path(exists=True), help='Path of MATCH folder.')
 @click.option('--plots', '-p', 'plots_path', type=click.Path(exists=True), help='Path of plots folder.')
+@click.option('--dataset', '-d', 'dataset', default='PeTaL', help='Name of dataset, e.g., "PeTaL".')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
-def main(match_path, plots_path, verbose):
+def main(match_path, plots_path, dataset, verbose):
     """Plots precision and recall and other statistics on graphs.
 
     Args:
@@ -39,12 +65,12 @@ def main(match_path, plots_path, verbose):
     """
 
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format="[%(asctime)s:%(name)s] %(message)s"
     )
-    PRlogger = logging.getLogger("P&R")  
+    PRlogger = logging.getLogger("P&R") 
 
-    DATASET = 'PeTaL'
+    DATASET = dataset
     MODEL = 'MATCH'
 
     res_labels = np.load(f"{match_path}/{DATASET}/results/{MODEL}-{DATASET}-labels.npy", allow_pickle=True)
@@ -91,9 +117,11 @@ def main(match_path, plots_path, verbose):
         if verbose:
             PRlogger.info(f"You already have a plots directory at {ALL_PLOTS_PATH}.")
 
-    time_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-    comment = f"on_{DATASET}"
-    PLOTS_PATH = os.path.join(ALL_PLOTS_PATH, f"{time_str}_{comment}")
+    now = datetime.now()
+    date_str = now.strftime("%Y%m%d")
+    time_str = now.strftime("%H%M%S")
+    comment = f"precision_recall" # "_on_{DATASET}"
+    PLOTS_PATH = os.path.join(ALL_PLOTS_PATH, f"{date_str}_{comment}")
 
     if not os.path.exists(PLOTS_PATH):
         os.mkdir(PLOTS_PATH)
@@ -115,7 +143,7 @@ def main(match_path, plots_path, verbose):
     plt.ylabel('Precision')
     plt.ylim(0, 1)
 
-    PLOT_PATH = os.path.join(PLOTS_PATH, f'prc_{MODEL}_{DATASET}.png')
+    PLOT_PATH = os.path.join(PLOTS_PATH, f'{time_str}_prc_{MODEL}_{DATASET}.png')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
     PRlogger.info(f"Your plot is saved as {PLOT_PATH}")
     plt.clf()
@@ -135,7 +163,7 @@ def main(match_path, plots_path, verbose):
     plt.ylim(0, 1)
     plt.legend()
 
-    PLOT_PATH = os.path.join(PLOTS_PATH, f'prf1_{MODEL}_{DATASET}.png')
+    PLOT_PATH = os.path.join(PLOTS_PATH, f'{time_str}_prf1_{MODEL}_{DATASET}.png')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
     PRlogger.info(f"Your plot is saved as {PLOT_PATH}")
     plt.clf()
@@ -152,7 +180,7 @@ def main(match_path, plots_path, verbose):
     plt.ylabel('Labels')
     plt.legend()
 
-    PLOT_PATH = os.path.join(PLOTS_PATH, f'labels_{MODEL}_{DATASET}.png')
+    PLOT_PATH = os.path.join(PLOTS_PATH, f'{time_str}_labels_{MODEL}_{DATASET}.png')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False)
     PRlogger.info(f"Your plot is saved as {PLOT_PATH}")
     plt.clf()

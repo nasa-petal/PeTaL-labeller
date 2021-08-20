@@ -2,7 +2,63 @@
     train.py
 
     Run MATCH with PeTaL data.
-    Last modified on 14 July 2021.
+    Last modified on 18 August 2021.
+
+    DESCRIPTION
+
+        train.py runs the model training portion of MATCH,
+        mostly adapting MATCH/main.py
+        prepared by the MATCH authors.
+
+        It begins with
+
+        - MATCH/
+          - PeTaL/
+            - train_texts.npy
+            - train_labels.npy
+            - test_texts.npy
+            - test_labels.npy 
+            - emb_init.npy
+            - vocab.npy
+
+        and ends up with
+
+        - MATCH/
+          - PeTaL/
+            - models/ (NEW)
+              - MATCH-PeTaL (NEW)
+            - train_texts.npy
+            - train_labels.npy
+            - test_texts.npy
+            - test_labels.npy 
+            - emb_init.npy
+            - vocab.npy
+            - labels_binarizer (NEW)
+
+        Not exactly sure what labels_binarizer is, but it seems to be important
+        to transforming the multilabel dataset into independently considered binary labels.
+        
+        The model weights are saved in models/MATCH-PeTaL.
+
+    OPTIONS
+
+        -c, --cnf
+            Path of configure yaml.
+        -i, --infer-mode
+            Enable inference mode.
+            Defaults to False.
+        -v, --verbose
+            Enable verbose output.
+            Defaults to False.
+
+    USAGE
+
+        train.py --cnf config.yaml [--verbose]
+
+    NOTES
+
+        config.yaml holds train.py configuration settings.
+        In INFERENCE MODE we don't do any training, so this gets skipped.
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
@@ -18,28 +74,40 @@ import wandb
 
 @click.command()
 @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
+@click.option('--infer-mode', '-i', type=click.BOOL, is_flag=True, default=False, help='Inference mode.')
 @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
 
-def main(cnf_path, verbose):
+def main(cnf_path, infer_mode, verbose):
     """
         Run training.
 
     Args:
         cnf_path (str): Path to configure yaml file.
+        infer_mode (bool): Whether to run in inference mode.
         verbose (bool): Verbose output.
     """
 
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
     
-    run_train(cnf, verbose)
+    run_train(cnf, infer_mode, verbose)
 
-def run_train(cnf, verbose):
+########################################
+#
+# NOTE
+#   main just calls run_train
+#   main is for Click to transform this file into a command-line program
+#   run_train is for other files to import if they need
+#
+########################################
+
+def run_train(cnf, infer_mode, verbose):
     """
         Run training.
 
     Args:
         cnf (Dict): Python dictionary whose structure adheres to our config.yaml file.
+        infer_mode (bool): Whether to run in inference mode.
         verbose (bool): Verbose output.
     """
     logging.basicConfig(
@@ -48,18 +116,29 @@ def run_train(cnf, verbose):
     )
     logger = logging.getLogger("train")
 
+    if infer_mode:
+        if verbose:
+            logger.info("Skipping training in inference mode.")
+        return
+
     if verbose:
         logger.info("Begin training.")
 
-    wandb.login()
+    
 
     MODEL = cnf['model']
     DATASET = cnf['dataset']
     split_cnf = cnf['split']
     transform_cnf = cnf['transform']
     train_cnf = cnf['train']
-    wandb_cnf = cnf['wandb']
+    
+    ########################################
+    # Perform the wandb setup.
     # wandb_config is the config information that our wandb project expects
+    ########################################
+
+    wandb.login()
+    wandb_cnf = cnf['wandb']
     wandb_config = {
         'train_proportion': split_cnf['train'],
         'dev_proportion': split_cnf['dev'],
@@ -80,10 +159,37 @@ def run_train(cnf, verbose):
         config=wandb_config
     )
 
+    ########################################
+    # Now we get on with training by cd-ing to the MATCH directory
+    # to let MATCH/main.py work its magic.
+    ########################################
 
     sys.path.insert(1, os.path.join(os.getcwd(), 'MATCH'))
 
     os.chdir(train_cnf['prefix'])
+
+    ########################################
+    # Print out the first few training token sequences
+    # and their labels.
+    ########################################
+
+    sample = train_cnf['sample']
+    if sample:
+        num_samples = train_cnf['num_samples']
+
+        logger.info(f"Sampling _{num_samples}_ texts and their labels.")
+
+        print('--- TRAINING SAMPLES')
+        with open(f"{DATASET}/train_texts.txt") as fin1, open(f"{DATASET}/train_labels.txt") as fin2:
+            for idx, (text, labels) in enumerate(zip(fin1, fin2)):
+                if idx >= num_samples:
+                    break
+                print(f"FULL TEXT: {text.strip()}")
+                print(f"LABELS: {labels.strip()}")
+                print('---')
+
+        logger.info(f"End of training samples.")
+        
 
     from MATCH.main import main as match_main # main.py
 

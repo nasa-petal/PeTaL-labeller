@@ -1,0 +1,194 @@
+```
+test skip=0
+
+
+
+---
+TEXT: strength reorientation daffodil narcissus amaryllidaceae flowers inwind drag reduction andtorsional 
+ACTUAL LABELS: protect_from_harm, protect_from_non-living_threats, protect_from_wind
+PREDICTED LABELS: move 0.711, passive_movement 0.072, active_movement 0.054, manage_structural_forces 0.036, maintain_structural_integrity 0.033
+---
+TEXT: the ecology rafting marine environment ii the rafting organisms community 
+ACTUAL LABELS: move, passive_movement, passively_move_through/on_liquids
+PREDICTED LABELS: manage_structural_forces 0.335, maintain_structural_integrity 0.276, move 0.035, manage_stress/strain 0.025, manage_shear 0.018
+---
+TEXT: obstruction impaction medicine aggressive pharmacological treatment reversing malignant bowel obstruction 
+ACTUAL LABELS: protect_from_harm, protect_from_non-living_threats, protect_from_living_threats, protect_from_light, protect_from_microbes
+PREDICTED LABELS: protect_from_harm 0.384, protect_from_non-living_threats 0.056, protect_from_living_threats 0.009, process_resources 0.006, maintain_ecological_community 0.003
+---
+TEXT: protein membrane protein curvature transport bilayer fusion mechanism bilayer biology 
+ACTUAL LABELS: sense_send_or_process_information, process_signals, send_signals, differentiate_signal_from_noise, respond_to_signals, send_electrical/magnetic_signals, convert_signals
+PREDICTED LABELS: protect_from_harm 0.112, sense_send_or_process_information 0.064, maintain_ecological_community 0.027, process_resources 0.021, sense_chemicals 0.012
+---
+TEXT: flight force squirrel volans aerodynamic force generation performance control body 
+ACTUAL LABELS: move, passive_movement, active_movement, passively_move_through_gases, actively_move_through_gases
+PREDICTED LABELS: move 0.918, active_movement 0.186, passive_movement 0.102, actively_move_through_gases 0.034, passively_move_through_gases 0.030
+---
+Precision@1,3,5: 0.7413793103448276 0.5718390804597702 0.4396551724137931
+nDCG@1,3,5: 0.7413793103448276 0.6131173000787031 0.6022903445480057
+```
+
+```
+test skip=0
+
+
+--- TRAINING SAMPLES
+FULL TEXT: MAG_bubble nest MAG_nest MAG_mixing MAG_bubble MAG_phase MAG_engystomops pustulosus MAG_deposition MAG_three phase MAG_composite material MAG_ecology MAG_biology VENUE_Weird_Nature:_An_Astonishing_Exploration_of_Nature's_Strangest_Behavior VENUE_Proceedings_of_the_Royal_Society_B VENUE_Biology_Letters VENUE_Biology_Letters AUTHOR_2346835213 AUTHOR_2098042950 REFP_2130285640 REFP_2066345165 REFP_2054319467 REFP_2047714064 REFP_2038086748 REFP_2146144564 REFP_2271809641 REFP_2083811528 REFP_2159311519 REFP_1991801038 REFP_2101222182 REFP_1794681095 building home foamtngara frog foam nest architecture threephase construction process frogs build foam nests floating water face problems over dispersion secretions eggs dangerously exposed air interface nest construction behaviour tungara engystomops pustulosus features may circumvent pairs periodic bursts production egg deposition three discrete phases discernible first characterized bubble raft without approximately linear increase duration mixing events time phase reduce initial precursor materials until critical concentration achieved main building marked start intervals nearly constant final change exponential fashion joining colonial nesting abbreviate presumably exploiting pioneer pair thereby reducing energy material expenditure predators finally deposited centre continuously 1 cm deep free cortex protectively encloses hatched larvae stranded 
+
+LABELS: physically_assemble/disassemble protect_from_harm physically_assemble_structure protect_from_living_threats protect_from_non-living_threats protect_from_animals protect_from_loss_of_liquids protect_from_microbes
+
+---
+FULL TEXT: MAG_sunset MAG_earth s magnetic field MAG_compass MAG_nocturnal MAG_myotis myotis MAG_sunrise MAG_mammal MAG_clockwise MAG_geodesy MAG_ecology MAG_biology VENUE_PNAS VENUE_Proceedings_of_the_National_Academy_of_Sciences_of_the_United_States_of_America AUTHOR_2132083079 AUTHOR_2425702268 AUTHOR_2552946098 REFP_1493129647 REFP_2037761037 REFP_1984592609 REFP_2136994271 REFP_598168241 REFP_2074763520 REFP_2015670290 REFP_1972968179 REFP_2082135766 REFP_1989762226 REFP_2014046631 REFP_2154337160 REFP_2143017768 REFP_2133423574 REFP_2072313554 REFP_2032882663 REFP_2023104827 REFP_2030439643 REFP_2056023782 REFP_1991815569 REFP_1998502308 REFP_2061173653 REFP_1512621966 REFP_2135044553 REFP_2127080275 REFP_2133149568 REFP_2055854153 REFP_1897075937 REFP_2059112007 REFP_2049301097 REFP_1991350922 REFP_2002015101 REFP_2093651107 REFP_1990263987 REFP_2079584046 REFP_1984175527 REFP_2561883427 REFP_2040802987 a nocturnal mammal greater mouseeared bat calibrates magnetic compass sun evidence suggests bats detect geomagnetic field way navigation home roost remains unresolved may animals both indicate direction locate position birds directional information appears derived interaction magnetic sun stars suggesting sunset sunrise primary reference compass calibrated daily homing greater mouse eared myotis calibrate cues testing response exposure altered manipulation resulted counterclockwise shift orientation controls consistent calibration whereas change unlike pattern polarization necessary occupy ecological niches rarely observed surprising finding yet primacy absolute geographical vertebrate taxa 
+
+LABELS: sense_send_or_process_information sense_signals/environmental_cues sense_spatial_awareness/balance/orientation
+
+---
+
+--- EVALUATION SAMPLES
+TEXT: melas flow corneum microscope electron microscopy ray photoelectron spectroscopy engineering 
+ACTUAL LABELS: chemically_modify_or_change_energy_state, maintain_structural_integrity, protect_from_harm, chemically_break_down, prevent_structural_failure, protect_from_living_threats, chemically_break_down_organic_compounds, prevent_fracture/rupture, protect_from_animals, protect_from_microbes
+PREDICTED LABELS: protect_from_harm 0.388, protect_from_non-living_threats 0.261, maintain_structural_integrity 0.239, manage_structural_forces 0.184, prevent_structural_failure 0.118
+---
+TEXT: watsonii fixation reduced iron vertical migration iron conservation reduction metalloenzyme 
+ACTUAL LABELS: physically_assemble/disassemble, optimize_shape/materials
+PREDICTED LABELS: protect_from_harm 0.502, protect_from_non-living_threats 0.354, chemically_modify_or_change_energy_state 0.171, maintain_structural_integrity 0.119, prevent_structural_failure 0.112
+---
+TEXT: optimization design process element method aided engineering teacher tree the 
+ACTUAL LABELS: maintain_structural_integrity, manage_structural_forces, manage_stress/strain, manage_shear
+PREDICTED LABELS: maintain_structural_integrity 0.727, prevent_structural_failure 0.647, manage_structural_forces 0.336, prevent_fracture/rupture 0.321, manage_stress/strain 0.190
+---
+TEXT: cuticle wall growth plant biomechanics combines principles physics chemistry engineering 
+ACTUAL LABELS: protect_from_harm, protect_from_non-living_threats, protect_from_excess_liquids, protect_from_loss_of_liquids, protect_from_temperature
+PREDICTED LABELS: maintain_structural_integrity 0.719, protect_from_harm 0.552, manage_structural_forces 0.486, prevent_structural_failure 0.436, protect_from_non-living_threats 0.350
+---
+TEXT: cell potential potential membrane current constant the mammalian auditory hair 
+ACTUAL LABELS: sense_send_or_process_information, sense_signals/environmental_cues, sense_sound/vibrations, sense_electricity/magnetism
+PREDICTED LABELS: protect_from_harm 0.163, maintain_structural_integrity 0.159, chemically_modify_or_change_energy_state 0.153, move 0.137, protect_from_non-living_threats 0.124
+---
+Precision@1,3,5: 0.6551724137931034 0.47988505747126436 0.35344827586206895
+nDCG@1,3,5: 0.6551724137931034 0.5216246518652078 0.5031630959641384
+```
+
+```
+test skip=0
+
+
+--- TRAINING SAMPLES
+FULL TEXT: MAG_bubble_nest MAG_nest MAG_mixing MAG_bubble MAG_phase MAG_engystomops_pustulosus MAG_deposition MAG_three_phase MAG_composite_material MAG_ecology MAG_biology VENUE_Weird_Nature:_An_Astonishing_Exploration_of_Nature's_Strangest_Behavior VENUE_Proceedings_of_the_Royal_Society_B VENUE_Biology_Letters VENUE_Biology_Letters AUTHOR_2346835213 AUTHOR_2098042950 REFP_2130285640 REFP_2066345165 REFP_2054319467 REFP_2047714064 REFP_2038086748 REFP_2146144564 REFP_2271809641 REFP_2083811528 REFP_2159311519 REFP_1991801038 REFP_2101222182 REFP_1794681095 building home foamtngara frog foam nest architecture threephase construction process frogs build foam nests floating water face problems over dispersion secretions eggs dangerously exposed air interface nest construction behaviour tungara engystomops pustulosus features may circumvent pairs periodic bursts production egg deposition three discrete phases discernible first characterized bubble raft without approximately linear increase duration mixing events time phase reduce initial precursor materials until critical concentration achieved main building marked start intervals nearly constant final change exponential fashion joining colonial nesting abbreviate presumably exploiting pioneer pair thereby reducing energy material expenditure predators finally deposited centre continuously 1 cm deep free cortex protectively encloses hatched larvae stranded
+LABELS: physically_assemble/disassemble protect_from_harm physically_assemble_structure protect_from_living_threats protect_from_non-living_threats protect_from_animals protect_from_loss_of_liquids protect_from_microbes
+---
+FULL TEXT: MAG_sunset MAG_earth_s_magnetic_field MAG_compass MAG_nocturnal MAG_myotis_myotis MAG_sunrise MAG_mammal MAG_clockwise MAG_geodesy MAG_ecology MAG_biology VENUE_PNAS VENUE_Proceedings_of_the_National_Academy_of_Sciences_of_the_United_States_of_America AUTHOR_2132083079 AUTHOR_2425702268 AUTHOR_2552946098 REFP_1493129647 REFP_2037761037 REFP_1984592609 REFP_2136994271 REFP_598168241 REFP_2074763520 REFP_2015670290 REFP_1972968179 REFP_2082135766 REFP_1989762226 REFP_2014046631 REFP_2154337160 REFP_2143017768 REFP_2133423574 REFP_2072313554 REFP_2032882663 REFP_2023104827 REFP_2030439643 REFP_2056023782 REFP_1991815569 REFP_1998502308 REFP_2061173653 REFP_1512621966 REFP_2135044553 REFP_2127080275 REFP_2133149568 REFP_2055854153 REFP_1897075937 REFP_2059112007 REFP_2049301097 REFP_1991350922 REFP_2002015101 REFP_2093651107 REFP_1990263987 REFP_2079584046 REFP_1984175527 REFP_2561883427 REFP_2040802987 a nocturnal mammal greater mouseeared bat calibrates magnetic compass sun evidence suggests bats detect geomagnetic field way navigation home roost remains unresolved may animals both indicate direction locate position birds directional information appears derived interaction magnetic sun stars suggesting sunset sunrise primary reference compass calibrated daily homing greater mouse eared myotis calibrate cues testing response exposure altered manipulation resulted counterclockwise shift orientation controls consistent calibration whereas change unlike pattern polarization necessary occupy ecological niches rarely observed surprising finding yet primacy absolute geographical vertebrate taxa
+LABELS: sense_send_or_process_information sense_signals/environmental_cues sense_spatial_awareness/balance/orientation
+---
+
+--- EVALUATION SAMPLES
+TEXT: four species genus phyllomedusa sauvagei iherengi pailona hypochondrialis found previously 
+ACTUAL LABELS: protect_from_harm, protect_from_non-living_threats, protect_from_loss_of_liquids
+PREDICTED LABELS: protect_from_harm 0.668, protect_from_non-living_threats 0.567, protect_from_loss_of_liquids 0.204, manage_structural_forces 0.019, maintain_structural_integrity 0.013
+---
+TEXT: ontogenetic scaling burrowing forces earthworm lumbricus terrestris hydrostatic skeletons internal 
+ACTUAL LABELS: move, physically_assemble/disassemble, optimize_shape/materials, active_movement, actively_move_through/on_solids
+PREDICTED LABELS: maintain_structural_integrity 0.491, move 0.406, manage_structural_forces 0.397, process_resources 0.076, manage_stress/strain 0.066
+---
+TEXT: the thermogenic center social wasps social wasps vespa orientalis paravespula 
+ACTUAL LABELS: protect_from_harm, protect_from_non-living_threats, protect_from_temperature
+PREDICTED LABELS: protect_from_non-living_threats 0.102, protect_from_harm 0.082, move 0.080, process_resources 0.031, chemically_modify_or_change_energy_state 0.013
+---
+TEXT:  
+ACTUAL LABELS: chemically_modify_or_change_energy_state, chemically_break_down, chemically_break_down_organic_compounds
+PREDICTED LABELS: chemically_modify_or_change_energy_state 0.613, detox/purify 0.284, process_resources 0.284, chemically_break_down 0.176, chemically_break_down_organic_compounds 0.112
+---
+TEXT: foldable structures natural design pollen grains upon release anther pollen 
+ACTUAL LABELS: change_size_or_color, protect_from_harm, change_size/shape, protect_from_non-living_threats, protect_from_loss_of_liquids
+PREDICTED LABELS: protect_from_harm 0.220, protect_from_non-living_threats 0.065, protect_from_loss_of_liquids 0.044, change_size/shape 0.036, maintain_structural_integrity 0.031
+---
+Precision@1,3,5: 0.7241379310344828 0.603448275862069 0.46379310344827585
+nDCG@1,3,5: 0.7241379310344828 0.63784058891882 0.6275936376940459
+```
+
+```
+test skip=0
+
+
+--- TRAINING SAMPLES
+FULL TEXT: MAG_bubble_nest MAG_nest MAG_mixing MAG_bubble MAG_phase MAG_engystomops_pustulosus MAG_deposition MAG_three_phase MAG_composite_material MAG_ecology MAG_biology VENUE_Weird_Nature:_An_Astonishing_Exploration_of_Nature's_Strangest_Behavior VENUE_Proceedings_of_the_Royal_Society_B VENUE_Biology_Letters VENUE_Biology_Letters AUTHOR_2346835213 AUTHOR_2098042950 REFP_2130285640 REFP_2066345165 REFP_2054319467 REFP_2047714064 REFP_2038086748 REFP_2146144564 REFP_2271809641 REFP_2083811528 REFP_2159311519 REFP_1991801038 REFP_2101222182 REFP_1794681095 building home foamtngara frog foam nest architecture threephase construction process frogs build foam nests floating water face problems over dispersion secretions eggs dangerously exposed air interface nest construction behaviour tungara engystomops pustulosus features may circumvent pairs periodic bursts production egg deposition three discrete phases discernible first characterized bubble raft without approximately linear increase duration mixing events time phase reduce initial precursor materials until critical concentration achieved main building marked start intervals nearly constant final change exponential fashion joining colonial nesting abbreviate presumably exploiting pioneer pair thereby reducing energy material expenditure predators finally deposited centre continuously 1 cm deep free cortex protectively encloses hatched larvae stranded
+LABELS: physically_assemble/disassemble protect_from_harm physically_assemble_structure protect_from_living_threats protect_from_non-living_threats protect_from_animals protect_from_loss_of_liquids protect_from_microbes
+---
+FULL TEXT: MAG_sunset MAG_earth_s_magnetic_field MAG_compass MAG_nocturnal MAG_myotis_myotis MAG_sunrise MAG_mammal MAG_clockwise MAG_geodesy MAG_ecology MAG_biology VENUE_PNAS VENUE_Proceedings_of_the_National_Academy_of_Sciences_of_the_United_States_of_America AUTHOR_2132083079 AUTHOR_2425702268 AUTHOR_2552946098 REFP_1493129647 REFP_2037761037 REFP_1984592609 REFP_2136994271 REFP_598168241 REFP_2074763520 REFP_2015670290 REFP_1972968179 REFP_2082135766 REFP_1989762226 REFP_2014046631 REFP_2154337160 REFP_2143017768 REFP_2133423574 REFP_2072313554 REFP_2032882663 REFP_2023104827 REFP_2030439643 REFP_2056023782 REFP_1991815569 REFP_1998502308 REFP_2061173653 REFP_1512621966 REFP_2135044553 REFP_2127080275 REFP_2133149568 REFP_2055854153 REFP_1897075937 REFP_2059112007 REFP_2049301097 REFP_1991350922 REFP_2002015101 REFP_2093651107 REFP_1990263987 REFP_2079584046 REFP_1984175527 REFP_2561883427 REFP_2040802987 a nocturnal mammal greater mouseeared bat calibrates magnetic compass sun evidence suggests bats detect geomagnetic field way navigation home roost remains unresolved may animals both indicate direction locate position birds directional information appears derived interaction magnetic sun stars suggesting sunset sunrise primary reference compass calibrated daily homing greater mouse eared myotis calibrate cues testing response exposure altered manipulation resulted counterclockwise shift orientation controls consistent calibration whereas change unlike pattern polarization necessary occupy ecological niches rarely observed surprising finding yet primacy absolute geographical vertebrate taxa
+LABELS: sense_send_or_process_information sense_signals/environmental_cues sense_spatial_awareness/balance/orientation
+---
+
+```
+test skip=0
+
+
+--- TRAINING SAMPLES
+FULL TEXT: MAG_bubble_nest MAG_nest MAG_mixing MAG_bubble MAG_phase MAG_engystomops_pustulosus MAG_deposition MAG_three_phase MAG_composite_material MAG_ecology MAG_biology VENUE_Weird_Nature:_An_Astonishing_Exploration_of_Nature's_Strangest_Behavior VENUE_Proceedings_of_the_Royal_Society_B VENUE_Biology_Letters VENUE_Biology_Letters AUTHOR_2346835213 AUTHOR_2098042950 REFP_2130285640 REFP_2066345165 REFP_2054319467 REFP_2047714064 REFP_2038086748 REFP_2146144564 REFP_2271809641 REFP_2083811528 REFP_2159311519 REFP_1991801038 REFP_2101222182 REFP_1794681095 building home foamtngara frog foam nest architecture threephase construction process frogs build foam nests floating water face problems over dispersion secretions eggs dangerously exposed air interface nest construction behaviour tungara engystomops pustulosus features may circumvent pairs periodic bursts production egg deposition three discrete phases discernible first characterized bubble raft without approximately linear increase duration mixing events time phase reduce initial precursor materials until critical concentration achieved main building marked start intervals nearly constant final change exponential fashion joining colonial nesting abbreviate presumably exploiting pioneer pair thereby reducing energy material expenditure predators finally deposited centre continuously 1 cm deep free cortex protectively encloses hatched larvae stranded
+LABELS: physically_assemble/disassemble protect_from_harm physically_assemble_structure protect_from_living_threats protect_from_non-living_threats protect_from_animals protect_from_loss_of_liquids protect_from_microbes
+---
+FULL TEXT: MAG_sunset MAG_earth_s_magnetic_field MAG_compass MAG_nocturnal MAG_myotis_myotis MAG_sunrise MAG_mammal MAG_clockwise MAG_geodesy MAG_ecology MAG_biology VENUE_PNAS VENUE_Proceedings_of_the_National_Academy_of_Sciences_of_the_United_States_of_America AUTHOR_2132083079 AUTHOR_2425702268 AUTHOR_2552946098 REFP_1493129647 REFP_2037761037 REFP_1984592609 REFP_2136994271 REFP_598168241 REFP_2074763520 REFP_2015670290 REFP_1972968179 REFP_2082135766 REFP_1989762226 REFP_2014046631 REFP_2154337160 REFP_2143017768 REFP_2133423574 REFP_2072313554 REFP_2032882663 REFP_2023104827 REFP_2030439643 REFP_2056023782 REFP_1991815569 REFP_1998502308 REFP_2061173653 REFP_1512621966 REFP_2135044553 REFP_2127080275 REFP_2133149568 REFP_2055854153 REFP_1897075937 REFP_2059112007 REFP_2049301097 REFP_1991350922 REFP_2002015101 REFP_2093651107 REFP_1990263987 REFP_2079584046 REFP_1984175527 REFP_2561883427 REFP_2040802987 a nocturnal mammal greater mouseeared bat calibrates magnetic compass sun evidence suggests bats detect geomagnetic field way navigation home roost remains unresolved may animals both indicate direction locate position birds directional information appears derived interaction magnetic sun stars suggesting sunset sunrise primary reference compass calibrated daily homing greater mouse eared myotis calibrate cues testing response exposure altered manipulation resulted counterclockwise shift orientation controls consistent calibration whereas change unlike pattern polarization necessary occupy ecological niches rarely observed surprising finding yet primacy absolute geographical vertebrate taxa
+LABELS: sense_send_or_process_information sense_signals/environmental_cues sense_spatial_awareness/balance/orientation
+---
+
+--- EVALUATION SAMPLES
+TEXT: defense foot adhesion beetle hemisphaerota cyanea beetle hemisphaerota cyanea chrysomelidae 
+ACTUAL LABELS: attach, attach_temporarily
+PREDICTED LABELS: attach 0.535, attach_temporarily 0.243, move 0.242, attach_permanently 0.144, active_movement 0.129
+---
+TEXT: chemical niche differentiation among sympatric species orchid bees male neotropical 
+ACTUAL LABELS: attach, attach_temporarily, cooperate_within/between_species
+PREDICTED LABELS: maintain_ecological_community 0.113, process_resources 0.096, protect_from_harm 0.072, physically_assemble/disassemble 0.070, move 0.066
+---
+TEXT: efficacy safety catnip nepeta cataria novel filth fly repellent catnip 
+ACTUAL LABELS: protect_from_harm, protect_from_living_threats, protect_from_animals, send_chemical_signals
+PREDICTED LABELS: protect_from_harm 0.198, protect_from_non-living_threats 0.154, physically_assemble/disassemble 0.114, move 0.077, manage_structural_forces 0.068
+---
+TEXT: the responses pupil gekko gekko external light stimulus 1 responses 
+ACTUAL LABELS: sense_send_or_process_information, sense_signals/environmental_cues, sense_light_in_the_visible_spectrum
+PREDICTED LABELS: sense_send_or_process_information 0.716, sense_signals/environmental_cues 0.438, protect_from_harm 0.115, sense_light_in_the_visible_spectrum 0.098, send_signals 0.088
+---
+TEXT: ecological impact beavers castor fiber castor canadensis ability modify ecosystems 
+ACTUAL LABELS: maintain_ecological_community, maintain_structural_integrity, group_benefit, prevent_structural_failure, maintain_biodiversity, control_erosion
+PREDICTED LABELS: maintain_structural_integrity 0.523, manage_structural_forces 0.366, manage_stress/strain 0.197, maintain_ecological_community 0.145, prevent_structural_failure 0.125
+---
+Precision@1,3,5: 0.5344827586206896 0.40804597701149425 0.3258620689655172
+nDCG@1,3,5: 0.5344827586206896 0.4443208013740872 0.44785503783977154
+```
+
+```
+test skip=0
+
+
+--- TRAINING SAMPLES
+FULL TEXT: MAG_bubble_nest MAG_nest MAG_mixing MAG_bubble MAG_phase MAG_engystomops_pustulosus MAG_deposition MAG_three_phase MAG_composite_material MAG_ecology MAG_biology VENUE_Weird_Nature:_An_Astonishing_Exploration_of_Nature's_Strangest_Behavior VENUE_Proceedings_of_the_Royal_Society_B VENUE_Biology_Letters VENUE_Biology_Letters AUTHOR_2346835213 AUTHOR_2098042950 REFP_2130285640 REFP_2066345165 REFP_2054319467 REFP_2047714064 REFP_2038086748 REFP_2146144564 REFP_2271809641 REFP_2083811528 REFP_2159311519 REFP_1991801038 REFP_2101222182 REFP_1794681095 building home foamtngara frog foam nest architecture threephase construction process frogs build foam nests floating water face problems over dispersion secretions eggs dangerously exposed air interface nest construction behaviour tungara engystomops pustulosus features may circumvent pairs periodic bursts production egg deposition three discrete phases discernible first characterized bubble raft without approximately linear increase duration mixing events time phase reduce initial precursor materials until critical concentration achieved main building marked start intervals nearly constant final change exponential fashion joining colonial nesting abbreviate presumably exploiting pioneer pair thereby reducing energy material expenditure predators finally deposited centre continuously 1 cm deep free cortex protectively encloses hatched larvae stranded
+LABELS: physically_assemble/disassemble protect_from_harm physically_assemble_structure protect_from_living_threats protect_from_non-living_threats protect_from_animals protect_from_loss_of_liquids protect_from_microbes
+---
+FULL TEXT: MAG_sunset MAG_earth_s_magnetic_field MAG_compass MAG_nocturnal MAG_myotis_myotis MAG_sunrise MAG_mammal MAG_clockwise MAG_geodesy MAG_ecology MAG_biology VENUE_PNAS VENUE_Proceedings_of_the_National_Academy_of_Sciences_of_the_United_States_of_America AUTHOR_2132083079 AUTHOR_2425702268 AUTHOR_2552946098 REFP_1493129647 REFP_2037761037 REFP_1984592609 REFP_2136994271 REFP_598168241 REFP_2074763520 REFP_2015670290 REFP_1972968179 REFP_2082135766 REFP_1989762226 REFP_2014046631 REFP_2154337160 REFP_2143017768 REFP_2133423574 REFP_2072313554 REFP_2032882663 REFP_2023104827 REFP_2030439643 REFP_2056023782 REFP_1991815569 REFP_1998502308 REFP_2061173653 REFP_1512621966 REFP_2135044553 REFP_2127080275 REFP_2133149568 REFP_2055854153 REFP_1897075937 REFP_2059112007 REFP_2049301097 REFP_1991350922 REFP_2002015101 REFP_2093651107 REFP_1990263987 REFP_2079584046 REFP_1984175527 REFP_2561883427 REFP_2040802987 a nocturnal mammal greater mouseeared bat calibrates magnetic compass sun evidence suggests bats detect geomagnetic field way navigation home roost remains unresolved may animals both indicate direction locate position birds directional information appears derived interaction magnetic sun stars suggesting sunset sunrise primary reference compass calibrated daily homing greater mouse eared myotis calibrate cues testing response exposure altered manipulation resulted counterclockwise shift orientation controls consistent calibration whereas change unlike pattern polarization necessary occupy ecological niches rarely observed surprising finding yet primacy absolute geographical vertebrate taxa
+LABELS: sense_send_or_process_information sense_signals/environmental_cues sense_spatial_awareness/balance/orientation
+---
+
+--- EVALUATION SAMPLES
+TEXT: surface properties skin pilot whale globicephala melas skin surface delphinids 
+ACTUAL LABELS: chemically_modify_or_change_energy_state, maintain_structural_integrity, protect_from_harm, chemically_break_down, prevent_structural_failure, protect_from_living_threats, chemically_break_down_organic_compounds, prevent_fracture/rupture, protect_from_animals, protect_from_microbes
+PREDICTED LABELS: move 0.151, maintain_structural_integrity 0.124, manage_structural_forces 0.109, protect_from_non-living_threats 0.097, protect_from_harm 0.062
+---
+TEXT: the contribution nasal countercurrent heat exchange water balance northern elephant 
+ACTUAL LABELS: protect_from_harm, protect_from_non-living_threats, protect_from_loss_of_liquids
+PREDICTED LABELS: protect_from_non-living_threats 0.984, protect_from_harm 0.916, move 0.284, protect_from_temperature 0.154, protect_from_loss_of_liquids 0.110
+---
+TEXT: erosion resistance bionic functional surfaces inspired desert scorpions paper bionic 
+ACTUAL LABELS: maintain_structural_integrity, protect_from_harm, manage_structural_forces, protect_from_non-living_threats, manage_wear, protect_from_solids
+PREDICTED LABELS: protect_from_harm 0.932, protect_from_non-living_threats 0.912, protect_from_excess_liquids 0.105, manage_structural_forces 0.052, protect_from_solids 0.041
+---
+TEXT: the mechanics adhesive locomotion terrestrial gastropods research adhesive locomotion terrestrial 
+ACTUAL LABELS: attach, move, attach_temporarily, active_movement, actively_move_through/on_solids
+PREDICTED LABELS: move 0.889, active_movement 0.412, maintain_structural_integrity 0.087, process_resources 0.077, passive_movement 0.076
+---
+TEXT: electrical signals control wound healing phosphatidylinositol3oh kinase pten wound healing 
+ACTUAL LABELS: sense_send_or_process_information, chemically_modify_or_change_energy_state, protect_from_harm, send_signals, change_energy_state, protect_from_living_threats, send_electrical/magnetic_signals, modify/convert_electrical_energy, protect_from_microbes
+PREDICTED LABELS: sense_send_or_process_information 0.582, sense_signals/environmental_cues 0.092, maintain_ecological_community 0.088, process_resources 0.033, sense_chemicals 0.032
+---
+Precision@1,3,5: 0.6810344827586207 0.5459770114942529 0.42586206896551726
+nDCG@1,3,5: 0.6810344827586207 0.5817221587193069 0.574024807883893
+```
+

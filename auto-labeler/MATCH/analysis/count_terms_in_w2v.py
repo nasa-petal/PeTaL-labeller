@@ -4,9 +4,32 @@
     Run MATCH with PeTaL data.
     Last modified on 16 July 2021.
 
+    DESCRIPTION
+
+        count_terms_in_w2v.py analyses a w2v model file *.joint.emb
+        which is formatted with rows such as:
+
+        REFP_1996578662 0.225306 -0.056286 0.002683 0.012376 ...
+
+        where the first item is a token and the rest are its embedding
+        in a 100-dimensional space.
+
+        It counts the number of tokens of each class (reference, venues,
+        authors, MAG, MeSH, labels, other) and prints that to stdout.
+        That's all.
+
+    OPTIONS
+
+        -f, --file PATH/TO/PeTaL.joint.emb
+            path to w2v model file (must exist)
+
     USAGE
 
         python3 count_terms_in_w2v.py -f PATH/TO/PeTaL.joint.emb
+
+    NOTES
+
+        Not really necessary to run anyhow.  
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
