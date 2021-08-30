@@ -7,12 +7,13 @@ import os
 import torch
 from torch.nn import utils
 from torch.utils.data import DataLoader
+from torch.utils.data.dataset import Dataset
 from transformers import get_linear_schedule_with_warmup
 from transformers import AdamW
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import TrainingArguments
 from transformers import Trainer
-
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 
 import numpy as np
 from tqdm import tqdm
@@ -135,12 +136,12 @@ def validation(validation_loader,model):
 
     return val_error
 
-def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTokenizer,epochs:int,val_epochs:int,save_folder:str,epochs_bert:int,number_of_labels:int=10):
+def train(train_dataset:Dataset,val_dataset:Dataset,tokenizer:AutoTokenizer,epochs:int,val_epochs:int,save_folder:str,epochs_bert:int,number_of_labels:int=10,batch_size:int=16):
     """Trains the model for a given nubmer of epochs. Runs validation every val_epochs
 
     Args:
-        train_dataloader (DataLoader): train dataloader
-        val_dataloader (DataLoader): validation dataloader
+        train_dataloader (Dataset): train dataset
+        val_dataloader (Dataset): validation dataset
         tokenizer (AutoTokenizer): word tokenizer
         epochs (int): number of epochs to run 
         val_epochs (int): at what epoch should validation be performed 
@@ -148,6 +149,18 @@ def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTo
         epochs_bert (int): additional number of epochs to train bert with new tokens
         number_of_labels(int): number of labels to predict 
     """
+    # Sample in random order when training
+    train_dataloader = DataLoader(
+                train_dataset,  
+                sampler = RandomSampler(train_dataset), 
+                batch_size = args.batch_size 
+            )
+
+    validation_dataloader = DataLoader(
+                val_dataset, 
+                sampler = SequentialSampler(val_dataset), 
+                batch_size = args.batch_size 
+            )
     # Possible hyperparamters: 
     # * batch size: 16, 32
     # * learning rate: 5e-5, 3e-5, 2e-5

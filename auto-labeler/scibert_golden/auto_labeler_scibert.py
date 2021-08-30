@@ -15,19 +15,15 @@ import pandas as pd
 import numpy as np
 from transformers import AutoTokenizer
 from torch.utils.data import TensorDataset, random_split
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
+from torch.utils.data import DataLoader
 from train import train
 from nltk.tokenize import word_tokenize
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def get_args_parser():
-    def dir_path(path):
-        if os.path.isdir(path):
-            return path
-        else:
-            raise argparse.ArgumentTypeError(f"readable_dir:{path} is not a valid path")
-
+    """Returns an argument object. This parses the arguments to the python file
+    """
 
     def str2bool(v):
         if isinstance(v, bool):
@@ -141,7 +137,7 @@ def setup_dataset(filename:str):
     train_size = int(0.7 * len(dataset))
     val_size = len(dataset) - train_size
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
-    return train_dataset, val_dataset, tokenizer
+    return train_dataset, val_dataset, tokenizer,unique_labels
 
 def main(args:argparse.ArgumentParser): 
     """Runs the training loop
@@ -152,35 +148,24 @@ def main(args:argparse.ArgumentParser):
     """
     # Handles the saving of the dataset
     if not os.path.exists('dataset.pt'):
-        train_dataset,val_dataset,tokenizer = setup_dataset(args.filename)
+        train_dataset,val_dataset,tokenizer,labels = setup_dataset(args.filename)
         torch.save({'train_dataset':train_dataset,
                     'val_dataset':val_dataset,
-                    'tokenizer':tokenizer},'dataset.pt')
+                    'tokenizer':tokenizer,
+                    'labels':labels},'dataset.pt')
     
     # Loads the dataset
     data = torch.load('dataset.pt')
     train_dataset = data['train_dataset']
     val_dataset = data['val_dataset']
     tokenizer = data['tokenizer']
+    labels = data['labels']
 
     # Splitting labels for training and testing, setting up data
     print('{:>5,} training docs'.format(len(train_dataset)))
     print('{:>5,} validation docs'.format(len(val_dataset)))
 
-    # Sample in random order when training
-    train_dataloader = DataLoader(
-                train_dataset,  
-                sampler = RandomSampler(train_dataset), 
-                batch_size = args.batch_size 
-            )
-
-    validation_dataloader = DataLoader(
-                val_dataset, 
-                sampler = SequentialSampler(val_dataset), 
-                batch_size = args.batch_size 
-            )
-
-    train(train_dataloader, validation_dataloader,tokenizer,args.epochs,args.validation_epoch,args.output_dir)
+    train(train_dataset=train_dataset, val_dataset=val_dataset,tokenizer=tokenizer,epoch=args.epochs,val_epochs=args.validation_epoch,epochs_bert=args.epochs_to_train_bert, save_folder=args.output_dir,number_of_labels=len(labels),batch_size=args.batch_size)
 
 
 if __name__ == '__main__':
