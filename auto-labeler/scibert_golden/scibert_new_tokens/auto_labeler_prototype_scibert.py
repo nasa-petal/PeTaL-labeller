@@ -10,23 +10,17 @@ import os
 import argparse
 from pathlib import Path
 import torch, gdown
-import random 
 import pandas as pd
 import numpy as np
 from transformers import AutoTokenizer
 from torch.utils.data import TensorDataset, random_split
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from train import train
 from nltk.tokenize import word_tokenize
-from sklearn.model_selection import train_test_split 
-
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def get_args_parser():
-    """Returns an argument object. This parses the arguments to the python file
-    """
-
     def str2bool(v):
         if isinstance(v, bool):
             return v
@@ -37,39 +31,16 @@ def get_args_parser():
         else:
             raise argparse.ArgumentTypeError('Boolean value expected.')
     parser = argparse.ArgumentParser('Set SuperResolution GANS', add_help=False)
-    parser.add_argument('--lr', default=5e-5, type=float)    
-    parser.add_argument('--filename', default='golden.csv', type=str)
-    parser.add_argument('--epochs_to_train_bert', default=50, type=int)
+    parser.add_argument('--lr', default=1e-4, type=float)    
     parser.add_argument('--batch_size', default=32, type=int)
     parser.add_argument('--num_workers', default=4, type=int)
-    parser.add_argument('--epochs_to_classify', default=500, type=int)
+    parser.add_argument('--epochs', default=500, type=int)
     parser.add_argument('--validation_epoch', default=1, type=int, help='At what epoch do we run the validation')
     parser.add_argument('--output_dir',default='epochs',type=str, help='folder where to save checkpoints')
-    parser.add_argument('--percent_dataset',default=0.1,type=float, help='percentage of dataset to use')
     return parser
-
-
-
-def chunks(lst, n):
-    """Breaks a large list into chunks 
-
-    Args:
-        lst ([type]): large list
-        n ([type]): chunks of size n
-
-    Yields:
-        list: list of lists with chunk size n
-    """
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
-        
-
-def setup_dataset(filename:str,percent_dataset:float=1):
+    
+def setup_dataset():
     """Setup the Train and Validation datasets
-
-    Args:
-        filename (str): [description]
-        percent_dataset (float, optional): percentage of dataset to use 0 to 1. Defaults to 1.
 
     Returns:
         (tuple): tuple containing:
@@ -77,45 +48,60 @@ def setup_dataset(filename:str,percent_dataset:float=1):
             - **train_dataset** (torch.utils.data.TensorDataset): pitch distribution
             - **val_dataset** (torch.utils.data.TensorDataset): pitch to chord distribution
     """
+    filename = 'SINGLELABEL_Colleen_and_Alex_training_data_4.19.csv'
+    if (not os.path.exists(filename)):
+        url = 'https://drive.google.com/file/d/1eOLNOl6ZMz4UxQ7qbSI-bJSSNkmNZjr9/view?usp=sharing'
+        gdown.download(url, filename, quiet=False)
+        md5 = 'fa837a88f0c40c513d975104edf3da17'
+        gdown.cached_download(url, filename, md5=md5, postprocess=gdown.extractall)
+
     df = pd.read_csv(filename)
+    df = df[['title', 'abstract', 'labels', 'doi', 'url', 'single_labels', 'labels_string']]
     df = df[df['single_labels'].notnull()]
 
-    _,df = train_test_split(df,test_size=percent_dataset,train_size=1-percent_dataset)
-    single_labels = df["single_labels"].tolist()
-    abstracts = df["abstract"].tolist()
-    title = df["title"].tolist()
-        
-    unique_labels = list(set(single_labels))
-    single_labels_int = [unique_labels.index(label) for label in single_labels]
+    labels = []
+    docs = []
+    labels_test = []
+    docs_test = []
+    labels_dict = ["'Protect from harm'", "'Process resources'", "'Sense send or process information'", "'Maintain structural integrity'", "'Move'", "'Attach'", "'Maintain ecological community'", "'Chemically modify or Change energy state'", "'Change size or color'", "'Physically assemble/disassemble'"]
 
-    regular_list = [word_tokenize(a) for a in abstracts]
+    single_labels = df["single_labels"].tolist()
+    abstract = df["abstract"].tolist()
+    title = df["title"].tolist()
+    for i in range(len(title)):
+        if i < len(title) - 40:
+            docs.append(abstract[i])
+            labels.append(labels_dict.index(single_labels[i]))
+        else:
+            docs_test.append(abstract[i])
+            labels_test.append(labels_dict.index(single_labels[i]))
+
+    print("Number of training labels: {:}".format(len(labels)))
+    print("Number of training docs: {:}".format(len(docs)))
+    print("Number of test labels: {:}".format(len(labels_test)))
+    print("Number of test docs: {:}".format(len(docs_test)))
+    
+    regular_list = [word_tokenize(a) for a in abstract]
     tokens_flat = [item for sublist in regular_list for item in sublist]
-    tokens_flat = set(tokens_flat)
-    unique_tokens = (list(tokens_flat))     # convert the set to the list
 
     tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
-    # Huggingface is crap https://github.com/huggingface/tokenizers/issues/175 
-    tokenizer.add_tokens(random.choices(unique_tokens,k=25000))
-    # unique_token_chunks = chunks(unique_tokens,50)
-    # [tokenizer.add_tokens(chunk) for chunk in unique_token_chunks] # Small lists are fine but extra large lists are tough 
+    tokenizer.add_tokens(tokens_flat)
 
     print('SciBERT tokenizer loaded')
 
     # original abstract
-    print(' Original: ', abstracts[5])
+    print(' Original: ', docs[5])
     # abstract split into tokens
-    print('Tokenized: ', tokenizer.tokenize(abstracts[5]))
+    print('Tokenized: ', tokenizer.tokenize(docs[5]))
     # abstract as mapped to ids
-    print('Token IDs: ', tokenizer.convert_tokens_to_ids(tokenizer.tokenize(abstracts[5])))
+    print('Token IDs: ', tokenizer.convert_tokens_to_ids(tokenizer.tokenize(docs[5])))
    
     # Finishing tokenizing all docs and map tokens to thier word IDs
     input_ids = []
     attention_masks = []
     actual_labels_test = []
 
-    max_abstract_len = max([len(a) for a in abstracts])
-
-    for d in abstracts:
+    for d in docs:
         encoded_dict = tokenizer.encode_plus(
                             d,                      
                             truncation=True,
@@ -131,9 +117,9 @@ def setup_dataset(filename:str,percent_dataset:float=1):
     # Convert the lists into tensors.
     input_ids = torch.cat(input_ids, dim=0)
     attention_masks = torch.cat(attention_masks, dim=0)
-    labels = torch.tensor(single_labels_int)
+    labels = torch.tensor(labels)
 
-    print('Original: ', abstracts[5])
+    print('Original: ', docs[5])
     print('Token IDs:', input_ids[5])
     print('Reverse:', tokenizer.convert_ids_to_tokens(input_ids[5]))
 
@@ -141,10 +127,10 @@ def setup_dataset(filename:str,percent_dataset:float=1):
     dataset = TensorDataset(input_ids, attention_masks, labels)
 
     # Number of docs to include per set
-    train_size = int(0.7 * len(dataset))
+    train_size = int(0.9 * len(dataset))
     val_size = len(dataset) - train_size
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
-    return train_dataset, val_dataset, tokenizer,unique_labels
+    return train_dataset, val_dataset, tokenizer
 
 def main(args:argparse.ArgumentParser): 
     """Runs the training loop
@@ -155,28 +141,39 @@ def main(args:argparse.ArgumentParser):
     """
     # Handles the saving of the dataset
     if not os.path.exists('dataset.pt'):
-        train_dataset,val_dataset,tokenizer,labels = setup_dataset(args.filename,args.percent_dataset)
+        train_dataset,val_dataset,tokenizer = setup_dataset()
         torch.save({'train_dataset':train_dataset,
                     'val_dataset':val_dataset,
-                    'tokenizer':tokenizer,
-                    'labels':labels},'dataset.pt')
+                    'tokenizer':tokenizer},'dataset.pt')
     
     # Loads the dataset
     data = torch.load('dataset.pt')
     train_dataset = data['train_dataset']
     val_dataset = data['val_dataset']
     tokenizer = data['tokenizer']
-    labels = data['labels']
 
     # Splitting labels for training and testing, setting up data
     print('{:>5,} training docs'.format(len(train_dataset)))
     print('{:>5,} validation docs'.format(len(val_dataset)))
 
-    train(train_dataset=train_dataset, val_dataset=val_dataset,tokenizer=tokenizer,epochs=args.epochs_to_classify,val_epochs=args.validation_epoch,epochs_bert=args.epochs_to_train_bert, save_folder=args.output_dir,number_of_labels=len(labels),batch_size=args.batch_size, learning_rate=args.lr)
+    # Sample in random order when training
+    train_dataloader = DataLoader(
+                train_dataset,  
+                sampler = RandomSampler(train_dataset), 
+                batch_size = args.batch_size 
+            )
+
+    validation_dataloader = DataLoader(
+                val_dataset, 
+                sampler = SequentialSampler(val_dataset), 
+                batch_size = args.batch_size 
+            )
+
+    train(train_dataloader, validation_dataloader,tokenizer,args.epochs,args.validation_epoch,args.output_dir)
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser('Scibert arguments', parents=[get_args_parser()])
+    parser = argparse.ArgumentParser('DETR training and evaluation script', parents=[get_args_parser()])
     args = parser.parse_args()
     if args.output_dir:
         Path(args.output_dir).mkdir(parents=True, exist_ok=True)

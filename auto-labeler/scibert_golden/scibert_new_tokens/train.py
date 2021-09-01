@@ -7,14 +7,9 @@ import os
 import torch
 from torch.nn import utils
 from torch.utils.data import DataLoader
-from torch.utils.data.dataset import Dataset
 from transformers import get_linear_schedule_with_warmup
 from transformers import AdamW
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from transformers import TrainingArguments
-from transformers import Trainer
-from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
-
 import numpy as np
 from tqdm import tqdm
 
@@ -136,65 +131,33 @@ def validation(validation_loader,model):
 
     return val_error
 
-def dummy_data_collector(some_dataset:Dataset):
-    batch = list()
-    n = len(some_dataset.dataset.tensors[0])
-    for i in range(n):
-        batch.append({'input_ids':some_dataset.dataset.tensors[0][i], 'attention_mask':some_dataset.dataset.tensors[1][i],'labels':some_dataset.dataset.tensors[2][i]})
-    return batch 
-
-def train(train_dataset:Dataset,val_dataset:Dataset,tokenizer:AutoTokenizer,epochs:int,val_epochs:int,save_folder:str,epochs_bert:int,number_of_labels:int=10,batch_size:int=16, learning_rate:float=5E-5):
+def train(train_dataloader:DataLoader,val_dataloader:DataLoader,tokenizer:AutoTokenizer,epochs:int,val_epochs:int,save_folder:str):
     """Trains the model for a given nubmer of epochs. Runs validation every val_epochs
 
     Args:
-        train_dataloader (Dataset): train dataset
-        val_dataloader (Dataset): validation dataset
+        train_dataloader (DataLoader): train dataloader
+        val_dataloader (DataLoader): validation dataloader
         tokenizer (AutoTokenizer): word tokenizer
         epochs (int): number of epochs to run 
         val_epochs (int): at what epoch should validation be performed 
-        save_folder (str): where to save the file
-        epochs_bert (int): additional number of epochs to train bert with new tokens
-        number_of_labels (int): number of labels to predict 
-        learning_rate (float): learning rate for adams optimizer. Defaults to 5E-5
+        save_folder (str): where to save the filew
     """
-
-    # Sample in random order when training
-    train_dataloader = DataLoader(
-                train_dataset,  
-                sampler = RandomSampler(train_dataset), 
-                batch_size = batch_size 
-            )
-
-    validation_dataloader = DataLoader(
-                val_dataset, 
-                sampler = SequentialSampler(val_dataset), 
-                batch_size = batch_size 
-            )
     # Possible hyperparamters: 
     # * batch size: 16, 32
     # * learning rate: 5e-5, 3e-5, 2e-5
     # * number of epochs: 2, 3, 4
 
-    model = AutoModelForSequenceClassification.from_pretrained("allenai/scibert_scivocab_uncased", num_labels = number_of_labels, output_attentions = False, output_hidden_states = False)
+    model = AutoModelForSequenceClassification.from_pretrained("allenai/scibert_scivocab_uncased", num_labels = 10, output_attentions = False, output_hidden_states = False)
     model.resize_token_embeddings(len(tokenizer))
-    model.to(device)
-    
-    # Train bert for a few epochs before actually classifying 
-    if epochs_bert>0:
-        training_args = TrainingArguments(evaluation_strategy="epoch",num_train_epochs=epochs_bert,output_dir="epochs")
-        # trainer = Trainer(model=model, args=training_args, train_dataset={'input_ids':train_dataset.dataset.tensors[0], 'attention_mask':train_dataset.dataset.tensors[1],'labels':train_dataset.dataset.tensors[2]}, eval_dataset={'input_ids':val_dataset.dataset.tensors[0], 'attention_mask':val_dataset.dataset.tensors[1],'labels':val_dataset.dataset.tensors[2]})
-        trainer = Trainer(model=model, args=training_args, train_dataset=dummy_data_collector(train_dataset), eval_dataset=dummy_data_collector(val_dataset))
-        trainer.train()
-
-    # Train the rest
     optimizer = AdamW(model.parameters(), lr = 5e-5, eps = 1e-8)
 
+
     # this needs to be run on GPU
-    
+    model.to(device)
     # Training epochs should be betw 2- 4 (reduce if overfitting)
     total_steps = len(train_dataloader) * epochs    
     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps = 0, num_training_steps = total_steps) # LR scheduler
-    
+
     # Check to see if training has been performed, reload last if exists
     val_losses = 0
     training_stats = list()
@@ -217,7 +180,7 @@ def train(train_dataset:Dataset,val_dataset:Dataset,tokenizer:AutoTokenizer,epoc
         model, optimizer, scheduler, avg_train_loss = train_one_epoch(model,train_dataloader,optimizer,scheduler,epoch,epochs)
 
         train_losses.append(avg_train_loss)
-        val_losses = validation(validation_dataloader, model)
+        val_losses = validation(val_dataloader, model)
         
         training_stats.append(
             {
