@@ -206,7 +206,7 @@ def train(train_dataset:Dataset,val_dataset:Dataset,tokenizer:AutoTokenizer,epoc
         model, optimizer, scheduler, avg_train_loss = train_one_epoch(model,train_dataloader,optimizer,scheduler,epoch,epochs)
 
         train_losses.append(avg_train_loss)
-        val_losses = validation(val_dataloader, model)
+        val_losses = validation(validation_dataloader, model)
         
         training_stats.append(
             {
