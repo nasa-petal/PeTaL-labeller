@@ -172,7 +172,7 @@ def train(train_dataset:Dataset,val_dataset:Dataset,tokenizer:AutoTokenizer,epoc
     # Train bert for a few epochs before actually classifying 
     if epochs_bert>0:
         training_args = TrainingArguments(evaluation_strategy="epoch",num_train_epochs=epochs_bert)
-        trainer = Trainer(model=model, args=training_args,      train_dataset=train_dataloader.data, eval_dataset=val_dataloader.data)
+        trainer = Trainer(model=model, args=training_args, train_dataset=train_dataset, eval_dataset=val_dataset)
         trainer.train()
 
     # Train the rest
