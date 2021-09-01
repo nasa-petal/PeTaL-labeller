@@ -157,7 +157,6 @@ def train(train_dataset:Dataset,val_dataset:Dataset,tokenizer:AutoTokenizer,epoc
         number_of_labels (int): number of labels to predict 
         learning_rate (float): learning rate for adams optimizer. Defaults to 5E-5
     """
-
     # Sample in random order when training
     train_dataloader = DataLoader(
                 train_dataset,  
