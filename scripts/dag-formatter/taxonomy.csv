@@ -2,14 +2,16 @@ Level I,Level II,Level III
 Attach,Attach permanently,
 ,Attach temporarily,
 ,,
-Move,Passive movement,Passively move through/on liquids
-,,Passively move through/on solids
+"Move on/through solids, liquids, or gases",Passive movement,Passively move through/on solids
+,,Passively move through/on liquids
 ,,Passively move through gases
-,Active movement,Actively move through/on liquids
-,,Actively move through/on solids
+,,Passively move through/on granular media
+,Active movement,Actively move through/on solids
+,,Actively move through/on liquids
 ,,Actively move through gases
+,,Actively move through/on granular media
 ,,
-Protect from harm,Protect from living threats,Protect from animals
+Protect from living or non-living threats,Protect from living threats,Protect from animals
 ,,Protect from plants
 ,,Protect from fungi
 ,,Protect from microbes
@@ -25,19 +27,19 @@ Protect from harm,Protect from living threats,Protect from animals
 ,,Protect from chemicals
 ,,Protect from radiation
 ,,
-Maintain structural integrity,Prevent structural failure,Prevent buckling
-,,Prevent deformation
-,,Prevent fatigue
+Manage mechanical forces,Manage external forces,Manage impact
+,,Regulate drag/turbulence
+,Manage stress/strain,Prevent buckling
 ,,Prevent fracture/rupture
+,,Manage shear
+,,Prevent or allow deformation
+,Prevent degradation,Prevent fatigue
 ,,Control erosion
-,Manage structural forces,Manage shear
-,,Manage stress/strain
-,,Manage impact
-,,Manage drag/turbulence
-,,Manage wear
+,,Regulate wear
 ,,
-Maintain ecological community,Individual benefit,Regulate reproduction or growth
+Sustain ecological community,Individual benefit,Regulate reproduction or growth
 ,,Self-replicate
+,,Maintain homeostasis/equillibrium
 ,Group benefit,Coordinate by self-organization
 ,,Cooperate within or between species
 ,,Compete within or between species
@@ -45,22 +47,21 @@ Maintain ecological community,Individual benefit,Regulate reproduction or growth
 ,,Manage populations/pests/diseases
 ,,Maintain biodiversity
 ,,
-Chemically modify or Change energy state,Chemically assemble,Chemically assemble inorganic compounds
+Chemically assemble or break down,Chemically assemble,Chemically assemble inorganic compounds
 ,,Chemically assemble organic compounds
 ,,Self-assemble
 ,Chemically break down,Chemically break down inorganic compounds
 ,,Chemically break down organic compounds
 ,,
-,Change energy state,Modify/convert electrical energy
-,,Modify/convert magnetic energy
-,,Modify/convert chemical energy
-,,Modify/convert mechanical energy
-,,Modify/convert thermal energy
-,,Modify/convert light energy
+Modify or convert energy,Modify/convert electrical energy,
+,Modify/convert magnetic energy,
+,Modify/convert chemical energy,
+,Modify/convert mechanical energy,
+,Modify/convert thermal energy,
+,Modify/convert light energy,
 ,,
 Physically assemble/disassemble,Physically assemble structure,
 ,Break down structure,
-,Optimize shape/materials,
 ,,
 "Sense, send, or process information",Send signals,Send light signals in the visible spectrum
 ,,Send light signals in the non-visible spectrum
@@ -85,7 +86,7 @@ Physically assemble/disassemble,Physically assemble structure,
 ,,Sense spatial awareness/balance/orientation
 ,,Sense shape and/or pattern
 ,,
-Process resources,Capture resources,Capture solids
+"Manipulate solids, liquids, gases, or energy",Capture resources,Capture solids
 ,,Capture liquids
 ,,Capture gases
 ,,Capture energy
@@ -96,16 +97,16 @@ Process resources,Capture resources,Capture solids
 ,,Store liquids
 ,,Store gases
 ,,Store energy
-,Distribute resources,Distribute solids
-,,Distribute liquids
-,,Distribute gases
-,,Distribute energy
-,Expel resources,Expel solids
-,,Expel liquids
-,,Expel gases
+,Distribute or expel resources,Distribute or expel solids
+,,Distribute or expel liquids
+,,Distribute or expel gases
+,,Distribute or expel energy
 ,Detox/purify,
 ,,
-Change size or color,Modify color,Change structural color
-,,Change chemical color/pigmentation
-,,Camouflage/mimicry
-,Change size/shape,
+Modify color/camouflage,Change structural color,
+,Change chemical color/pigmentation,
+,Camouflage/mimicry,
+,,
+Modify size/shape/material properties,Change size/shape,
+,Optimize shape/materials,
+,Change material properties,
