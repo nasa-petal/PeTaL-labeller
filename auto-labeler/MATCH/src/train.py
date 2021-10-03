@@ -166,7 +166,7 @@ def run_train(cnf, infer_mode, verbose):
 
     sys.path.insert(1, os.path.join(os.getcwd(), 'MATCH'))
 
-    os.chdir(train_cnf['prefix'])
+    # os.chdir(train_cnf['prefix'])
 
     ########################################
     # Print out the first few training token sequences

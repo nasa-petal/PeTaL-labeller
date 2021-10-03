@@ -1,0 +1,27 @@
+{
+    "os": "Linux-5.10.16.3-microsoft-standard-WSL2-x86_64-with-debian-bullseye-sid",
+    "python": "3.6.8",
+    "heartbeatAt": "2021-10-03T21:37:23.740553",
+    "startedAt": "2021-10-03T21:37:22.646775",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3080",
+    "gpu_count": 1,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [
+        "--cnf",
+        "config.yaml",
+        "--verbose"
+    ],
+    "state": "running",
+    "program": "<python with no main file>",
+    "git": {
+        "remote": "git@github.com:nasa-petal/PeTaL-labeller.git",
+        "commit": "8edbe7944a43e186be128e5a8a8ccfd7de0cea9e"
+    },
+    "email": null,
+    "root": "/home/pjuangph/github/PeTaL-labeller",
+    "host": "pahtryzen",
+    "username": "pjuangph",
+    "executable": "/home/pjuangph/miniconda3/envs/match-env/bin/python"
+}

@@ -113,6 +113,7 @@ from Split import split
 from augment import augment
 # from transform_data_MeSH import transform_data
 from transform_data_golden import transform_data
+from MATCH.preprocess import main as preprocess_main
 
 @click.command()
 @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
@@ -290,20 +291,18 @@ def preprocess(cnf,
             os.remove(f"{DATASET}/vocab.npy")
             os.remove(f"{DATASET}/emb_init.npy")
 
-        from MATCH.preprocess import main as preprocess_main
-
         if not infer_mode: # if not in inference mode, run the training
-            preprocess_main.callback(
+            preprocess_main(
                 text_path=f"{DATASET}/train_texts.txt",
                 label_path=f"{DATASET}/train_labels.txt",
                 vocab_path=f"{DATASET}/vocab.npy",
                 emb_path=f"{DATASET}/emb_init.npy",
-                w2v_model=f"{DATASET}/{DATASET}.joint.emb",
+                w2v_model=f"{DATASET}/{preprocess_cnf['embfile']}",
                 vocab_size=int(preprocess_cnf['vocab_size']),
                 max_len=int(preprocess_cnf['max_len']),
             )
 
-        preprocess_main.callback(
+        preprocess_main(
             text_path=f"{DATASET}/test_texts.txt",
             label_path=f"{DATASET}/test_labels.txt",
             vocab_path=f"{DATASET}/vocab.npy",
@@ -312,7 +311,7 @@ def preprocess(cnf,
             vocab_size=int(preprocess_cnf['vocab_size']),
             max_len=int(preprocess_cnf['max_len']),
         )
-        os.chdir("..")
+        # os.chdir("..")
 
     if verbose:
         logger.info('End preprocessing.')
