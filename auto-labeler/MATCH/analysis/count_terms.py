@@ -4,9 +4,26 @@
     Run MATCH with PeTaL data.
     Last modified on 16 July 2021.
 
+    DESCRIPTION
+
+        count_terms.py analyses a train_texts.txt file.
+
+        It counts the number of tokens of each class (reference, venues,
+        authors, MAG, MeSH, labels, other) and prints that to stdout.
+        That's all.
+
     USAGE
 
-        python3 count_terms.py -f PATH/TO/TRAIN_TEXTS.txt
+        python3 count_terms.py -f PATH/TO/train_texts.txt
+
+    OPTIONS
+
+        -f, --file PATH/TO/train_texts.txt
+            path to file of texts
+
+    NOTES
+
+        Not really necessary to run anyhow.  
 
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''

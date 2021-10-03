@@ -4,6 +4,10 @@
     Run MATCH with PeTaL data.
     Last modified on 21 July 2021.
 
+    NOTES
+    
+        This script is strictly superseded by transform_data_golden.py.
+
     Authors: Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com)
 '''
 

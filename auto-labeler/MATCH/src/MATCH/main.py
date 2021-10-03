@@ -72,7 +72,12 @@ def main(data_cnf, model_cnf, mode, reg):
 								  model_cnf['valid']['batch_size'], num_workers=4)
 		model = Model(network=MATCH, labels_num=labels_num, model_path=model_path, emb_init=emb_init, mode='train', reg=reg, hierarchy=edges,
 					  **data_cnf['model'], **model_cnf['model'])
-		model.train(train_loader, valid_loader, **model_cnf['train'])
+		opt_params = {
+			'lr': model_cnf['train']['learning_rate'],
+			'betas': (model_cnf['train']['beta1'], model_cnf['train']['beta2']),
+			'weight_decay': model_cnf['train']['weight_decay']
+		}
+		model.train(train_loader, valid_loader, opt_params=opt_params, **model_cnf['train']) # CHANGE: inserted opt_params
 		logger.info('Finish Training')
 
 	if mode is None or mode == 'eval':

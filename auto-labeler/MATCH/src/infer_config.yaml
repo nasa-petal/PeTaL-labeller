@@ -1,0 +1,59 @@
+model: MATCH
+dataset: PeTaL
+
+split:
+  prefix: MATCH/PeTaL
+  dataset: infer.json
+  train: 0
+  dev: 0
+  skip: 0
+  tot: 0
+
+augment:
+  prefix: MATCH/PeTaL
+  factor: 1
+  balance_aware: False
+  alpha: 0.7
+  beta: 1
+
+transform:
+  prefix: MATCH
+  dataset: PeTaL
+  use_mag: True
+  use_mesh: True
+  use_venue: True
+  use_author: True
+  use_reference: True
+  use_text: True
+  use_title: True
+  use_abstract: True
+  use_level1: True
+  use_level2: True
+  use_level3: True
+  include_labels_in_features: False
+
+preprocess:
+  prefix: MATCH
+  vocab_size: 500000
+  max_len: 500
+
+train:
+  prefix: MATCH
+  sample: True
+  num_samples: 2
+  hypernymy_regularization: True
+  leaf_labels_only: False
+  notes: ''
+
+eval:
+  prefix: MATCH
+  sample: True
+  num_samples: 5
+  criterion: top_k
+  top_k: 5
+  threshold: 0.2
+  num_text_tokens: 10
+
+wandb:
+  project: MATCH
+  group: golden_20210818a_infer

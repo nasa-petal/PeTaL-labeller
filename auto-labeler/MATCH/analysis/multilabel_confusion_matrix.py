@@ -4,6 +4,44 @@
     Run MATCH with PeTaL data.
     Last modified on 23 July 2021.
 
+    DESCRIPTION
+
+        multilabel_confusion_matrix.py plots multilabel confusion matrices
+        based on the data in MATCH/PeTaL/results.
+
+        In a multilabel confusion matrix, the rows correspond to 
+        ground-truth labels $l_{true}$ and the columns correspond to 
+        predicted labels $l_{pred}$. Each cell sports a colour representing 
+        the average confidence score MATCH predicts for the label $l_{pred}$ 
+        across all papers bearing the actual label $l_{true}$. This colour 
+        is brighter for averages closer to 1, and darker for averages closer
+        to 0.
+
+        In an ideal classifier, there would be a bright line streaking
+        across the diagonal from the top left to the bottom right. Cells on
+        the diagonal represent correct predictions; most cells off the
+        diagonal represent mispredictions.
+
+        Labels are sorted by their frequency of occurrence in the dataset;
+        labels at the top and left are more common; labels at the bottom and
+        right are rarer.
+
+    OPTIONS
+
+        -m, --match PATH/TO/MATCH
+            Path of MATCH folder.
+        -p, --plots PATH/TO/plots
+            Path of plots folder.
+        --leaf-only
+            Only include leaf labels in the matrix. Defualts to false.
+        --threshold
+            Logits threshold for a positive prediction, between 0 and 1.
+            If it exists, we convert all confidence scores above threshold to 1
+            and all other confidence scores to 0. ("hard" prediction)
+            If not, we don't transform the confidence scores. ("soft" prediction)
+        -v, --verbose
+            Enables verbose output.
+
     USAGE
 
         python3 multilabel_confusion_matrix.py -m ../src/MATCH -p ../plots --verbose
@@ -135,9 +173,11 @@ def main(match_path, plots_path, leaf_only, threshold, verbose):
         if verbose:
             MCMlogger.info(f"You already have a plots directory at {ALL_PLOTS_PATH}.")
     
-    time_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+    now = datetime.now()
+    date_str = now.strftime("%Y%m%d")
+    time_str = now.strftime("%H%M%S")
     comment = f"MCM"
-    PLOTS_PATH = os.path.join(ALL_PLOTS_PATH, f"{time_str}_{comment}")
+    PLOTS_PATH = os.path.join(ALL_PLOTS_PATH, f"{date_str}_{comment}")
 
     if not os.path.exists(PLOTS_PATH):
         os.mkdir(PLOTS_PATH)
@@ -147,20 +187,28 @@ def main(match_path, plots_path, leaf_only, threshold, verbose):
         if verbose:
             MCMlogger.info(f"You already have a plots directory at {PLOTS_PATH}")
 
-    rc('xtick', labelsize=7)
-    rc('ytick', labelsize=7)
+    rc('xtick', labelsize=8)
+    rc('ytick', labelsize=8)
     rc('font', size=20)
 
-    # label_limit = 100
-    # conf_matrix_small = conf_matrix[:label_limit, :label_limit]
-    # num_labels = label_limit
+    ################################################################################
+    # COMMENT/UNCOMMENT THIS CODE TO FILTER OUT EVERYTHING BUT THE TOP label_limit LABELS
+    label_limit = 25
+    conf_matrix = conf_matrix[:label_limit, :label_limit]
+    num_labels = label_limit
+    ################################################################################
+
     row_labels = [idx2label[i] for i in range(num_labels)]
     col_labels = [idx2label[i] for i in range(num_labels)]
+
+    if verbose:
+        conf_matrix_shape = conf_matrix.shape
+        MCMlogger.info(f"Generating MCM with size {conf_matrix_shape[0]}x{conf_matrix_shape[1]}")
 
     plt.rcParams["figure.figsize"] = (10, 10)
     fig, ax = plt.subplots()
     plt.matshow(conf_matrix, fignum=0)
-    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nLabels Sorted by Frequency', y=1.5, pad=0)
+    ax.set_title('Multilabel Confusion Matrix for MATCH on golden.json\nTop 25 of All Labels Sorted by Frequency', y=1.5, pad=0)
     ax.set_xlabel('Predicted labels')
     ax.set_ylabel('Ground truth labels')
     ax.xaxis.set_label_position('top')
@@ -173,6 +221,8 @@ def main(match_path, plots_path, leaf_only, threshold, verbose):
     PLOT_PATH = os.path.join(PLOTS_PATH, f'mcm_{time_str}')
     plt.savefig(fname=PLOT_PATH, facecolor='w', transparent=False, bbox_inches='tight')
     plt.clf()
+    if verbose:
+        MCMlogger.info(f"New plot at {PLOT_PATH}")
 
 if __name__ == '__main__':
     main()

@@ -27,6 +27,36 @@ import wandb
 class Model(object):
 	def __init__(self, network, model_path, mode, reg=False, hierarchy=None, gradient_clip_value=5.0, device_ids=None, **kwargs):
 		self.model = nn.DataParallel(network(**kwargs).cuda(), device_ids=device_ids)
+		
+		#################### INSERTED CODE
+		# logger.info("HEY HERE'S SOME INSERTED CODE")
+		# # logger.info("Loading pretrained model.")
+		# # logger.info(f"Working directory: {os.getcwd()}")
+		# # petal_state_dict = torch.load("PeTaL/models/MATCH-PeTaL")
+		# # self.model.module.load_state_dict(petal_state_dict)
+		# # petal_keys = [key for key in petal_state_dict.keys()]
+		# # logger.info(f"PeTaL Keys {petal_keys}")
+		# # mesh_state_dict = torch.load("MeSH/models/MATCH-MeSH")
+		# # mesh_keys = [key for key in mesh_state_dict.keys()]
+		# # logger.info(f"MeSH Keys {mesh_keys}")
+		# # common_keys = [key for key in petal_keys if key in mesh_keys]
+		# # logger.info(f"Common Keys {common_keys}")
+		# # logger.info(f"PeTaL Keys not in MeSH {[key for key in petal_keys if key not in mesh_keys]}")
+		# # logger.info(f"MeSH Keys not in PeTaL {[key for key in mesh_keys if key not in petal_keys]}")
+
+		# mesh_state_dict = torch.load("MeSH/models/MATCH-MeSH")
+		# mismatch_keys = {"tewp.embeddings.word_embeddings.weight", "plaincls.out_mesh_dstrbtn.weight", "plaincls.out_mesh_dstrbtn.bias"}
+		# for key in mismatch_keys:
+		# 	mesh_state_dict.pop(key, None)		
+		# # mesh_items = [(key, value) for (key, value) in mesh_state_dict.items()]
+		# # for key, value in mesh_items:
+		# # 	logger.info(f"{key} : {value}")
+		# self.model.module.load_state_dict(mesh_state_dict, strict=False)
+
+		# # logger.info(self.model.state_dict())
+		# logger.info("END OF INSERTED CODE")
+		#################### INSERTED CODE
+
 		self.loss_fn = nn.BCEWithLogitsLoss()
 		self.model_path, self.state = model_path, {}
 		os.makedirs(os.path.split(self.model_path)[0], exist_ok=True)
@@ -151,6 +181,19 @@ class Model(object):
 
 	def load_model(self):
 		self.model.module.load_state_dict(torch.load(self.model_path))
+		################### INSERTED CODE
+		# logger.info(self.model.state_dict().keys())
+		# mesh_state_dict = torch.load("MeSH/models/MATCH-MeSH")
+		# mismatch_keys = {"tewp.embeddings.word_embeddings.weight", "plaincls.out_mesh_dstrbtn.weight", "plaincls.out_mesh_dstrbtn.bias"}
+		# for key in mismatch_keys:
+		# 	mesh_state_dict.pop(key, None)		
+		# # mesh_items = [(key, value) for (key, value) in mesh_state_dict.items()]
+		# # for key, value in mesh_items:
+		# # 	logger.info(f"{key} : {value}")
+		# self.model.module.load_state_dict(mesh_state_dict, strict=False)
+		# logger.info(self.model.state_dict().keys())
+		# raise BaseException
+		################### INSERTED CODE
 
 	def clip_gradient(self):
 		if self.gradient_clip_value is not None:
