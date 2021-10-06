@@ -4,7 +4,9 @@ The Periodic Table of Life (PeTaL, pronounced petal) is a design tool aimed at a
 
 PeTaL is comprised of multiple interconnected services. This repository is for the Labeller. There are other repositories for the [API and database](https://github.com/nasa/petal-db), and [ReactJS web front end client](https://github.com/nasa/PeTaL).
 
-## Getting Started
+## [v0.2 MATCH-based classifier](https://github.com/nasa-petal/PeTaL-labeller/tree/main/auto-labeler/MATCH)
+
+## v0.1 BERT-based classifier
 
 The labeler is currently in a prototype stage and we are experimenting with different models, currently transformer-based models (BERT, XLNet, BioBERT) and support vector machines (SVMs).
 
