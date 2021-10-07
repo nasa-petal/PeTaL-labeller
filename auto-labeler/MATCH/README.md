@@ -335,4 +335,4 @@ Labels are sorted by their frequency of occurrence in the dataset; labels at the
 
 ## <a name="contact"></a> Contact 
 
-For questions contact Eric Kong (eric.l.kong@nasa.gov, erickongl@gmail.com).
+For questions contact Eric Kong (erickongl@gmail.com).
