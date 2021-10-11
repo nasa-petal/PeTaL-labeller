@@ -310,7 +310,7 @@ def preprocess(cnf,
             vocab_size=int(preprocess_cnf['vocab_size']),
             max_len=int(preprocess_cnf['max_len']),
         )
-        os.chdir("..")
+        # os.chdir("..")
 
     if verbose:
         logger.info('End preprocessing.')

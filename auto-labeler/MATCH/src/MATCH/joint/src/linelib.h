@@ -16,20 +16,24 @@ const int hash_table_size = 30000000;
 
 typedef float real;
 
-typedef Eigen::Matrix< real, Eigen::Dynamic,
-	Eigen::Dynamic, Eigen::RowMajor | Eigen::AutoAlign >
-	BLPMatrix;
+typedef Eigen::Matrix<real, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor | Eigen::AutoAlign> BLPMatrix;
 
-typedef Eigen::Matrix< real, 1, Eigen::Dynamic,
-	Eigen::RowMajor | Eigen::AutoAlign >
-	BLPVector;
+/**
+ * @brief This creates a real matrix with 1 row and dynamic number of columns
+ * 
+ */
+typedef Eigen::Matrix<real, 1, Eigen::Dynamic,Eigen::RowMajor | Eigen::AutoAlign> BLPVector;
 
 struct struct_node {
 	char *word;
 };
 
+/**
+ * @brief This struct contains the int nb_id
+ * 
+ */
 struct hin_nb {
-	int nb_id;
+	int nb_id; // File id
 	double eg_wei;
 	int eg_tp;
 };
