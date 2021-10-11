@@ -50,3 +50,4 @@ typing-extensions==3.10.0.0
 urllib3==1.26.6
 wandb==0.10.33
 zipp==3.5.0
+deepxml

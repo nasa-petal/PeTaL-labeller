@@ -1,19 +1,20 @@
 import json
 from collections import defaultdict
 import argparse
+import os.path as osp 
 
 parser = argparse.ArgumentParser(description='main', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--dataset', default='MAG', choices=['MAG', 'MeSH'])
 
 args = parser.parse_args()
-folder = '../'+args.dataset+'/'
+dataset = args.dataset
 
 thrs = 5
 left = set()
 right = set()
 
 node2cnt = defaultdict(int)
-with open(folder+'train.json') as fin:
+with open(osp.join(dataset,'train.json')) as fin:
 	for idx, line in enumerate(fin):
 		if idx % 10000 == 0:
 			print(idx)
@@ -26,7 +27,7 @@ with open(folder+'train.json') as fin:
 			A = 'AUTHOR_' + A0
 			node2cnt[A] += 1
 
-with open(folder+'train.json') as fin, open('network.dat', 'w') as fout:
+with open(osp.join(dataset,'train.json')) as fin, open('network.dat', 'w') as fout:
 	for idx, line in enumerate(fin):
 		if idx % 10000 == 0:
 			print(idx)
@@ -80,7 +81,7 @@ with open(folder+'train.json') as fin, open('network.dat', 'w') as fout:
 				fout.write(Wj+' '+Wi+' 5 1 \n')
 				left.add(Wj)
 			
-with open('left.dat', 'w') as fou1, open('right.dat', 'w') as fou2:
+with open(osp.join(dataset,'left.dat'), 'w') as fou1, open(osp.join(dataset,'right.dat'), 'w') as fou2:
 	for x in left:
 		fou1.write(x+'\n')
 	for x in right:

@@ -185,27 +185,26 @@ def main(prefix,
 #
 ########################################
 
-def transform_data(prefix,
-        dataset,
-        no_mag=False,
-        no_mesh=False,
-        no_venue=False,
-        no_author=False,
-        no_reference=False,
-        no_text=False,
-        no_title=False,
-        no_abstract=False,
-        no_level1=False,
-        no_level2=False,
-        no_level3=False,
-        include_labels_in_features=False,
-        infer_mode=False,
-        verbose=False):
+def transform_data(dataset_path:str,
+        no_mag:bool=False,
+        no_mesh:bool=False,
+        no_venue:bool=False,
+        no_author:bool=False,
+        no_reference:bool=False,
+        no_text:bool=False,
+        no_title:bool=False,
+        no_abstract:bool=False,
+        no_level1:bool=False,
+        no_level2:bool=False,
+        no_level3:bool=False,
+        include_labels_in_features:bool=False,
+        infer_mode:bool=False,
+        verbose:bool=False):
     """Transforms newline-delimited json files into MATCH-compatible text files.
 
     Args:
         prefix (string): Path from current working directory to directory containing dataset.
-        dataset (string): Name of dataset (in fact, directory containing data)
+        dataset_path (string): Path of dataset (in fact, directory containing data)
         no_mag (bool, optional): Whether to omit MAG field of study metadata. Defaults to False.
         no_mesh (bool, optional): Whether to omit MeSH term metadata. Defaults to False.
         no_venue (bool, optional): Whether to omit venue metadata. Defaults to False.
@@ -257,13 +256,13 @@ def transform_data(prefix,
     ########################################
 
     for src_json, dst_txt, file_mode in zip_options:
-        dataset_path = os.path.join(prefix, dataset, f"{src_json}.json")
-        texts_path = os.path.join(prefix, dataset, f"{dst_txt}_texts.txt")
-        labels_path = os.path.join(prefix, dataset, f"{dst_txt}_labels.txt")
+        src_json_path = os.path.join(dataset_path, f"{src_json}.json")
+        texts_path = os.path.join(dataset_path, f"{dst_txt}_texts.txt")
+        labels_path = os.path.join(dataset_path, f"{dst_txt}_labels.txt")
         if verbose:
-            logger.info(f"Transforming from {dataset_path} into {texts_path} and {labels_path}.")
+            logger.info(f"Transforming from {src_json_path} into {texts_path} and {labels_path}.")
 
-        with open(dataset_path) as fin, open(texts_path, file_mode) as fou1, open(labels_path, file_mode) as fou2:
+        with open(src_json_path,'r') as fin, open(texts_path, file_mode) as fou1, open(labels_path, file_mode) as fou2:
             for line in fin:
                 data = json.loads(line)
 

@@ -1,24 +1,21 @@
 model: MATCH
-dataset: PeTaL
+dataset_folder: ../PeTaL
+dataset_json: golden.json
 
 split:
-  prefix: MATCH/PeTaL
-  dataset: filtered.json
+  filterJSON: filtered.json
   train: 0.8
   dev: 0.1
   skip: 0
   tot: 0
 
 augment:
-  prefix: MATCH/PeTaL
   factor: 1
   balance_aware: False
   alpha: 0.7
   beta: 1
 
 transform:
-  prefix: MATCH
-  dataset: PeTaL
   use_mag: True
   use_mesh: True
   use_venue: True

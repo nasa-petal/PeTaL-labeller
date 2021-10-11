@@ -97,3 +97,4 @@ with open('left.dat', 'w') as fou1, open('right.dat', 'w') as fou2:
 		fou1.write(x+'\n')
 	for x in right:
 		fou2.write(x+'\n')
+

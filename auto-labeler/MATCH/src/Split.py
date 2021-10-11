@@ -135,8 +135,8 @@ def main(prefix='MATCH/PeTaL',
 #
 ########################################
 
-def split(prefix='MATCH/PeTaL',
-		dataset='cleaned_lens_output.json',
+def split(dataset_path='cleaned_lens_output.json',
+		dataset_json='golden.json',
 		train=0.8,
 		dev=0.1,
 		skip=0,
@@ -147,7 +147,7 @@ def split(prefix='MATCH/PeTaL',
 
 	Args:
 		prefix (string): Path from current working directory to directory containing dataset.
-		dataset (string): Filename of newline-delimited json dataset.
+		dataset_path (string): Filename of newline-delimited json dataset.
 		train (float): Proportion, from 0.0 to 1.0, of dataset used for training.
 		dev (float): Proportion, from 0.0 to 1.0, of dataset used for validation.
 		skip (int): Number of training examples by which to rotate the dataset (e.g., for cross-validation).
@@ -168,7 +168,6 @@ def split(prefix='MATCH/PeTaL',
 	#
 	########################################
 
-	dataset_path = os.path.join(prefix, dataset)
 	if not os.path.exists(dataset_path):
 		logger.error(f"ERROR: Unable to find dataset json file {os.path.join(os.getcwd(), dataset_path)}.")
 		return
@@ -194,7 +193,7 @@ def split(prefix='MATCH/PeTaL',
 	########################################
 
 	if infer_mode:
-		infer_path = os.path.join(prefix, 'test.json')
+		infer_path = os.path.join(dataset_path, 'test.json')
 		
 		if verbose:
 			logger.info(f"Copying from {dataset_path} to {infer_path} for inference mode.")
@@ -212,9 +211,9 @@ def split(prefix='MATCH/PeTaL',
 	########################################
 	
 	else:
-		train_path = os.path.join(prefix, 'train.json')
-		dev_path = os.path.join(prefix, 'dev.json')
-		test_path = os.path.join(prefix, 'test.json')
+		train_path = os.path.join(dataset_path, 'train.json')
+		dev_path = os.path.join(dataset_path, 'dev.json')
+		test_path = os.path.join(dataset_path, 'test.json')
 
 		if verbose:
 			logger.info(f"Transforming from {dataset_path} to {train_path}, {dev_path}, and {test_path}.")
@@ -230,7 +229,7 @@ def split(prefix='MATCH/PeTaL',
 		# Otherwise stick with the passed-in total argument,
 		# unless that exceeds the actual number of examples in the dataset.
 		########################################
-		with open(dataset_path) as fin:
+		with open(os.path.join(dataset_path,dataset_json),'r') as fin:
 			num_examples = sum(1 for _ in json.loads(fin.read()))
 			if tot == 0 or tot > num_examples:
 				tot = num_examples
@@ -244,7 +243,7 @@ def split(prefix='MATCH/PeTaL',
 		# while constructing train.json, dev.json, and test.json.
 		########################################
 
-		with open(dataset_path) as fin, open(train_path, 'w') as fou1, open(dev_path, 'w') as fou2, open(test_path, 'w') as fou3:
+		with open(os.path.join(dataset_path,dataset_json),'r') as fin, open(train_path, 'w') as fou1, open(dev_path, 'w') as fou2, open(test_path, 'w') as fou3:
 			golden = json.loads(fin.read())
 			# for idx, line in enumerate(fin):
 			for idx, js in enumerate(golden):
@@ -360,30 +359,3 @@ def split(prefix='MATCH/PeTaL',
 
 if __name__ == "__main__":
 	main()
-
-########################################
-#
-#   FOR HISTORICAL REFERENCE
-#
-########################################
-
-'''
-	Original argparse version of getting CLI arguments (for reference purposes):
-
-	parser = argparse.ArgumentParser(description='main', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-	parser.add_argument('--prefix', default='MATCH/PeTaL', help='Path from current working directory to directory containing dataset.')
-	parser.add_argument('--dataset', default='cleaned_lens_output.json', help='Filename of newline-delimited json dataset.')
-	parser.add_argument('--train', default=0.8, type=float, help='Proportion, from 0.0 to 1.0, of dataset used for training.')
-	parser.add_argument('--dev', default=0.1, type=float, help='Proportion, from 0.0 to 1.0, of dataset used for validation.')
-	parser.add_argument('--skip', default=0, type=int, help='Number of training examples by which to rotate the dataset (e.g., for cross-validation).')
-	parser.add_argument()
-
-	args = parser.parse_args()
-	prefix = args.prefix
-	dataset = args.dataset
-	train_proportion = args.train
-	dev_proportion = args.dev
-	skip = args.skip
-
-	labelled = 1000 # 409
-'''

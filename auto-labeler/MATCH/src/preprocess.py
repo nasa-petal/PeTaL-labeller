@@ -114,15 +114,15 @@ from augment import augment
 # from transform_data_MeSH import transform_data
 from transform_data_golden import transform_data
 
-@click.command()
-@click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
-@click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
-@click.option('--split/--no-split', '-s/-S', 'do_split', default=True, help='Perform train-dev-test split.')
-@click.option('--augment/--no-augment', '-a/-A', 'do_augment', default=True, help='Augment training set.')
-@click.option('--transform/--no-transform', '-t/-T', 'do_transform', default=True, help='Perform transformation from json to text.')
-@click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
-@click.option('--infer-mode', '-i', type=click.BOOL, is_flag=True, default=False, help='Inference mode.')
-@click.option('--remake-vocab-file', type=click.BOOL, is_flag=True, default=False, help='Force vocab.npy and emb_init.npy to be recomputed.')
+# @click.command()
+# @click.option('--cnf', '-c', 'cnf_path', type=click.Path(exists=True), help='Path of configure yaml.')
+# @click.option('--verbose', '-v', type=click.BOOL, is_flag=True, default=False, help='Verbose output.')
+# @click.option('--split/--no-split', '-s/-S', 'do_split', default=True, help='Perform train-dev-test split.')
+# @click.option('--augment/--no-augment', '-a/-A', 'do_augment', default=True, help='Augment training set.')
+# @click.option('--transform/--no-transform', '-t/-T', 'do_transform', default=True, help='Perform transformation from json to text.')
+# @click.option('--preprocess/--no-preprocess', '-p/-P', 'do_preprocess', default=True, help='Perform preprocessing.')
+# @click.option('--infer-mode', '-i', type=click.BOOL, is_flag=True, default=False, help='Inference mode.')
+# @click.option('--remake-vocab-file', type=click.BOOL, is_flag=True, default=False, help='Force vocab.npy and emb_init.npy to be recomputed.')
 
 def main(cnf_path,
         verbose=False,
@@ -191,9 +191,9 @@ def preprocess(cnf,
     if verbose:
         logger.info("Begin preprocessing.")
     
-    sys.path.insert(1, os.path.join(os.getcwd(), 'MATCH'))
+    # sys.path.insert(1, os.path.join(os.getcwd(), 'MATCH'))
 
-    DATASET = cnf['dataset']
+    DATASET = cnf['dataset_folder']
 
     '''
         Train-test split.
@@ -209,9 +209,8 @@ def preprocess(cnf,
     '''
     if do_split:
         split_cnf = cnf['split']
-        split(
-            prefix=split_cnf['prefix'],
-            dataset=split_cnf['dataset'],
+        split(dataset_path=DATASET,
+            dataset_json=cnf['dataset_json'],
             train=float(split_cnf['train']),
             dev=float(split_cnf['dev']),
             skip=int(split_cnf['skip']),
@@ -223,7 +222,7 @@ def preprocess(cnf,
     if do_augment:
         augment_cnf = cnf['augment']
         augment(
-            dataset_path=f"{augment_cnf['prefix']}/train.json",
+            data_json=os.path.join(cnf['dataset_folder'],'train.json'),
             factor=augment_cnf['factor'],
             balance_aware=augment_cnf['balance_aware'],
             alpha=augment_cnf['alpha'],
@@ -241,8 +240,7 @@ def preprocess(cnf,
     if do_transform:
         transform_cnf = cnf['transform']
         transform_data(
-            prefix=transform_cnf['prefix'],
-            dataset=transform_cnf['dataset'],
+            dataset_path=DATASET,
             no_mag=not transform_cnf['use_mag'],
             no_mesh=not transform_cnf['use_mesh'],
             no_venue=not transform_cnf['use_venue'],
@@ -284,7 +282,6 @@ def preprocess(cnf,
     '''
     if do_preprocess:
         preprocess_cnf = cnf['preprocess']
-        os.chdir(preprocess_cnf['prefix'])
 
         if remake_vocab_file:
             os.remove(f"{DATASET}/vocab.npy")
@@ -292,18 +289,19 @@ def preprocess(cnf,
 
         from MATCH.preprocess import main as preprocess_main
 
+        dataset_name = os.path.dirname(DATASET)
         if not infer_mode: # if not in inference mode, run the training
-            preprocess_main.callback(
+            preprocess_main(
                 text_path=f"{DATASET}/train_texts.txt",
                 label_path=f"{DATASET}/train_labels.txt",
                 vocab_path=f"{DATASET}/vocab.npy",
                 emb_path=f"{DATASET}/emb_init.npy",
-                w2v_model=f"{DATASET}/{DATASET}.joint.emb",
+                w2v_model=f"{DATASET}/{dataset_name}.joint.emb",
                 vocab_size=int(preprocess_cnf['vocab_size']),
                 max_len=int(preprocess_cnf['max_len']),
             )
 
-        preprocess_main.callback(
+        preprocess_main(
             text_path=f"{DATASET}/test_texts.txt",
             label_path=f"{DATASET}/test_labels.txt",
             vocab_path=f"{DATASET}/vocab.npy",

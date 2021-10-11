@@ -126,7 +126,7 @@ def main(cnf_path,
     yaml = YAML(typ='safe')
     cnf = yaml.load(Path(cnf_path))
 
-    run_MATCH_with_PeTaL_data(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, do_train, do_eval, infer_mode, remake_vocab_file)
+    run_MATCH_with_PeTaL_data(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, do_train, do_eval, infer_mode)
 
 ########################################
 #
@@ -146,7 +146,7 @@ def run_MATCH_with_PeTaL_data(cnf,
         do_train=True,
         do_eval=True,
         infer_mode=False,
-        remake_vocab_file=False):
+        remake_vocab_file=True):
     """Runs MATCH on PeTaL data.
 
     Args:
@@ -178,7 +178,7 @@ def run_MATCH_with_PeTaL_data(cnf,
         transform json to txt, and preprocess txt into npy
         in preprocess.py.
     '''
-    preprocess(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, infer_mode, remake_vocab_file)
+    preprocess(cnf, verbose, do_split, do_augment, do_transform, do_preprocess, infer_mode,remake_vocab_file)
 
     '''
         Training: Run training in train.py.

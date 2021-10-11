@@ -1,23 +1,34 @@
 import os
 import re
-import click
+
 import numpy as np
 from tqdm import tqdm
 from logzero import logger
 
-from deepxml.data_utils import build_vocab, convert_to_binary
+from MATCH.deepxml.data_utils import build_vocab, convert_to_binary
 
-@click.command()
-@click.option('--text-path', type=click.Path(exists=True), help='Path of text.')
-@click.option('--label-path', type=click.Path(exists=True), default=None, help='Path of labels.')
-@click.option('--vocab-path', type=click.Path(), default=None,
-			  help='Path of vocab, if it doesn\'t exit, build one and save it.')
-@click.option('--emb-path', type=click.Path(), default=None, help='Path of word embedding.')
-@click.option('--w2v-model', type=click.Path(), default=None, help='Path of Gensim Word2Vec Model.')
-@click.option('--vocab-size', type=click.INT, default=500000, help='Size of vocab.')
-@click.option('--max-len', type=click.INT, default=500, help='Truncated length.')
+# @click.command()
+# @click.option('--text-path', type=click.Path(exists=True), help='Path of text.')
+# @click.option('--label-path', type=click.Path(exists=True), default=None, help='Path of labels.')
+# @click.option('--vocab-path', type=click.Path(), default=None,
+# 			  help='Path of vocab, if it doesn\'t exit, build one and save it.')
+# @click.option('--emb-path', type=click.Path(), default=None, help='Path of word embedding.')
+# @click.option('--w2v-model', type=click.Path(), default=None, help='Path of Gensim Word2Vec Model.')
+# @click.option('--vocab-size', type=click.INT, default=500000, help='Size of vocab.')
+# @click.option('--max-len', type=click.INT, default=500, help='Truncated length.')
 
-def main(text_path, label_path, vocab_path, emb_path, w2v_model, vocab_size, max_len):
+def main(text_path:str, label_path:str, vocab_path:str, emb_path:str, w2v_model:str, vocab_size:int, max_len:int):
+	"""[summary]
+
+	Args:
+		text_path (str): Path of text
+		label_path (str): Path of labels
+		vocab_path (str): [description]
+		emb_path (str): [description]
+		w2v_model (str): [description]
+		vocab_size (int): [description]
+		max_len (int): [description]
+	"""
 	if not os.path.exists(vocab_path):
 		logger.info(F'Building Vocab. {text_path}')
 		with open(text_path) as fp:

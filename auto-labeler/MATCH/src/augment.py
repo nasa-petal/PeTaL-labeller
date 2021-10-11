@@ -87,7 +87,7 @@ from utils import extract_labels
 @click.option('--beta', type=click.FLOAT, default=1, help='Beta parameter in balance-aware data augmentation.')
 @click.option('-v', '--verbose', type=click.BOOL, is_flag=True, default=False, required=False, help='Verbose output.')
 
-def main(dataset_path,
+def main(data_json,
         factor=2,
         balance_aware=False,
         alpha=0.7,
@@ -104,7 +104,7 @@ def main(dataset_path,
         verbose (bool, optional): Verbose output. Defaults to False.
     """
 
-    augment(dataset_path, factor, balance_aware, alpha, beta, verbose)
+    augment(data_json, factor, balance_aware, alpha, beta, verbose)
 
 ########################################
 #
@@ -115,7 +115,7 @@ def main(dataset_path,
 #
 ########################################
 
-def augment(dataset_path,
+def augment(data_json,
         factor,
         balance_aware=False,
         alpha=0.7,
@@ -138,9 +138,9 @@ def augment(dataset_path,
     )
     logger = logging.getLogger("augment")
 
-    if not os.path.exists(dataset_path):
+    if not os.path.exists(data_json):
         if verbose:
-            logger.info(f'Skipping training set augmentation, for {dataset_path} not found.')
+            logger.info(f'Skipping training set augmentation, for {data_json} not found.')
         return
 
     if factor < 2:
@@ -156,7 +156,7 @@ def augment(dataset_path,
     nltk.download('wordnet')
 
     golden = []
-    with open(dataset_path) as fin:
+    with open(data_json) as fin:
         for line in fin:
             data = json.loads(line)
             golden.append(data)
@@ -166,15 +166,15 @@ def augment(dataset_path,
     if balance_aware:
         min_rareness, max_rareness, spread_factor = analyze_for_balance_awareness(golden, alpha, beta)
         if verbose:
-            logger.info(f"Analyzing papers in {dataset_path} for balance-aware data augmentation.")
+            logger.info(f"Analyzing papers in {data_json} for balance-aware data augmentation.")
             logger.info(f"Minimum rareness score is {min_rareness}.")
             logger.info(f"Maximum rareness score is {max_rareness}.")
             logger.info(f"This allows a spread factor of {spread_factor}.")
 
         if verbose:
-            logger.info(f"Augmenting dataset at {dataset_path} with {len(golden)} examples.")
+            logger.info(f"Augmenting dataset at {data_json} with {len(golden)} examples.")
 
-    with open(dataset_path, 'w') as fout:
+    with open(data_json, 'w') as fout:
         for epoch in (tqdm(range(factor), desc='Full augmentation progress') if verbose else range(factor)):
             for js in (tqdm(golden, desc='Per epoch progress', leave=False) if verbose else golden):
                 if epoch == 0:
@@ -270,10 +270,4 @@ def analyze_for_balance_awareness(dataset, alpha, beta):
 
 if __name__ == "__main__":
     main()
-
-########################################
-#
-#   FOR HISTORICAL REFERENCE
-#
-########################################
 
